@@ -3,7 +3,7 @@
 # Purpose: SSH into boxes with mongodb running, fail if process is down
 # Author: Freddie Rosario <rosario@ecohealthalliance.org>
 
-import os
+import os,sys
 
 # "Useful name": ["ssh_key", "ip address or fqdn"]
 servers = {
@@ -15,7 +15,7 @@ servers = {
   "tater-prod": ["infrastructure.pem", "54.175.138.187"],
   "rana-dev": ["grits-dev.pem", "52.1.78.153"],
   "rana-prod": ["rana-prod.pem", "52.7.110.184"],
-  "grits-dev.ecohealthalliance.org": ["grits-dev.pem", "52.23.250.31"]
+  "grits-dev.ecohealthalliance.org": ["grits-dev.pem", "52.71.252.57"]
 }
 
 key_dir = "/keys/"
@@ -26,5 +26,6 @@ for name in servers.keys():
   return_code = os.system(SSH)
   if return_code != 0:
     print "Problem checking for running mongodb on " + name
+    sys.exit(1)
 
 

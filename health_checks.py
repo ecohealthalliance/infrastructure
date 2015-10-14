@@ -14,7 +14,7 @@ urls = [
     'https://tater-dev.ecohealth.io/',
     'https://tater.ecohealthalliance.org/',
     'https://grits.ecohealthalliance.org/',
-    'https://grits-dev.ecohealth.io/'
+    'https://grits-dev.ecohealthalliance.org/'
   ]
 
 for u in urls:
