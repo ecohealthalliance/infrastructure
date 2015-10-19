@@ -5,7 +5,7 @@
 
 import boto3
 
-#Open connections and get AWS data
+#Open connections and get EC2 and Cloudwatch data
 client_ec2 = boto3.client('ec2')
 client_cloudwatch = boto3.client('cloudwatch')
 filters = [{'Name': 'instance-state-name','Values': ['running']}]
@@ -57,9 +57,47 @@ for i in instance_id_list:
   print "Alarms set for: " + i
 
 
+#Get elastic loadbalancer data
+client_lb = boto3.client('elb')
+resp = client_lb.describe_load_balancers()
+
+
+#Populate list of elastic loadbalancers
+loadbalancer_list = []
+for r in resp['LoadBalancerDescriptions']:
+  loadbalancer_list.append(r['LoadBalancerName'])
+
+
+#Create cloud watch alarms for loadbalancers
+for lb in loadbalancer_list:
+  
+  #Healthy host count alarm
+  client_cloudwatch.put_metric_alarm(
+    AlarmName="lb-" + lb + "-healthy-hosts",
+    AlarmDescription="minimum number of healthy instances",
+    ActionsEnabled=True,
+    AlarmActions=['arn:aws:sns:us-east-1:810686069923:infrastructure-monitoring'],
+    MetricName='HealthyHostCount',
+    Namespace='AWS/ELB',
+    Statistic='Minimum',
+    Dimensions=[{u'Name': 'LoadBalancerName', u'Value': lb}],
+    Period=60,
+    EvaluationPeriods=1,
+    Threshold=1.0,
+    ComparisonOperator='LessThanThreshold'
+  )
+
+  print "Alarms set for: lb-" + lb
+
+
+
+
 #InfoNote for debugging later:
 #alarms = client_cloudwatch.describe_alarms()
 #a = alarms["MetricAlarms"][0]
 
-
+#count = 0
+#for m in alarms["MetricAlarms"]:
+#  print count + ": " + m
+#  count += 1
 
