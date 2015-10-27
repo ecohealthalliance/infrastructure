@@ -1,0 +1,21 @@
+docker-registry:
+  container_name: docker-registry
+  image: registry:2
+  ports:
+    - "5000:5000"
+  environment:
+    SETTINGS_FLAVOR: s3 
+    GUNICORN_OPTS: [--preload] 
+    AWS_BUCKET: eha-devops-docker-registry 
+    STORAGE_PATH: /registry 
+    AWS_REGION: us-east-1 
+    AWS_KEY: AKIAJVECOZYOARNIRYXA 
+    AWS_SECRET: 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 
+    SEARCH_BACKEND: sqlalchemy 
+    REGISTRY_HTTP_SECRET: 8TjZ;N(4D4>(Usjm
+  mem_limit: 2g
+  restart: always
+
+
+
+
