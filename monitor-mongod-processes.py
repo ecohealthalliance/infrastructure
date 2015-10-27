@@ -7,7 +7,6 @@ import os,sys
 
 # "Useful name": ["ssh_key", "ip address or fqdn"]
 servers = {
-  "mongo-tater-dev": ["infrastructure.pem", "52.21.199.95"],
   "grid-prod": ["grits-dev.pem", "54.164.176.170"],
   "mongo-tater-prod": ["infrastructure.pem", "52.21.23.33"],
   "grits.ecohealthalliance.org": ["grits-prod.pem", "grits.ecohealthalliance.org"],
