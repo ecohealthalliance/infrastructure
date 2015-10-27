@@ -11,7 +11,6 @@ urls = [
     'https://mantle.ecohealthalliance.org/grrs',
     'http://www.ecohealthalliance.org/',
     'https://eidr.ecohealthalliance.org/',
-    'https://tater-dev.ecohealth.io/',
     'https://tater.ecohealthalliance.org/',
     'https://grits.ecohealthalliance.org/',
     'https://grits-dev.ecohealthalliance.org/'
