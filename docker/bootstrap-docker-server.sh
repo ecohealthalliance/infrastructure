@@ -16,7 +16,8 @@ case $key in
 
   *)
     echo "Please specify hostname like so: --hostname <FQDN>"
-    echo "\n\n\n"
+    echo
+    echo
     exit 1
     ;;
 esac
@@ -42,7 +43,7 @@ apt-get update
 apt-get install -y lxc-docker
 
 
-asdfset hostname
+echo $NAME > /etc/hostname
 
 
 #Install docker compose

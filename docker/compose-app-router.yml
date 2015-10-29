@@ -1,0 +1,10 @@
+app-router:
+  container_name: app-router
+  image: docker-repository.tater.io/devops/app-router
+  ports:
+    - "80:80"
+    - "443:443"
+  restart: always
+  volumes:
+    - /var/log
+

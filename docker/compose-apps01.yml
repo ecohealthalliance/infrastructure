@@ -13,4 +13,9 @@ docker-registry:
   mem_limit: 2g
   restart: always
 
-
+healthcheck:
+  container_name: docker-repository.tater.io/devops/healthcheck
+  image: healthcheck
+  ports:
+    - "8000:8000"
+  restart: always
