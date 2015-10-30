@@ -13,10 +13,9 @@ RUN apt-get -y install lighttpd
 RUN apt-get clean all
 
 #Add config and file
-ADD lighttpd.conf /etc/lighttpd/lighttpd.conf
 ADD index.html /var/www/index.html
 
 LABEL app="healthcheck"
 EXPOSE 8000
 
-CMD /usr/sbin/lighttpd -f /etc/lighttpd/lighttpd.conf -D
+CMD "/usr/sbin/lighttpd -f /etc/lighttpd/lighttpd.conf -D"

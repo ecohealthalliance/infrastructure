@@ -1,6 +1,6 @@
 docker-registry:
   container_name: docker-registry
-  image: registry
+  image: registry:2
   ports:
     - "5000:5000"
   environment:
@@ -14,8 +14,8 @@ docker-registry:
   restart: always
 
 healthcheck:
-  container_name: docker-repository.tater.io/devops/healthcheck
-  image: healthcheck
+  container_name: healthcheck
+  image: docker-repository.tater.io:5000/devops/healthcheck
   ports:
-    - "8000:8000"
+    - "8000:80"
   restart: always

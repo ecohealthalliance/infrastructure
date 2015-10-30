@@ -44,6 +44,7 @@ apt-get install -y lxc-docker
 
 
 echo $NAME > /etc/hostname
+echo 'DOCKER_OPTS="--insecure-registry docker-repository.tater.io:5000"' >> /etc/default/docker
 
 
 #Install docker compose

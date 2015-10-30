@@ -18,8 +18,6 @@ EXPOSE 80
 EXPOSE 443
 
 # Add config files and scripts
-ADD rsyslog-haproxy /etc/rsyslog.d/49-haproxy.conf
-ADD logrotate-haproxy /etc/logrotate.d/haproxy
 ADD haproxy.cfg /etc/haproxy/haproxy.cfg
 ADD run.sh /run.sh
 
