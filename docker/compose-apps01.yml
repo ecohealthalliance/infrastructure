@@ -1,6 +1,6 @@
 docker-registry:
   container_name: docker-registry
-  image: registry:2
+  image: registry
   ports:
     - "5000:5000"
   environment:
@@ -10,7 +10,6 @@ docker-registry:
     - AWS_KEY=AKIAJVECOZYOARNIRYXA
     - AWS_SECRET=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
     - SEARCH_BACKEND=sqlalchemy
-  mem_limit: 2g
   restart: always
 
 healthcheck:
@@ -19,3 +18,11 @@ healthcheck:
   ports:
     - "8000:80"
   restart: always
+
+eha.tater.io:
+  container_name: eha.tater.io
+  image: docker-repository.tater.io:5000/apps/tater
+  ports:
+    - "3000:8001"
+  restart: always
+

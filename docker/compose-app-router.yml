@@ -7,5 +7,4 @@ app-router:
   restart: always
   volumes:
     - /var/log:/var/log
-  privileged: true
 
