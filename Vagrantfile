@@ -28,6 +28,9 @@ Vagrant.configure(2) do |config|
       #Install docker
       apt-get update
       apt-get install -y lxc-docker
+
+      #Download Ubuntu 14.04 image
+      docker pull ubuntu:14.04.3
     SHELL
   end
 end
