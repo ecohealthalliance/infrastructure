@@ -1,4 +1,7 @@
 #!/bin/bash
+# NOTE: Some of these commands must stay here and not in Dockerfile
+# This is because we have to perform actions on mounted external volumes
+
 
 if [ -f /var/lib/mongodb/NOT-MOUNTED ] || [ -f /var/log/NOT-MOUNTED ]
 then
@@ -7,5 +10,10 @@ then
   exit 1
 else
   mkdir /var/lib/mongodb
+  chown mongodb:mongodb /var/lib/mongodb/
+
+  mkdir /var/log/mongodb
+  touch /var/log/mongodb/mongodb.log
+  chown -R mongodb:mongodb /var/log/mongodb/
   /usr/bin/mongod --config /etc/mongodb.conf
 fi

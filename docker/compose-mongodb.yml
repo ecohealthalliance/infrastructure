@@ -5,6 +5,6 @@ mongodb:
     - "27017:27017"
   restart: always
   volumes:
-    - /var/lib:/var/lib
+    - /mnt/mongo:/var/lib
     - /var/log:/var/log
 
