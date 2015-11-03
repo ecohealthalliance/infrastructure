@@ -1,7 +1,6 @@
 mongodb:
   container_name: mongodb
-  #image: docker-repository.tater.io:5000/devops/mongodb
-  image: mongodb
+  image: docker-repository.tater.io:5000/devops/mongodb
   ports:
     - "27017:27017"
   restart: always
