@@ -1,0 +1,11 @@
+mongodb:
+  container_name: mongodb
+  #image: docker-repository.tater.io:5000/devops/mongodb
+  image: mongodb
+  ports:
+    - "27017:27017"
+  restart: always
+  volumes:
+    - /var/lib:/var/lib
+    - /var/log:/var/log
+
