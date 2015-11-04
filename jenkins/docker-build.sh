@@ -23,6 +23,9 @@ case $key in
 esac
 
 
+# Embed git revision into container
+git rev-parse HEAD > revision.txt
+
 DATE=$(date +%F) &&\
 docker build -t $IMAGE_NAME:$DATE . &&\
 docker tag -f $IMAGE_NAME:$DATE $IMAGE_NAME:latest &&\
