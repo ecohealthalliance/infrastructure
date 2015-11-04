@@ -14,8 +14,9 @@ RUN apt-get clean all
 
 #Add config and file
 ADD index.html /var/www/index.html
+ADD run.sh /run.sh
 
 LABEL app="healthcheck"
-EXPOSE 8000
+EXPOSE 80
 
-CMD "/usr/sbin/lighttpd -f /etc/lighttpd/lighttpd.conf -D"
+CMD /bin/bash run.sh
