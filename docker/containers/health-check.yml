@@ -1,0 +1,7 @@
+healthcheck:
+  container_name: healthcheck
+  image: docker-repository.tater.io:5000/devops/healthcheck
+  ports:
+    - "8000:80"
+  restart: always
+
