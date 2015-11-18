@@ -6,4 +6,6 @@ eha.tater.io:
   restart: always
   environment:
     - MONGO_URL=mongodb://10.0.0.92:27017/eha
+    - ROOT_URL=https://eha.tater.io
+    - PORT=3000
 
