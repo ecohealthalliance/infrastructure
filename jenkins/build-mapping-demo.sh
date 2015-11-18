@@ -15,7 +15,7 @@ cd ../
 source /var/lib/jenkins/.profile 
 nvm use v0.12.7
 rm -fr ./gritsbuild
-/opt/meteor/meteor build ./gritsbuild --directory || exit 1
+meteor build ./gritsbuild --directory || exit 1
 
 
 #Create the docker file
