@@ -45,6 +45,7 @@ sed -i 's/username/ECOHEALTH/' grits_ftp_config.py
 sed -i 's/password/CC6832Hy/' grits_ftp_config.py
 
 python grits_flight_pull.py
+python grits_consume.py --type DiioAirport -m 10.0.0.175 -d grits-net-meteor /tests/data/MiExpressAllAirportCodes.tsv
 python grits_consume.py --type FlightGlobal -m 10.0.0.175 -d grits-net-meteor /data/EcoHealth_*.csv
 
 node main.js
