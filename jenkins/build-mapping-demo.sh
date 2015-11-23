@@ -26,9 +26,18 @@ cat > ./gritsbuild/bundle/Dockerfile<<-EOF
 FROM node:0.12
 EXPOSE 80
 ADD . .
-RUN apt-get update && apt-get -y install build-essential python python-dev python-setuptools python-pip
-RUN pip install virtualenv virtualenvwrapper
+
+#Install dependencies
+RUN apt-get update && apt-get -y install build-essential python python-dev python-setuptools python-pip mongodb-clients
+RUN pip install virtualenv virtualenvwrapper awscli
 RUN cd programs/server && npm install
+
+#Setup AWS config
+RUN mkdir /root/.aws
+
+ENV aws_access_key_id=AKIAJLKTQX7LL2L2JV7Q
+ENV aws_secret_access_key=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
+
 CMD bash run.sh
 EOF
 
@@ -46,7 +55,11 @@ sed -i 's/password/CC6832Hy/' grits_ftp_config.py
 
 python grits_flight_pull.py
 python grits_consume.py --type DiioAirport -m 10.0.0.175 -d grits-net-meteor /tests/data/MiExpressAllAirportCodes.tsv
-python grits_consume.py --type FlightGlobal -m 10.0.0.175 -d grits-net-meteor /data/EcoHealth_*.csv
+python grits_consume.py --type FlightGlobal -m 10.0.0.175 -d grits-net-meteor /data/EcoHealth_*.csv  &&\ 
+rm -fr /data
+
+aws s3 sync s3://flight-network-heat-map/ /
+mongorestore -h 10.0.0.175 -d grits-net-meteor -c heatmap /dump/grits/heatmap.bson
 
 node main.js
 EOF
