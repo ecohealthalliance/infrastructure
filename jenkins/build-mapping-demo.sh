@@ -35,8 +35,8 @@ RUN cd programs/server && npm install
 #Setup AWS config
 RUN mkdir /root/.aws
 
-ENV aws_access_key_id=AKIAJLKTQX7LL2L2JV7Q
-ENV aws_secret_access_key=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
+ENV AWS_ACCESS_KEY=AKIAJLKTQX7LL2L2JV7Q
+ENV AWS_SECRET_KEY=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
 
 CMD bash run.sh
 EOF
