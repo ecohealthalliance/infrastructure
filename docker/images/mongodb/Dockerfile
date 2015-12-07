@@ -23,6 +23,6 @@ EXPOSE 27017
 
 # Add config files and scripts
 ADD mongodb.conf /etc/mongodb.conf
-Add run.sh /run.sh
+ADD run.sh /run.sh
 
 CMD /bin/bash run.sh
