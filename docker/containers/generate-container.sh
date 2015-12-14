@@ -24,13 +24,15 @@ case $key in
   *)
     echo "Please specify container name, e.g.: --name eha"
     echo ""
-    echo ""
     exit 1;
     ;;
 esac
 
 # Lowercase the $NAME
 NAME="$(tr [A-Z] [a-z] <<< "$NAME")"
+
+# Create the sub-directory
+mkdir -p tater
 
 if [[ -n "$NAME" ]]; then
   echo "${NAME}.tater.io:
@@ -43,5 +45,5 @@ environment:
   - MONGO_URL=mongodb://10.0.0.92:27017/${NAME}
   - ROOT_URL=https://${NAME}.tater.io
   - PORT=3000
-"
+" >> "tater/${NAME}"
 fi
