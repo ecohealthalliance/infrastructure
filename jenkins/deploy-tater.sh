@@ -16,7 +16,7 @@ case $key in
     ;;
 esac
 
-scp -i /keys/infrastructure.pem docker/containers/$INSTANCE_NAME ubuntu@po.tater.io:/tmp
+scp -i /keys/infrastructure.pem docker/containers/tater/$INSTANCE_NAME ubuntu@po.tater.io:/tmp
 export remote_ssh="ssh -i /keys/infrastructure.pem ubuntu@po.tater.io"
 
 $remote_ssh "sudo docker-compose -f /tmp/$INSTANCE_NAME pull"
