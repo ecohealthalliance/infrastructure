@@ -1,6 +1,8 @@
 #!/bin/bash
 #Name: build-mapping-demo.sh
 #Purpose: Shell script that jenkins will use to build docker container to demo mapping engine build by DIT
+#Warning: This is a convoluted process that I had to reverse engineer from an external contractor.
+#         There is a better way to handle all of this, I just don't have a ton of time right now
 #Author: Freddie Rosario <rosario@ecohealthalliance.org>
 
 #Checkout necessary repos
@@ -20,6 +22,18 @@ rm -fr ./gritsbuild
 meteor build ./gritsbuild --directory || exit 1
 
 
+#Create the supervisor config file for embedded mongo
+touch ./gritsbuild/bundle/mongod-supervisor.conf
+cat > ./gritsbuild/bundle/mongod-supervisor.conf<<-EOF
+[program:mongod]
+command=/usr/bin/mongod -f /etc/mongodb.conf 
+environment=LC_ALL=C
+user=mongodb
+autostart=true
+autorestart=unexpected
+EOF
+
+
 #Create the docker file
 touch ./gritsbuild/bundle/Dockerfile
 cat > ./gritsbuild/bundle/Dockerfile<<-EOF
@@ -28,9 +42,13 @@ EXPOSE 80
 ADD . .
 
 #Install dependencies
-RUN apt-get update && apt-get -y install build-essential python python-dev python-setuptools python-pip mongodb-clients
+RUN apt-get clean all && apt-get update
+RUN apt-get -y install build-essential python python-dev python-setuptools python-pip mongodb-clients mongodb supervisor
 RUN pip install virtualenv virtualenvwrapper awscli
 RUN cd programs/server && npm install
+
+#Move mongodb supervisor config file to correct location
+RUN mv /mongod-supervisor.conf /etc/supervisor/conf.d/mongod.conf
 
 #Setup AWS config
 RUN mkdir /root/.aws
@@ -67,6 +85,9 @@ python grits_ensure_index.py
 #Import heat map data
 aws s3 sync s3://flight-network-heat-map/ /
 mongorestore -h 10.0.0.175 -d grits-net-meteor -c heatmap /dump/grits/heatmap.bson
+
+#To enable the embedded instance of mongodb, uncomment the following line
+#service supervisor start
 
 #Start the app
 node main.js
