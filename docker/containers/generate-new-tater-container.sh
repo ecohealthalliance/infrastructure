@@ -71,14 +71,14 @@ then
 
   # Ouput the new container file
   echo "$NAME.tater.io:
-container_name: $NAME.tater.io
-image: docker-repository.tater.io:5000/apps/tater
-ports:
-  - \"$PORT:3000\"
-restart: always
-environment:
-  - MONGO_URL=mongodb://10.0.0.92:27017/$NAME
-  - ROOT_URL=https://$NAME.tater.io
-  - PORT=3000
+  container_name: $NAME.tater.io
+  image: docker-repository.tater.io:5000/apps/tater
+  ports:
+    - \"$PORT:3000\"
+  restart: always
+  environment:
+    - MONGO_URL=mongodb://10.0.0.92:27017/$NAME
+    - ROOT_URL=https://$NAME.tater.io
+    - PORT=3000
 " > "tater/$NAME"
 fi
