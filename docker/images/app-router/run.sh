@@ -1,3 +1,2 @@
 #!/bin/bash
-/usr/sbin/haproxy -f /etc/haproxy/haproxy.cfg -d 
-
+supervisord --nodaemon --config /etc/supervisor/supervisord.conf
