@@ -13,7 +13,10 @@ urls = [
     'https://eidr.ecohealthalliance.org/',
     'https://grits.ecohealthalliance.org/',
     'https://grits-dev.ecohealthalliance.org/',
-    'https://eha.tater.io'
+    'https://eha.tater.io',
+    'https://clarkson.tater.io',
+    'https://beta.tater.io',
+    'https://dtra.tater.io'
   ]
 
 for u in urls:
