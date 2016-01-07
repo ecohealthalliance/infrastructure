@@ -15,7 +15,7 @@ urls = [
     'https://grits-dev.ecohealthalliance.org/',
     'https://eha.tater.io',
     'https://clarkson.tater.io',
-    'https://beta.tater.io',
+    'https://www.tater.io',
     'https://dtra.tater.io'
   ]
 
