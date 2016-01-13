@@ -8,7 +8,6 @@ from sys import exit
 failure = False
 
 urls = [
-    'https://mantle.ecohealthalliance.org/grrs',
     'http://www.ecohealthalliance.org/',
     'https://eidr.ecohealthalliance.org/',
     'https://grits.ecohealthalliance.org/',
@@ -16,7 +15,8 @@ urls = [
     'https://eha.tater.io',
     'https://clarkson.tater.io',
     'https://www.tater.io',
-    'https://dtra.tater.io'
+    'https://dtra.tater.io',
+    'https://mantle.io'
   ]
 
 for u in urls:
