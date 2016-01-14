@@ -28,6 +28,5 @@ EXPOSE 80
 EXPOSE 443
 EXPOSE 22
 
-ADD update_config.py /update_config.py
 ADD run.sh /run.sh
 CMD /bin/bash run.sh
