@@ -12,9 +12,8 @@ servers = {
   "grits.ecohealthalliance.org": ["grits-prod.pem", "grits.ecohealthalliance.org"],
   "mantle-dev": ["infrastructure.pem", "52.3.59.100"],
   "tater-prod": ["infrastructure.pem", "54.175.138.187"],
-  "rana-dev": ["grits-dev.pem", "52.1.78.153"],
-  "rana-prod": ["rana-prod.pem", "52.7.110.184"],
-  "grits-dev.ecohealthalliance.org": ["grits-dev.pem", "52.71.252.57"]
+  "grits-dev.ecohealthalliance.org": ["grits-dev.pem", "52.71.252.57"],
+  "mongodb01.tater.io": ["infrastructure.pem", "mongodb01.tater.io"]
 }
 
 key_dir = "/keys/"
