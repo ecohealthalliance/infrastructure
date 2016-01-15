@@ -8,7 +8,7 @@ export PYTHONPATH="$(pwd)/pyhaproxy"
 
 
 #Update haproxy.cfg
-$WORKSPACE/docker/images/app-router/update_config.py \
+./docker/images/app-router/update_config.py \
   -n $instance_name \
   -c $WORKSPACE/docker/images/app-router/haproxy.cfg \
   -p $instance_port
