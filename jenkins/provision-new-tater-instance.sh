@@ -14,6 +14,10 @@ $WORKSPACE/docker/images/app-router/update_config.py \
   -p $instance_port
 
 
+#Create a docker-compose file for new instance
+./docker/containers/generate-new-tater-container.sh --name $instance_name --port $instance_port
+
+
 #Commit update to revision control
 git add -A
 git commit -m "New tater instance: $instance_name   $BUILD_URL"
