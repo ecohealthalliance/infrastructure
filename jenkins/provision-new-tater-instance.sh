@@ -21,6 +21,8 @@ export PYTHONPATH="$(pwd)/pyhaproxy"
 #Commit update to revision control
 git add -A
 git commit -m "New tater instance: $instance_name   $BUILD_URL"
-#HEAD_ON_BRANCH=$(echo $GIT_BRANCH|awk -F"/" '{print $1 " HEAD:"$2}')
-#git push $HEAD_ON_BRANCH
+HEAD_ON_BRANCH=$(echo $GIT_BRANCH|awk -F"/" '{print $1 " HEAD:"$2}')
+git push $HEAD_ON_BRANCH
+
+
 

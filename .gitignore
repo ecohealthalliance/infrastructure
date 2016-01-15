@@ -4,3 +4,4 @@
 **/*.swo
 .vagrant/*
 **/pyhaproxy/**
+pyhaproxy
