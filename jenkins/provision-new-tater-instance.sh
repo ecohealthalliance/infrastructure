@@ -51,7 +51,6 @@ backup_config="($verify_config && cp $config_file $config_file-$timestamp) || $c
 /usr/bin/ssh -p 2222 root@tots01.tater.io "supervisorctl restart haproxyd"
 
 
+#Update DNS
+./jenkins/update-tater-dns.py -n $instance_name
 
-
-#TODO:
-#Route53 API call
