@@ -13,8 +13,8 @@ deploy_instance () {
 
   $remote_ssh "sudo docker-compose -f /tmp/$INSTANCE_NAME pull"
   export id="$($remote_ssh sudo docker ps | grep $INSTANCE_NAME | sed 's/ .*//')"
-  $remote_ssh "sudo docker stop $id"
-  $remote_ssh "sudo docker rm $id"
+  $remote_ssh "sudo docker-compose -f /tmp/$INSTANCE_NAME stop $id"
+  $remote_ssh "sudo docker-compose -f  /tmp/$INSTANCE_NAME rm $id"
   $remote_ssh "sudo docker-compose -f /tmp/$INSTANCE_NAME up -d"
   return 0
 }
