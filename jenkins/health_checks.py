@@ -15,7 +15,6 @@ urls = [
     'https://eha.tater.io',
     'https://clarkson.tater.io',
     'https://www.tater.io',
-    'https://dtra.tater.io',
     'https://mantle.io'
   ]
 
