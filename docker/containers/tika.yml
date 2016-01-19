@@ -1,0 +1,7 @@
+tika:
+  container_name: tika
+  image: docker-repository.tater.io:5000/apps/tika
+  ports:
+    - "9998:9998"
+  restart: always
+
