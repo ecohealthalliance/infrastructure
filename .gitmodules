@@ -1,0 +1,9 @@
+[submodule "docker/images/flirt/grits-net-meteor"]
+	path = docker/images/flirt/grits-net-meteor
+	url = git@github.com:ecohealthalliance/grits-net-meteor.git
+[submodule "docker/images/flirt/grits-net-mapper"]
+	path = docker/images/flirt/grits-net-mapper
+	url = git@github.com:ecohealthalliance/grits-net-mapper.git
+[submodule "docker/images/flirt/grits-net-consume"]
+	path = docker/images/flirt/grits-net-consume
+	url = git@github.com:ecohealthalliance/grits-net-consume.git

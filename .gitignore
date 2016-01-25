@@ -5,3 +5,7 @@
 .vagrant/*
 **/pyhaproxy/**
 pyhaproxy
+docker/images/flirt/grits-net-consume/*
+docker/images/flirt/grits-net-mapper/*
+docker/images/flirt/grits-net-meteor/*
+
