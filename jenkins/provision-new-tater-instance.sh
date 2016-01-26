@@ -29,7 +29,7 @@ git push $HEAD_ON_BRANCH
 
 #Spin up new docker container
 /usr/bin/scp -i /keys/infrastructure.pem docker/containers/tater/$instance_name  ubuntu@po.tater.io:/tmp/ && \
-/usr/bin/ssh -i /keys/infrastructure.pem  ubuntu@po.tater.io "sudo docker-compose -f /tmp/$instance_name up -d"
+/usr/bin/ssh -i /keys/infrastructure.pem  ubuntu@po.tater.io "sudo --login docker-compose -f /tmp/$instance_name up -d"
 
 
 #Build up a few convenience aliases

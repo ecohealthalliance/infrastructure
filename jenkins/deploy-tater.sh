@@ -11,7 +11,7 @@ deploy_instance () {
   scp -i /keys/infrastructure.pem docker/containers/tater/$INSTANCE_NAME ubuntu@po.tater.io:/tmp
   export remote_ssh="ssh -i /keys/infrastructure.pem ubuntu@po.tater.io"
 
-  $remote_ssh "sudo docker-compose -f /tmp/$INSTANCE_NAME pull"
+  $remote_ssh "sudo --login docker-compose -f /tmp/$INSTANCE_NAME pull"
   export id="$($remote_ssh sudo docker ps | grep $INSTANCE_NAME | sed 's/ .*//')"
   $remote_ssh "sudo docker-compose -f /tmp/$INSTANCE_NAME stop $id"
   $remote_ssh "sudo docker-compose -f  /tmp/$INSTANCE_NAME rm $id"
