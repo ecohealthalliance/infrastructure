@@ -19,8 +19,13 @@ deploy_instance () {
   return 0
 }
 
-FILES=docker/containers/tater/*
-for file in $FILES
-do
-  deploy_instance ${file##*/}
-done
+INSTANCE_NAME="$1"
+if [ $INSTANCE_NAME ]; then
+  deploy_instance $INSTANCE_NAME
+else
+  FILES=docker/containers/tater/*
+  for file in $FILES
+  do
+    deploy_instance ${file##*/}
+  done
+fi
