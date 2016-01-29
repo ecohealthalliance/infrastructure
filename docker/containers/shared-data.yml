@@ -1,0 +1,5 @@
+shared-data:
+  container_name: shared-data
+  image: docker-repository.tater.io:5000/devops/shared-data
+  command: sleep infinity
+

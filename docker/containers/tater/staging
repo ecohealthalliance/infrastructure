@@ -8,4 +8,6 @@ staging.tater.io:
     - MONGO_URL=mongodb://10.0.0.92:27017/staging
     - ROOT_URL=https://staging.tater.io
     - PORT=3000
+  volumes_from:
+    - shared-data:ro
 

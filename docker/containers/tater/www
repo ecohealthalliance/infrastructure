@@ -8,4 +8,6 @@ www.tater.io:
     - MONGO_URL=mongodb://10.0.0.92:27017/www
     - ROOT_URL=https://www.tater.io
     - PORT=3000
+  volumes_from:
+    - shared-data:ro
 

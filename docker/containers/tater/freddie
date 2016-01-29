@@ -8,4 +8,6 @@ freddie.tater.io:
     - MONGO_URL=mongodb://10.0.0.92:27017/freddie
     - ROOT_URL=https://freddie.tater.io
     - PORT=3000
+  volumes_from:
+    - shared-data:ro
 

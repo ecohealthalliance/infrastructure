@@ -8,4 +8,6 @@ predict.tater.io:
     - MONGO_URL=mongodb://10.0.0.92:27017/predict
     - ROOT_URL=https://predict.tater.io
     - PORT=3000
+  volumes_from:
+    - shared-data:ro
 
