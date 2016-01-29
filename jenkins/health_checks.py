@@ -15,7 +15,8 @@ urls = [
     'https://eha.tater.io',
     'https://clarkson.tater.io',
     'https://www.tater.io',
-    'https://mantle.io'
+    'https://mantle.io',
+    'http://flirt.eha.io'
   ]
 
 for u in urls:
