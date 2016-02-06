@@ -5,8 +5,7 @@ flirt:
     - MONGO_URL=mongodb://10.0.0.175:27017/grits-net-meteor
     - ROOT_URL=http://52.23.65.236
     - PORT=80 
-    ports:
+  ports:
     - "80:80"
   restart: always
-  command: node /example/gritsbuild/bundle/main.js
 

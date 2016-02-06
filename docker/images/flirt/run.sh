@@ -2,11 +2,17 @@
 # Should only be executed on first run.
 # If you have a prepopulated DB, just execute the container with the last line
 
-#Take care of dependencies
+#Take care of grits-net-consume dependencies
 cd /grits-net-consume
 virtualenv /grits-net-consume-env &&\ 
 source /grits-net-consume-env/bin/activate &&\ 
 pip install -r requirements.txt
+
+#Take care of flirt-simulation-dependencies
+cd /flirt-simulation-service
+virtualenv /flirt-simulation-service-env &&\
+source /flirt-simulation-service-env/bin/activate &&\
+pip install -r requirements.txt 
 
 #Update ftp credentials
 sed -i 's/url-innovata.com/suwweb03.innovata-llc.com/' grits_ftp_config.py
@@ -26,8 +32,5 @@ python grits_ensure_index.py
 aws s3 sync s3://flight-network-heat-map/ ./
 mongorestore -h 10.0.0.175 -d grits-net-meteor -c heatmap ./dump/grits/heatmap.bson
 
-#To enable the embedded instance of mongodb, uncomment the following line
-#service supervisor start
-
 #Start the app
-node /example/gritsbuild/bundle/main.js
+service supervisor start

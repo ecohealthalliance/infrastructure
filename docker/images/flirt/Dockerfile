@@ -11,6 +11,11 @@ RUN apt-get clean all && \
 
 #Config files
 COPY mongod-supervisor.conf /etc/supervisor/conf.d/mongod.conf
+COPY celery-supervisor.conf /etc/supervisor/conf.d/celery.conf
+COPY celery.sh /celery.sh
+COPY tornado-supervisor.conf /etc/supervisor/conf.d/tornado.conf
+COPY tornado.sh /tornado.sh
+COPY flirt-supervisor.conf /etc/supervisor/conf.d/flirt.conf
 
 #Copy necessary repos
 COPY grits-net-meteor /
@@ -20,6 +25,8 @@ COPY grits-net-mapper /example/packages/grits-net-mapper
 COPY grits-net-consume /example/packages/grits-net-consume
 RUN cp -al /example/packages/grits-net-consume /grits-net-consume
 COPY flirt-sidebar /example/packages/flirt-sidebar
+COPY flirt-simulation-service /example/packages/flirt-simulation-service
+RUN cp -al /example/packages/flirt-simulation-service /flirt-simulation-service
 
 #Build the meteor app
 #Chaining these commands to keep the image smaller
@@ -36,6 +43,7 @@ RUN mkdir /root/.aws
 ENV AWS_ACCESS_KEY_ID=AKIAJLKTQX7LL2L2JV7Q
 ENV AWS_SECRET_ACCESS_KEY=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
 
+ENV FLIRT_SIMULATOR_URL="http://localhost:45000/simulator"
 EXPOSE 80
 COPY run.sh /run.sh
 CMD bash run.sh
