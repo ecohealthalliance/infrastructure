@@ -9,4 +9,4 @@
 	url = git@github.com:ecohealthalliance/grits-net-consume.git
 [submodule "docker/images/flirt/flirt-sidebar"]
 	path = docker/images/flirt/flirt-sidebar
-	url = https://github.com/ecohealthalliance/flirt-sidebar
+	url = git@github.com:ecohealthalliance/flirt-sidebar.git
