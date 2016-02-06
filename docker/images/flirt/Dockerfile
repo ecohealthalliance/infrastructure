@@ -18,6 +18,7 @@ RUN mkdir /example/packages
 COPY grits-net-meteor /example/packages/grits-net-meteor
 COPY grits-net-mapper /example/packages/grits-net-mapper
 COPY grits-net-consume /example/packages/grits-net-consume
+COPY flirt-sidebar /example/packages/flirt-sidebar
 
 #Build the meteor app
 #Chaining these commands to keep the image smaller
