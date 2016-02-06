@@ -32,5 +32,8 @@ python grits_ensure_index.py
 aws s3 sync s3://flight-network-heat-map/ ./
 mongorestore -h 10.0.0.175 -d grits-net-meteor -c heatmap ./dump/grits/heatmap.bson
 
+#Create legs collection
+java -jar /flirt-legs.jar --mongohost="10.0.0.175" mongoport="27017"
+
 #Start the app
 service supervisor start
