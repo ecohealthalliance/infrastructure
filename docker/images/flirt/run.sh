@@ -3,7 +3,7 @@
 # If you have a prepopulated DB, just execute the container with the last line
 
 #Take care of dependencies
-cd /example/packages/grits-net-consume
+cd /grits-net-consume
 virtualenv /grits-net-consume-env &&\ 
 source /grits-net-consume-env/bin/activate &&\ 
 pip install -r requirements.txt
