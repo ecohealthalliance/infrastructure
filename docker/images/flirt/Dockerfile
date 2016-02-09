@@ -75,6 +75,12 @@ RUN mkdir /root/.aws
 ENV AWS_ACCESS_KEY_ID=AKIAJLKTQX7LL2L2JV7Q
 ENV AWS_SECRET_ACCESS_KEY=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
 
+#Take care of flirt-simulation-dependencies
+RUN cd /flirt-simulation-service && \
+    virtualenv /flirt-simulation-service-env &&\
+    source /flirt-simulation-service-env/bin/activate &&\
+    pip install -r requirements.txt 
+
 ENV FLIRT_SIMULATOR_URL="http://localhost:45000/simulator"
 EXPOSE 80
 COPY run.sh /run.sh

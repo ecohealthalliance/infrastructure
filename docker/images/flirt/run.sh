@@ -8,12 +8,6 @@ virtualenv /grits-net-consume-env &&\
 source /grits-net-consume-env/bin/activate &&\ 
 pip install -r requirements.txt
 
-#Take care of flirt-simulation-dependencies
-cd /flirt-simulation-service
-virtualenv /flirt-simulation-service-env &&\
-source /flirt-simulation-service-env/bin/activate &&\
-pip install -r requirements.txt 
-
 #Update ftp credentials
 sed -i 's/url-innovata.com/suwweb03.innovata-llc.com/' grits_ftp_config.py
 sed -i 's/username/ECOHEALTH/' grits_ftp_config.py
