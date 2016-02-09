@@ -8,4 +8,4 @@ flirt:
   ports:
     - "80:80"
   restart: always
-
+  command: supervisord --nodaemon --config /etc/supervisor/supervisord.conf
