@@ -3,15 +3,14 @@
 #Please run this from the top level of the infrastructure repo
 
 #Dump the freshly built image into a tarball
-/bin/rm /tmp/flirt.tar.gz
 /usr/bin/docker save flirt > /tmp/flirt.tar
 /bin/echo "Docker image exported"
 /bin/gzip -1 /tmp/flirt.tar 
 /bin/echo "Exported image now compressed"
 
 #Useful alias/function
-export ssh_command="/usr/bin/ssh -i /keys/infrastructure.pem  ubuntu@52.23.65.236"
-function scp_file { /usr/bin/scp -i /keys/infrastructurea.pem $1 ubuntu@52.23.65.236:/tmp/ }
+export ssh_command="/usr/bin/ssh -i /keys/infrastructure.pem  ubuntu@52.23.65.236 "
+function scp_file { /usr/bin/scp -i /keys/infrastructure.pem $1 ubuntu@52.23.65.236:/tmp/; }
 
 #Import image on demo box
 scp_file /tmp/flirt.tar.gz
