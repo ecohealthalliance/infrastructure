@@ -48,6 +48,7 @@ COPY celery.sh /celery.sh
 COPY tornado-supervisor.conf /etc/supervisor/conf.d/tornado.conf
 COPY tornado.sh /tornado.sh
 COPY flirt-supervisor.conf /etc/supervisor/conf.d/flirt.conf
+COPY flirt.sh /flirt.sh
 
 #Copy necessary repos
 COPY grits-net-meteor /
