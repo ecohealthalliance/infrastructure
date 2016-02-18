@@ -80,5 +80,7 @@ then
     - MONGO_URL=mongodb://10.0.0.92:27017/$NAME
     - ROOT_URL=https://$NAME.tater.io
     - PORT=3000
+  volumes_from:
+      - shared-data:ro
 " > "tater/$NAME"
 fi
