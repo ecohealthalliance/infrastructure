@@ -8,4 +8,6 @@ flirt:
   ports:
     - "80:80"
   restart: always
+  volumes_from:
+    - shared-data:ro
   command: supervisord --nodaemon --config /etc/supervisor/supervisord.conf
