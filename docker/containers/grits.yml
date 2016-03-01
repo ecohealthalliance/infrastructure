@@ -1,0 +1,13 @@
+full-grits-api:
+  image: full-grits-api
+  container_name: full-grits-api
+  ports:
+    - "2222:22"
+    - "80:80"
+  restart: always
+  environment:
+    - placeholder=true
+  volumes:
+    - /var/lib/mongo:/var/lib/mongo
+    - /var/lib/mongo:/home/grits
+
