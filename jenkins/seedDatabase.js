@@ -1,5 +1,5 @@
 var system = require('system');
-var url = system.args[1];
+var url = encodeURI(system.args[1]);
 
 var page = require('webpage').create();
 
