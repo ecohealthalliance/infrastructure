@@ -4,12 +4,16 @@
 instance_port=$RANDOM
 quit=0
 
+while [ "$instance_port" -lt 1024 ]; do
+  instance_port=$RANDOM
+done
+
 while [ "$quit" -ne 1 ]; do
   netstat -a | grep $instance_port >> /dev/null
   if [ $? -gt 0 ]; then
     quit=1
   else
-    port=`expr $instance_port + 1`
+    instance_port=`expr $instance_port + 1`
   fi
 done
 
