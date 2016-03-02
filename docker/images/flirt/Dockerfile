@@ -74,6 +74,14 @@ RUN bash -c "cd /flirt-simulation-service && \
     source /flirt-simulation-service-env/bin/activate &&\
     pip install -r requirements.txt"
 
+#Create pypy env
+COPY pypy-4.0.1-linux_x86_64-portable.tar.bz2 /pypy-4.0.1-linux_x86_64-portable.tar.bz2
+RUN bash -c "tar -xvjf /pypy-4.0.1-linux_x86_64-portable.tar.bz2"
+RUN bash -c "virtualenv -p pypy-4.0.1-linux_x86_64-portable/bin/pypy /flirt-pypy-env"
+RUN bash -c "cd /flirt-simulation-service/simulator/ && \
+    source /flirt-pypy-env/bin/activate &&\
+    pip install -r requirements.pip"
+
 ENV FLIRT_SIMULATOR_URL="http://localhost:45000/simulator"
 EXPOSE 80
 COPY run.sh /run.sh
