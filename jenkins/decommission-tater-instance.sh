@@ -53,4 +53,5 @@ backup_config="($verify_config && cp $config_file $config_file-$timestamp) || $c
 
 
 #Remove DNS record
+./jenkins/update-tater-dns.py -n $instance_name --delete
 
