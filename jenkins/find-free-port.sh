@@ -4,7 +4,7 @@
 instance_port=$RANDOM
 quit=0
 
-while [ "$instance_port" -lt 1024 ]; do
+while [ $instance_port -lt 1024 ] && [ $instance_port -gt 65535 ]; do
   instance_port=$RANDOM
 done
 
