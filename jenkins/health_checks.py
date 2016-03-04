@@ -10,13 +10,15 @@ failure = False
 urls = [
     'http://www.ecohealthalliance.org/',
     'https://eidr.ecohealthalliance.org/',
-    'https://grits.ecohealthalliance.org/',
     'https://grits-dev.ecohealthalliance.org/',
+    'https://grits.ecohealthalliance.org/',
     'https://eha.tater.io',
-    'https://clarkson.tater.io',
     'https://www.tater.io',
     'https://mantle.io',
-    'http://flirt.eha.io'
+    'http://flirt.eha.io',
+    'https://staging.tater.io',
+    'https://predict.tater.io',
+    'https://bsve.tater.io'
   ]
 
 for u in urls:
