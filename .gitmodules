@@ -13,3 +13,6 @@
 [submodule "docker/images/flirt/flirt-simulation-service"]
 	path = docker/images/flirt/flirt-simulation-service
 	url = git@github.com:ecohealthalliance/flirt-simulation-service.git
+[submodule "docker/images/spa/flirt-sidebar"]
+	path = docker/images/spa/flirt-sidebar
+	url = git@github.com:ecohealthalliance/flirt-sidebar.git
