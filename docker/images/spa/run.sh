@@ -8,11 +8,6 @@ virtualenv /grits-net-consume-env &&\
 source /grits-net-consume-env/bin/activate &&\ 
 pip install -r requirements.txt
 
-#Update ftp credentials
-sed -i 's/url-innovata.com/suwweb03.innovata-llc.com/' grits_ftp_config.py
-sed -i 's/username/ECOHEALTH/' grits_ftp_config.py
-sed -i 's/password/CC6832Hy/' grits_ftp_config.py
-
 #Consume/import flight data
 python grits_flight_pull.py
 python grits_consume.py --type DiioAirport -m 10.0.0.175 -d grits-net-meteor /tests/data/MiExpressAllAirportCodes.tsv
