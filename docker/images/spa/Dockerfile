@@ -1,4 +1,4 @@
-FROM ubuntu:14.04.3
+FROM ubuntu:14.04.4
 
 #Install dependencies
 #Chaining these commands to keep the image smaller
@@ -45,9 +45,7 @@ COPY spa.sh /spa.sh
 
 #Copy necessary repos
 COPY spa /
-
-#RUN mkdir /packages
-#COPY flirt-sidebar /packages/flirt-sidebar
+COPY flirt-sidebar /packages/flirt-sidebar
 
 #Build the meteor app
 #Chaining these commands to keep the image smaller
