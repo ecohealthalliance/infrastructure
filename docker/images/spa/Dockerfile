@@ -44,17 +44,17 @@ COPY spa-supervisor.conf /etc/supervisor/conf.d/spa.conf
 COPY spa.sh /spa.sh
 
 #Copy necessary repos
-COPY flirt-sidebar /
+COPY spa /
+
 RUN mkdir /packages
 COPY flirt-sidebar /packages/flirt-sidebar
 
 #Build the meteor app
 #Chaining these commands to keep the image smaller
-RUN cd /example && \
-    (meteor build ./gritsbuild --directory || exit 1) && \
-    cd /example/gritsbuild/bundle/programs/server && \
+RUN (meteor build ./spabuild --directory || exit 1) && \
+    cd /spabuild/bundle/programs/server && \
     npm install && \
-    rm -fr /example/packages && \
+    rm -fr /packages && \
     rm -fr /root/.meteor && \
     apt-get clean all
 

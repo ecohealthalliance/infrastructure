@@ -16,3 +16,6 @@
 [submodule "docker/images/spa/flirt-sidebar"]
 	path = docker/images/spa/flirt-sidebar
 	url = git@github.com:ecohealthalliance/flirt-sidebar.git
+[submodule "docker/images/spa/spa"]
+	path = docker/images/spa/spa
+	url = git@github.com:ecohealthalliance/spa.git
