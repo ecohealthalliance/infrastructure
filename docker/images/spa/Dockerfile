@@ -43,23 +43,26 @@ COPY mongod-supervisor.conf /etc/supervisor/conf.d/mongod.conf
 COPY spa-supervisor.conf /etc/supervisor/conf.d/spa.conf
 COPY spa.sh /spa.sh
 
-#Copy necessary repos
-COPY spa /
-COPY flirt-sidebar /packages/flirt-sidebar
+#make app dir
+RUN mkdir /spa-meteor
+COPY spa /spa-meteor
+
+#submodule requires a submodule and that's not coming through. make sure it's there.
+COPY flirt-sidebar /spa-meteor/packages/flirt-sidebar
 
 #Build the meteor app
-#Chaining these commands to keep the image smaller
-RUN (meteor build ./spabuild --directory || exit 1) && \
-    cd /spabuild/bundle/programs/server && \
+RUN cd /spa-meteor && \
+    (meteor build ./spabuild --directory || exit 1) && \
+    cd /spa-meteor/spabuild/bundle/programs/server && \
     npm install && \
-    rm -fr /packages && \
+    rm -fr /spa-meteor/packages && \
     rm -fr /root/.meteor && \
     apt-get clean all
 
 #Setup AWS config
-RUN mkdir /root/.aws
-ENV AWS_ACCESS_KEY_ID=AKIAJLKTQX7LL2L2JV7Q
-ENV AWS_SECRET_ACCESS_KEY=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
+#RUN mkdir /root/.aws
+#ENV AWS_ACCESS_KEY_ID=AKIAJLKTQX7LL2L2JV7Q
+#ENV AWS_SECRET_ACCESS_KEY=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
 
 EXPOSE 80
 COPY run.sh /run.sh
