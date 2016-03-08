@@ -1,0 +1,2 @@
+# An empty line is required at the end of this file for a valid cron file.
+"0 0 * * * ansible-playbook --connection=local /ansible/site.yml --vault-password-file /.promed_vault_password

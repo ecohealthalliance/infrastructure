@@ -15,7 +15,14 @@ RUN apt-get clean all && \
 
 RUN pip install ansible
 
+# This file needs to be added to the deployment directory
 COPY .promed_vault_password .promed_vault_password
+
+RUN mkdir /ansible
+COPY promed_mail_scraper/ansible /ansible
+
+# Create cronjob to run ProMED mail ingest
+ADD crontab /etc/cron.d/crontab
 
 # gpg keys listed at https://github.com/nodejs/node
 RUN set -ex \
