@@ -47,8 +47,8 @@ COPY spa.sh /spa.sh
 RUN mkdir /spa-meteor
 COPY spa /spa-meteor
 
-RUN mkdir /shared
-ADD settings-development.json /shared/settings-production.json
+RUN mkdir /shared 
+RUN cp /spa-meteor/settings-development.json /shared/settings-production.json
 
 #submodule requires a submodule and that's not coming through. make sure it's there.
 COPY flirt-sidebar /spa-meteor/packages/flirt-sidebar
