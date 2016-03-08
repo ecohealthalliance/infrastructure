@@ -3,5 +3,5 @@
 
 git checkout master
 git submodule foreach git pull origin master
-docker build -t flirt docker/images/spa
+docker build -t spa docker/images/spa
 
