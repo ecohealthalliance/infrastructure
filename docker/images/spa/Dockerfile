@@ -4,7 +4,7 @@ FROM ubuntu:14.04.4
 #Chaining these commands to keep the image smaller
 RUN apt-get clean all && \
     apt-get update && \
-    apt-get -y install build-essential python python-dev python-setuptools python-pip mongodb-clients mongodb supervisor python-software-properties debconf-utils software-properties-common curl && \
+    apt-get -y install build-essential openssh-server python python-dev python-setuptools python-pip mongodb-clients mongodb supervisor python-software-properties debconf-utils software-properties-common curl && \
     pip install virtualenv virtualenvwrapper awscli && \
     curl https://install.meteor.com/ | sh && \
     add-apt-repository -y ppa:webupd8team/java && \
@@ -12,6 +12,10 @@ RUN apt-get clean all && \
     echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | debconf-set-selections && \
     apt-get install -y oracle-java8-installer && \
     apt-get clean all
+
+RUN pip install ansible
+
+COPY .promed_vault_password .promed_vault_password
 
 # gpg keys listed at https://github.com/nodejs/node
 RUN set -ex \
