@@ -1,0 +1,12 @@
+spa:
+  container_name: spa
+  image: spa
+  environment:
+    - MONGO_URL=mongodb://10.0.0.175:27017/promed
+    - PORT=80 
+  ports:
+    - "80:80"
+  restart: always
+  volumes_from:
+    - shared-data:ro
+  command: supervisord --nodaemon --config /etc/supervisor/supervisord.conf

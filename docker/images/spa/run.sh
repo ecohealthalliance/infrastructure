@@ -1,28 +1,8 @@
-# This is the default run.sh..
-# Should only be executed on first run.
-# If you have a prepopulated DB, just execute the container with the last line
-
-#Take care of grits-net-consume dependencies
-cd /grits-net-consume
-virtualenv /grits-net-consume-env &&\ 
-source /grits-net-consume-env/bin/activate &&\ 
-pip install -r requirements.txt
-
-#Consume/import flight data
-python grits_flight_pull.py
-python grits_consume.py --type DiioAirport -m 10.0.0.175 -d grits-net-meteor /tests/data/MiExpressAllAirportCodes.tsv
-python grits_consume.py --type FlightGlobal -m 10.0.0.175 -d grits-net-meteor /data/EcoHealth_*.csv  &&\ 
-rm -fr ./data
-
-#Make sure indexes are good
-python grits_ensure_index.py
+# Default run.sh..
 
 #Import heat map data
-aws s3 sync s3://flight-network-heat-map/ ./
-mongorestore -h 10.0.0.175 -d grits-net-meteor -c heatmap ./dump/grits/heatmap.bson
-
-#Create legs collection
-java -jar /flirt-legs.jar --mongohost="10.0.0.175" mongoport="27017"
+aws s3 sync s3://promed-database/ ./
+mongorestore -h 10.0.0.175 -d promed -c blindspots ./dump/promed/blindspots.bson
 
 #Start the app
 service supervisor start

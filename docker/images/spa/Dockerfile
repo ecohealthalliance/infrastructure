@@ -60,9 +60,9 @@ RUN cd /spa-meteor && \
     apt-get clean all
 
 #Setup AWS config
-#RUN mkdir /root/.aws
-#ENV AWS_ACCESS_KEY_ID=AKIAJLKTQX7LL2L2JV7Q
-#ENV AWS_SECRET_ACCESS_KEY=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
+RUN mkdir /root/.aws
+ENV AWS_ACCESS_KEY_ID=AKIAJLKTQX7LL2L2JV7Q
+ENV AWS_SECRET_ACCESS_KEY=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
 
 EXPOSE 80
 COPY run.sh /run.sh
