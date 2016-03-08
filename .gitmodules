@@ -19,3 +19,6 @@
 [submodule "docker/images/spa/spa"]
 	path = docker/images/spa/spa
 	url = git@github.com:ecohealthalliance/spa.git
+[submodule "docker/images/spa/promed_mail_scraper"]
+	path = docker/images/spa/promed_mail_scraper
+	url = git@github.com:ecohealthalliance/promed_mail_scraper.git
