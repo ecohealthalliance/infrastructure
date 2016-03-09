@@ -23,6 +23,7 @@ COPY promed_mail_scraper/ansible /ansible
 
 # Create cronjob to run ProMED mail ingest
 ADD crontab /etc/cron.d/crontab
+RUN crontab /etc/cron.d/crontab
 
 # gpg keys listed at https://github.com/nodejs/node
 RUN set -ex \
