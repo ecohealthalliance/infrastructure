@@ -8,4 +8,6 @@ spa:
   ports:
     - "80:80"
   restart: always
+  volumes_from:
+    - /shared:/shared
   command: supervisord --nodaemon --config /etc/supervisor/supervisord.conf

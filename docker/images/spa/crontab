@@ -1,3 +1,3 @@
 # An empty line is required at the end of this file for a valid cron file.
-0 0 * * * ansible-playbook --connection=local /ansible/site.yml --vault-password-file /.promed_vault_password --extra mongo_url=172.30.2.160:27017 --extra promed_scraper_git_version=ansible-deploy
+0 0 * * * ansible-playbook --connection=local /ansible/site.yml --vault-password-file /shared/promed_vault_password --extra mongo_url=172.30.2.160:27017 --extra promed_scraper_git_version=ansible-deploy
 
