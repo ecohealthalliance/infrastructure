@@ -1,5 +1,6 @@
 var system = require('system');
 var url = encodeURI(system.args[1]);
+console.log(url);
 
 var page = require('webpage').create();
 page.onError = function (msg, trace) {
