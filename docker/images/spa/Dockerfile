@@ -51,6 +51,7 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
 COPY mongod-supervisor.conf /etc/supervisor/conf.d/mongod.conf
 COPY spa-supervisor.conf /etc/supervisor/conf.d/spa.conf
 COPY spa.sh /spa.sh
+COPY cron-supervisor.conf /etc/supervisor/conf.d/cron.conf
 
 #make app dir
 RUN mkdir /spa-meteor
