@@ -83,6 +83,10 @@ RUN bash -c "cd /flirt-simulation-service/simulator/ && \
     pip install -r requirements.pip"
 
 ENV FLIRT_SIMULATOR_URL="http://localhost:45000/simulator"
+ENV MONGO_HOST="10.0.0.175"
+ENV MONGO_PORT="27017"
+ENV MONGO_DB="grits-net-meteor"
+ENV MONGO_URI="mongodb://$MONGO_HOST:$MONGO_PORT/$MONGO_DB"
 EXPOSE 80
 COPY run.sh /run.sh
 CMD bash run.sh
