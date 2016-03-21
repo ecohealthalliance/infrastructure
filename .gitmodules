@@ -22,7 +22,10 @@
 [submodule "docker/images/spa/promed_mail_scraper"]
 	path = docker/images/spa/promed_mail_scraper
 	url = git@github.com:ecohealthalliance/promed_mail_scraper.git
+[submodule "docker/images/birt/birt"]
+	path = docker/images/birt/birt
+	url = git@github.com:ecohealthalliance/birt.git
 [submodule "docker/images/birt/flirt-sidebar"]
-	path = docker/images/birt/flirt-sidebar
+	path = docker/images/birt/birt/flirt-sidebar
 	url = git@github.com:ecohealthalliance/flirt-sidebar.git
 
