@@ -3,5 +3,5 @@
 
 git checkout master
 git submodule foreach git pull origin master
-docker build -t flirt docker/images/birt
+docker build -t birt docker/images/birt
 
