@@ -7,8 +7,5 @@ docker-registry:
     - SETTINGS_FLAVOR=s3
     - AWS_BUCKET=eha-devops-docker-registry
     - STORAGE_PATH=/registry
-    - AWS_KEY=AKIAJVECOZYOARNIRYXA
-    - AWS_SECRET=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
     - SEARCH_BACKEND=sqlalchemy
   restart: always
-

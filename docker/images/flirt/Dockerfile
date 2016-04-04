@@ -65,8 +65,6 @@ RUN cd /example && \
 
 #Setup AWS config
 RUN mkdir /root/.aws
-ENV AWS_ACCESS_KEY_ID=AKIAJLKTQX7LL2L2JV7Q
-ENV AWS_SECRET_ACCESS_KEY=Y9cT3LojWqDFBa+Yh4KvZiKXE/oCVWicbLDgTsNT
 
 #Take care of flirt-simulation-dependencies
 RUN bash -c "cd /flirt-simulation-service && \
@@ -90,4 +88,3 @@ ENV MONGO_URI="mongodb://$MONGO_HOST:$MONGO_PORT/$MONGO_DB"
 EXPOSE 80
 COPY run.sh /run.sh
 CMD bash run.sh
-

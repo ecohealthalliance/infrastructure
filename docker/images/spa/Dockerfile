@@ -57,7 +57,7 @@ COPY cron-supervisor.conf /etc/supervisor/conf.d/cron.conf
 RUN mkdir /spa-meteor
 COPY spa /spa-meteor
 
-RUN mkdir /shared 
+RUN mkdir /shared
 RUN cp /spa-meteor/settings-development.json /shared/settings-production.json
 
 #submodule requires a submodule and that's not coming through. make sure it's there.
@@ -74,11 +74,8 @@ RUN cd /spa-meteor && \
 
 #Setup AWS config
 RUN mkdir /root/.aws
-ENV AWS_ACCESS_KEY_ID=AKIAJLKTQX7LL2L2JV7Q
-ENV AWS_SECRET_ACCESS_KEY=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
 
 VOLUME /shared
 EXPOSE 80
 COPY run.sh /run.sh
 CMD bash run.sh
-
