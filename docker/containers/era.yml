@@ -1,0 +1,13 @@
+era:
+  container_name: era
+  image: era
+  environment:
+    - MONGO_URL=mongodb://172.30.2.95:27017/
+    - ROOT_URL=http://era.eha.io
+    - PORT=80 
+  ports:
+    - "80:80"
+  restart: always
+  volumes:
+    - /shared:/shared
+  command: supervisord --nodaemon --config /etc/supervisor/supervisord.conf
