@@ -28,4 +28,6 @@
 [submodule "docker/images/birt/flirt-sidebar"]
 	path = docker/images/birt/birt/flirt-sidebar
 	url = git@github.com:ecohealthalliance/flirt-sidebar.git
-
+[submodule "docker/images/era/era"]
+	path = docker/images/era/era
+	url = git@github.com:ecohealthalliance/ERA.git
