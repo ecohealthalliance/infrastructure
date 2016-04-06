@@ -1,6 +1,6 @@
 eha.tater.io:
   container_name: eha.tater.io
-  image: docker-repository.tater.io:5000/apps/tater
+  image: tater
   ports:
     - "8002:3000"
   restart: always

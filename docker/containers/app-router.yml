@@ -1,6 +1,6 @@
 app-router01:
   container_name: app-router01
-  image: docker-repository.tater.io:5000/devops/app-router
+  image: app-router
   ports:
     - "80:80"
     - "443:443"
@@ -11,7 +11,7 @@ app-router01:
 
 app-router02:
   container_name: app-router02
-  image: docker-repository.tater.io:5000/devops/app-router
+  image: app-router
   ports:
     - "80:80"
     - "443:443"

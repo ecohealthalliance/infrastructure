@@ -1,6 +1,6 @@
 predict.tater.io:
   container_name: predict.tater.io
-  image: docker-repository.tater.io:5000/apps/tater
+  image: tater
   ports:
     - "8005:3000"
   restart: always

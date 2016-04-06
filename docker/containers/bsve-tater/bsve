@@ -1,6 +1,6 @@
 tater:
   container_name: tater
-  image: docker-repository.tater.io:5000/apps/tater
+  image: tater
   ports:
     - "8007:3000"
   restart: always

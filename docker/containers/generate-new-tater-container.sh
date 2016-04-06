@@ -72,7 +72,7 @@ then
   # Ouput the new container file
   echo "$NAME.tater.io:
   container_name: $NAME.tater.io
-  image: docker-repository.tater.io:5000/apps/tater
+  image: tater
   ports:
     - \"$PORT:3000\"
   restart: always
