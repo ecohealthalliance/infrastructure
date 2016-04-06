@@ -7,5 +7,7 @@ docker-registry:
     - SETTINGS_FLAVOR=s3
     - AWS_BUCKET=eha-devops-docker-registry
     - STORAGE_PATH=/registry
+    - AWS_KEY="Change me on after copying this file to actual server"
+    - AWS_SECRET="Change me on after copying this file to actual server"
     - SEARCH_BACKEND=sqlalchemy
   restart: always
