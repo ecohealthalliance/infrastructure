@@ -49,7 +49,7 @@ COPY birt /birt-meteor
 RUN cp -R /birt-meteor/flirt-sidebar /birt-meteor/app/packages/ &&\
     rm -fr /birt-meteor/flirt-sidebar
 
-RUN mkdir /shared 
+RUN mkdir /shared
 #RUN cp /birt-meteor/settings-development.json /shared/settings-production.json
 
 #Build the meteor app
@@ -63,11 +63,8 @@ RUN cd /birt-meteor/app && \
 
 #Setup AWS config
 RUN mkdir /root/.aws
-ENV AWS_ACCESS_KEY_ID=AKIAJLKTQX7LL2L2JV7Q
-ENV AWS_SECRET_ACCESS_KEY=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
 
 VOLUME /shared
 EXPOSE 80
 COPY run.sh /run.sh
 CMD bash run.sh
-
