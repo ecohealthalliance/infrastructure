@@ -1,15 +1,3 @@
-[submodule "docker/images/flirt/grits-net-meteor"]
-	path = docker/images/flirt/grits-net-meteor
-	url = git@github.com:ecohealthalliance/grits-net-meteor.git
-[submodule "docker/images/flirt/grits-net-mapper"]
-	path = docker/images/flirt/grits-net-mapper
-	url = git@github.com:ecohealthalliance/grits-net-mapper.git
-[submodule "docker/images/flirt/grits-net-consume"]
-	path = docker/images/flirt/grits-net-consume
-	url = git@github.com:ecohealthalliance/grits-net-consume.git
-[submodule "docker/images/flirt/flirt-sidebar"]
-	path = docker/images/flirt/flirt-sidebar
-	url = git@github.com:ecohealthalliance/flirt-sidebar.git
 [submodule "docker/images/flirt/flirt-simulation-service"]
 	path = docker/images/flirt/flirt-simulation-service
 	url = git@github.com:ecohealthalliance/flirt-simulation-service.git
@@ -31,3 +19,6 @@
 [submodule "docker/images/era/era"]
 	path = docker/images/era/era
 	url = git@github.com:ecohealthalliance/ERA.git
+[submodule "/Users/frosario/ecohealth/infrastructure/docker/images/flirt/flirt-webapp"]
+	path = /Users/frosario/ecohealth/infrastructure/docker/images/flirt/flirt-webapp
+	url = git@github.com:ecohealthalliance/flirt.git

@@ -42,23 +42,15 @@ COPY flirt-supervisor.conf /etc/supervisor/conf.d/flirt.conf
 COPY flirt.sh /flirt.sh
 
 #Copy necessary repos
-COPY grits-net-meteor /
-RUN mkdir /example/packages
-COPY grits-net-meteor /example/packages/grits-net-meteor
-COPY grits-net-mapper /example/packages/grits-net-mapper
-COPY grits-net-consume /example/packages/grits-net-consume
-RUN cp -al /example/packages/grits-net-consume /grits-net-consume
-COPY flirt-sidebar /example/packages/flirt-sidebar
-COPY flirt-simulation-service /example/packages/flirt-simulation-service
-RUN cp -al /example/packages/flirt-simulation-service /flirt-simulation-service
+COPY flirt-webapp /flirt-webapp
+COPY flirt-simulation-service /flirt-simulation-service
 
 #Build the meteor app
 #Chaining these commands to keep the image smaller
-RUN cd /example && \
-    (meteor build ./gritsbuild --directory || exit 1) && \
-    cd /example/gritsbuild/bundle/programs/server && \
+RUN cd /flirt-webapp/app && \
+    (meteor build ./build --directory || exit 1) && \
+    cd /flirt-webapp/app/build/bundle/programs/server && \
     npm install && \
-    rm -fr /example/packages && \
     rm -fr /root/.meteor && \
     apt-get clean all
 
