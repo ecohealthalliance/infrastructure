@@ -3,5 +3,5 @@
 
 git checkout master
 git submodule foreach git pull origin master
-docker build -t era docker/images/era
+docker build -t era /opt/infrastructure/docker/images/era
 
