@@ -19,6 +19,6 @@
 [submodule "docker/images/era/era"]
 	path = docker/images/era/era
 	url = git@github.com:ecohealthalliance/ERA.git
-[submodule "/Users/frosario/ecohealth/infrastructure/docker/images/flirt/flirt-webapp"]
-	path = /Users/frosario/ecohealth/infrastructure/docker/images/flirt/flirt-webapp
+[submodule "docker/images/flirt/flirt-webapp"]
+	path = docker/images/flirt/flirt-webapp
 	url = git@github.com:ecohealthalliance/flirt.git
