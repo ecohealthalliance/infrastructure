@@ -23,6 +23,6 @@ $ssh_command "/usr/bin/sudo /usr/bin/docker load < /tmp/era.tar"
 $ssh_command /bin/rm /tmp/era.tar
 
 #Reprovision flirt container
-scp_file docker/containers/era.yml
+scp_file /opt/infrastructure/docker/containers/era.yml
 $ssh_command "sudo docker-compose -f /tmp/era.yml up -d"
 
