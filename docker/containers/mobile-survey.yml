@@ -2,7 +2,7 @@ mobile-survey:
   container_name: mobile-survey
   image: mobile-survey
   environment:
-    - MONGO_URL=mongodb://127.0.0.1:27017/survey
+    - MONGO_URL=mongodb://10.0.0.13:27017/survey
     - ROOT_URL=http://survey.eha.io
     - PORT=80 
   ports:
