@@ -22,3 +22,6 @@
 [submodule "docker/images/flirt/flirt-webapp"]
 	path = docker/images/flirt/flirt-webapp
 	url = git@github.com:ecohealthalliance/flirt.git
+[submodule "docker/images/mobile-survey/mobile-survey-webapp"]
+	path = docker/images/mobile-survey/mobile-survey-webapp
+	url = https://github.com/ecohealthalliance/mobile-survey
