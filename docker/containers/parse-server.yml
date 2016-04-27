@@ -1,6 +1,8 @@
 parse-server:
   container_name: parse-server
   image: parse-server
+  environment:
+    - MONGO_URL=mongodb://10.0.0.13:27017/parse
   ports:
     - "1337:1337"
   restart: always
