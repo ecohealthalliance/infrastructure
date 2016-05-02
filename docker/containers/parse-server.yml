@@ -3,7 +3,9 @@ parse-server:
   image: parse-server
   environment:
     - MONGO_URL=mongodb://10.0.0.13:27017/parse
+    - SERVER_URL=http://survey.eha.io:1337
   ports:
     - "1337:1337"
+    - "4040:4040"
   restart: always
 

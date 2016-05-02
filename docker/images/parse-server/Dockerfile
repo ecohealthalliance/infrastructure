@@ -8,9 +8,14 @@ RUN apt-get clean all && \
     apt-get clean all
 
 #Install parse server
-RUN npm install -g parse-server mongodb-runner
+RUN npm install -g parse-server mongodb-runner parse-dashboard
+
+COPY supervisor-server.conf /etc/supervisor/conf.d/server.conf
+COPY parse-server.sh /parse-server.sh
+COPY supervisor-dashboard.conf /etc/supervisor/conf.d/dashboard.conf
+COPY parse-dashboard.sh /parse-dashboard.sh
 
 EXPOSE 80
-COPY parse-server.sh /parse-server.sh
-CMD /bin/bash /parse-server.sh
-
+EXPOSE 4040
+EXPOSE 1337
+CMD supervisord --nodaemon --config /etc/supervisor/supervisord.conf
