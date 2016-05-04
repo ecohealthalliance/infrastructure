@@ -44,6 +44,7 @@ COPY flirt.sh /flirt.sh
 #Copy necessary repos
 COPY flirt-webapp /flirt-webapp
 COPY flirt-simulation-service /flirt-simulation-service
+COPY grits-net-consume /grits-net-consume
 
 #Build the meteor app
 #Chaining these commands to keep the image smaller

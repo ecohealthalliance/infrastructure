@@ -25,3 +25,6 @@
 [submodule "docker/images/mobile-survey/mobile-survey-webapp"]
 	path = docker/images/mobile-survey/mobile-survey-webapp
 	url = https://github.com/ecohealthalliance/mobile-survey
+[submodule "docker/images/flirt/grits-net-consume"]
+	path = docker/images/flirt/grits-net-consume
+	url = git@github.com:ecohealthalliance/grits-net-consume.git
