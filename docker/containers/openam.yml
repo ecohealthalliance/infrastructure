@@ -1,0 +1,9 @@
+openam:
+  container_name: openam
+  image: openam
+  ports:
+    - "80:80"
+  restart: always
+  volumes:
+    - /mnt:/mnt
+
