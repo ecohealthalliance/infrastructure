@@ -4,7 +4,7 @@ FROM ubuntu:14.04.4
 #Chaining these commands to keep the image smaller
 RUN apt-get clean all && \
     apt-get update && \
-    apt-get -y install build-essential python python-dev python-setuptools python-pip mongodb-clients mongodb supervisor python-software-properties debconf-utils software-properties-common curl software-properties-common && \
+    apt-get -y install build-essential python python-dev python-setuptools python-pip mongodb-clients mongodb supervisor python-software-properties debconf-utils software-properties-common curl software-properties-common git && \
     pip install virtualenv virtualenvwrapper awscli && \
     curl https://install.meteor.com/ | sh && \
     add-apt-repository ppa:openjdk-r/ppa && \
