@@ -1,0 +1,16 @@
+{
+  "apps": [
+    {
+      "serverURL": "http://survey.eha.io:1337/parse",
+      "appId": "testapp",
+      "masterKey": "testkey",
+      "appName": "MyTestApp"
+    }
+  ],
+  "users": [
+    {
+      "user":"changeme",
+      "pass":"changeme"
+    }
+  ]
+}

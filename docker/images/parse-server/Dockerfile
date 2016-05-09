@@ -14,6 +14,7 @@ COPY supervisor-server.conf /etc/supervisor/conf.d/server.conf
 COPY parse-server.sh /parse-server.sh
 COPY supervisor-dashboard.conf /etc/supervisor/conf.d/dashboard.conf
 COPY parse-dashboard.sh /parse-dashboard.sh
+COPY parse-dashboard-config.json /parse-dashboard-config.json
 
 EXPOSE 80
 EXPOSE 4040

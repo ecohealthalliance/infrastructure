@@ -1,4 +1,4 @@
 #!/bin/bash
 
-parse-dashboard --appId testapp --masterKey testkey --serverURL $SERVER_URL --allowInsecureHTTP=1
+parse-dashboard --allowInsecureHTTP=1 --config /parse-dashboard-config.json
 
