@@ -8,4 +8,6 @@ parse-server:
     - "1337:1337"
     - "4040:4040"
   restart: always
+  volumes:
+    - /shared:/shared:ro
 
