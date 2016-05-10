@@ -1,4 +1,4 @@
-FROM ubuntu:15.10
+FROM ubuntu:16.04
 
 # Replace shell with bash so we can source files
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
@@ -29,4 +29,4 @@ EXPOSE 443
 EXPOSE 22
 
 ADD run.sh /run.sh
-CMD /bin/bash run.sh
+CMD /bin/bash /run.sh
