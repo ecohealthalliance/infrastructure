@@ -1,4 +1,5 @@
 #!/bin/bash
 
-parse-server --appId testapp --masterKey testkey --databaseURI $MONGO_URL
+source /shared/environment-variables.sh &&\
+parse-server --appId $APP_ID --masterKey $MASTER_KEY --databaseURI $MONGO_URL
 
