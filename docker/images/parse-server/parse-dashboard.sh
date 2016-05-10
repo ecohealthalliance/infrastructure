@@ -1,4 +1,4 @@
 #!/bin/bash
 
-parse-dashboard --allowInsecureHTTP=1 --config /parse-dashboard-config.json
+parse-dashboard --allowInsecureHTTP=1 --config /shared/parse-dashboard-config.json
 
