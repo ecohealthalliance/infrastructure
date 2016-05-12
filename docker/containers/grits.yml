@@ -9,4 +9,5 @@ grits:
   volumes:
     - /mnt/mongo:/var/lib/mongo
     - /mnt/grits:/home/grits
+    - /opt/grits-deploy-ansible:/opt/grits-deploy-ansible
 
