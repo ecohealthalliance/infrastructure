@@ -1,0 +1,12 @@
+grits:
+  image: grits
+  container_name: grits
+  ports:
+    - "80:80"
+  restart: always
+  environment:
+    - placeholder=true
+  volumes:
+    - /mnt/mongo:/var/lib/mongo
+    - /mnt/grits:/home/grits
+
