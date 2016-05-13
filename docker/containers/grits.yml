@@ -5,7 +5,7 @@ grits:
     - "80:80"
   restart: always
   environment:
-    - GIRDER_MONGO_URI=mongodb://172.30.2.123:27017
+    - GIRDER_MONGO_URI=mongodb://172.30.2.123:27017/girder
   volumes:
     - /mnt/mongo:/var/lib/mongo
     - /mnt/grits:/home/grits
