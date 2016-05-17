@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 
 RUN apt-get update &&\
-    apt-get install -y apache2 tomcat8 supervisor curl
+    apt-get install -y apache2 tomcat8 supervisor curl less vim
 
 # Download openam nightly build war
 RUN curl http://download.forgerock.org/downloads/openam/openam_link.js | grep -o "http://.*\.war" | xargs curl -o /var/lib/tomcat8/webapps/openam.war
