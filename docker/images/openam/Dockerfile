@@ -7,7 +7,7 @@ RUN apt-get update &&\
 RUN curl http://download.forgerock.org/downloads/openam/openam_link.js | grep -o "http://.*\.war" | xargs curl -o /var/lib/tomcat8/webapps/openam.war
 
 # Setup for openam
-#RUN chown -R tomcat:tomcat /usr/share/tomcat8
+RUN chown -R tomcat8:tomcat8 /usr/share/tomcat8
 
 # Setup config files
 RUN a2enmod ssl
