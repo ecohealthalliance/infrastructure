@@ -13,7 +13,6 @@ export ssh_command="/usr/bin/ssh -i /keys/infrastructure.pem  ubuntu@52.23.65.23
 function scp_file { /usr/bin/scp -i /keys/infrastructure.pem $1 ubuntu@52.23.65.236:/tmp/; }
 
 #Import image on demo box
-scp_file /tmp/flirt.tar.gz
 $ssh_command /bin/gzip -d /tmp/flirt.tar.gz
 $ssh_command "/usr/bin/sudo /usr/bin/docker load < /tmp/flirt.tar"
 /bin/echo "Image now imported on demo box"
@@ -23,6 +22,6 @@ $ssh_command "/usr/bin/sudo /usr/bin/docker load < /tmp/flirt.tar"
 $ssh_command /bin/rm /tmp/flirt.tar
 
 #Reprovision flirt container
-scp_file docker/containers/flirt.yml
+scp_file /opt/infrastructure/docker/containers/flirt.yml
 $ssh_command "sudo docker-compose -f /tmp/flirt.yml up -d"
 
