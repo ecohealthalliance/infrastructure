@@ -19,4 +19,5 @@ COPY parse-dashboard-config.json /parse-dashboard-config.json
 EXPOSE 80
 EXPOSE 4040
 EXPOSE 1337
+ENV TERM=xterm
 CMD supervisord --nodaemon --config /etc/supervisor/supervisord.conf
