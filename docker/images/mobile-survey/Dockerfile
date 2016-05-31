@@ -42,8 +42,8 @@ COPY mobile-survey.sh /mobile-survey.sh
 
 #make app dirs
 RUN mkdir /shared 
-COPY mobile-survey-webapp/sample-settings.json /shared/settings-production.json
 COPY mobile-survey-webapp /mobile-survey-webapp
+COPY mobile-survey-webapp/sample-settings.json /shared/settings-production.json
 
 #Build the meteor app
 RUN cd /mobile-survey-webapp/app && \
