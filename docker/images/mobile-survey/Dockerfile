@@ -4,7 +4,7 @@ FROM ubuntu:14.04.4
 #Chaining these commands to keep the image smaller
 RUN apt-get clean all && \
     apt-get update && \
-    apt-get install -y supervisor curl build-essential && \
+    apt-get install -y supervisor curl build-essential vim && \
     apt-get clean all
  
 # gpg keys listed at https://github.com/nodejs/node
@@ -57,5 +57,6 @@ RUN cd /mobile-survey-webapp/app && \
 
 VOLUME /shared
 EXPOSE 80
+ENV TERM=xterm
 CMD supervisord --nodaemon --config /etc/supervisor/supervisord.conf
 
