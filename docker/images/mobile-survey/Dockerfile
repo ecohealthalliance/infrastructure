@@ -22,7 +22,7 @@ RUN set -ex \
     gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
   done
 
-ENV NODE_VERSION=0.10.45
+ENV NODE_VERSION=0.12.9
 
 #Install NodeJS
 RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz" \
@@ -44,7 +44,7 @@ RUN mkdir /shared
 COPY mobile-survey-webapp /mobile-survey-webapp
 
 #This is a giant hack to get around dependency hell
-RUN rm -fr /mobile-survey-webapp/app/packages/parse/.npm /mobile-survey-webapp/app/packages/fibers/.npm
+RUN rm -fr /mobile-survey-webapp/app/packages/parse/.npm /mobile-survey-webapp/app/packages/fibers/.npm /mobile-survey-webapp/app/packages/npm-bcrypt/.npm
 
 #Build the meteor app
 RUN cd /mobile-survey-webapp/app && \
