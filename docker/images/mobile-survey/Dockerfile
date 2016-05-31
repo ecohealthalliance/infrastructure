@@ -22,7 +22,8 @@ RUN set -ex \
     gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
   done
 
-ENV NODE_VERSION=0.12.9
+#Found this version by typing "meteor node -v"
+ENV NODE_VERSION=0.10.43
 
 #Install NodeJS
 RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz" \
