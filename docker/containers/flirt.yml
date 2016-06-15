@@ -14,6 +14,6 @@ flirt:
     - "80:80"
   restart: always
   volumes:
-    - shared:shared:ro
+    - /shared:/shared:ro
   command: supervisord --nodaemon --config /etc/supervisor/supervisord.conf
 
