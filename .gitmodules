@@ -28,3 +28,6 @@
 [submodule "docker/images/flirt/grits-net-consume"]
 	path = docker/images/flirt/grits-net-consume
 	url = git@github.com:ecohealthalliance/grits-net-consume.git
+[submodule "docker/images/niam/nia-monitor"]
+	path = docker/images/niam/nia-monitor
+	url = git@github.com:ecohealthalliance/nia-monitor.git
