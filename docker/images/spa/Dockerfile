@@ -13,6 +13,7 @@ RUN apt-get clean all && \
     apt-get install -y oracle-java8-installer && \
     apt-get clean all
 
+RUN pip install --upgrade setuptools
 RUN pip install ansible
 
 RUN mkdir /ansible
