@@ -5,6 +5,7 @@ spa:
     - MONGO_URL=mongodb://172.30.2.160:27017/promed
     - ROOT_URL=http://54.174.42.80
     - PORT=80 
+    - TERM=xterm
   ports:
     - "80:80"
   restart: always
