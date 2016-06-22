@@ -4,7 +4,7 @@ FROM ubuntu:16.04
 #Chaining these commands to keep the image smaller
 RUN apt-get clean all && \
     apt-get update && \
-    apt-get install -y supervisor curl build-essential nodejs npm git nodejs-legacy && \
+    apt-get install -y supervisor curl build-essential git && \
     apt-get clean all
 
 #Install Meteor
@@ -23,7 +23,7 @@ COPY era /era-webapp
 RUN cd /era-webapp && \
     (meteor build ./build --directory || exit 1) && \
     cd /era-webapp/build/bundle/programs/server && \
-    npm install && \
+    meteor npm install && \
     rm -fr /era-webapp/packages && \
     rm -fr /root/.meteor && \
     apt-get clean all
