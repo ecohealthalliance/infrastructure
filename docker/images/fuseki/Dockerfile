@@ -6,7 +6,7 @@ ADD supervisord.conf /etc/supervisor/conf.d/fuseki.conf
 # Chaining these commands to keep the image smaller
 RUN apt-get clean all && \
     apt-get update && \
-    apt-get -y install python supervisor software-properties-common && \
+    apt-get -y install git python supervisor software-properties-common && \
     add-apt-repository -y ppa:webupd8team/java && \
     apt-get update && \
     echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | debconf-set-selections && \
@@ -22,6 +22,7 @@ RUN tar -xvzf apache-jena-fuseki-2.4.0.tar.gz && \
 
 WORKDIR /apache-jena-fuseki
 RUN mkdir DB
+RUN git clone https://github.com/ecohealthalliance/t11
 
 EXPOSE 3030
 
