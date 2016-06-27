@@ -1,4 +1,4 @@
-FROM ubuntu:14.04.4
+FROM ubuntu:16.04
 
 #Install dependencies
 #Chaining these commands to keep the image smaller
@@ -23,8 +23,9 @@ RUN rm -fr /mobile-survey-webapp/app/packages/parse/.npm /mobile-survey-webapp/a
 
 #Build the meteor app
 RUN cd /mobile-survey-webapp/app && \
+    (meteor build ./build --directory || exit 1) && \
+    cd /mobile-survey-webapp/app/build/bundle/programs/server && \
     meteor npm install && \
-    meteor lint &&\
     apt-get clean all
 
 VOLUME /shared
