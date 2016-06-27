@@ -19,7 +19,8 @@ RUN mkdir /shared
 COPY mobile-survey-webapp /mobile-survey-webapp
 
 #This is a giant hack to get around dependency hell
-RUN rm -fr /mobile-survey-webapp/app/packages/parse/.npm /mobile-survey-webapp/app/packages/fibers/.npm /mobile-survey-webapp/app/packages/npm-bcrypt/.npm
+#RUN rm -fr /mobile-survey-webapp/app/packages/parse/.npm /mobile-survey-webapp/app/packages/fibers/.npm /mobile-survey-webapp/app/packages/npm-bcrypt/.npm
+RUN rm -fr /mobile-survey-webapp/app/packages/*/.npm
 
 #Build the meteor app
 RUN cd /mobile-survey-webapp/app && \
