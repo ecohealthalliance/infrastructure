@@ -4,7 +4,7 @@ FROM ubuntu:16.04
 #Chaining these commands to keep the image smaller
 RUN apt-get clean all && \
     apt-get update && \
-    apt-get install -y supervisor curl build-essential vim && \
+    apt-get install -y supervisor curl build-essential vim nodejs nodejs-legacy npm && \
     apt-get clean all
  
 #Install Meteor
@@ -26,7 +26,7 @@ RUN rm -fr /mobile-survey-webapp/app/packages/*/.npm
 RUN cd /mobile-survey-webapp/app && \
     (meteor build ./build --directory || exit 1) && \
     cd /mobile-survey-webapp/app/build/bundle/programs/server && \
-    meteor npm install && \
+    npm install && \
     apt-get clean all
 
 VOLUME /shared
