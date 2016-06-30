@@ -1,5 +1,4 @@
 #!/bin/bash
 
-export METEOR_SETTINGS=$(cat /shared/settings-production.json)
-node /mobile-survey-webapp/app/build/bundle/main.js 
-
+cd /mobile-survey-webapp/app
+meteor run --production --settings /shared/settings-production.json

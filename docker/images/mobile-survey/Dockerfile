@@ -24,8 +24,6 @@ RUN rm -fr /mobile-survey-webapp/app/packages/*/.npm
 
 #Build the meteor app
 RUN cd /mobile-survey-webapp/app && \
-    (meteor build ./build --directory || exit 1) && \
-    cd /mobile-survey-webapp/app/build/bundle/programs/server && \
     npm install && \
     apt-get clean all
 
