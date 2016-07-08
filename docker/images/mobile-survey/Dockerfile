@@ -4,7 +4,7 @@ FROM ubuntu:16.04
 #Chaining these commands to keep the image smaller
 RUN apt-get clean all && \
     apt-get update && \
-    apt-get install -y supervisor curl build-essential vim nodejs nodejs-legacy npm && \
+    apt-get install -y supervisor curl build-essential vim nodejs nodejs-legacy npm git && \
     apt-get clean all
  
 #Install Meteor
