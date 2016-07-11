@@ -44,6 +44,7 @@ ENV MONGO_HOST="192.168.99.100"
 ENV MONGO_PORT="27017"
 ENV MONGO_DB="niam"
 ENV MONGO_URI="mongodb://$MONGO_HOST:$MONGO_PORT/$MONGO_DB"
+ENV SPARQURL="http://niam.eha.io:3030/dataset/query"
 EXPOSE 80
 COPY run.sh /run.sh
 CMD bash run.sh
