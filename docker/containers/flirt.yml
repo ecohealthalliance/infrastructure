@@ -10,6 +10,7 @@ flirt:
     - SIMULATION_PORT=45000
     - ROOT_URL=http://52.23.65.236
     - PORT=80
+    - TERM=xterm
   ports:
     - "80:80"
   restart: always
