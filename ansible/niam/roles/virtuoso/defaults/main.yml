@@ -1,0 +1,2 @@
+docker_virtuoso_path: /tmp/docker-virtuoso
+virtuoso_data_path: /var/virtuoso

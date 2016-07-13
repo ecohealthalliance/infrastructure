@@ -4,47 +4,30 @@ FROM ubuntu:16.04
 #Chaining these commands to keep the image smaller
 RUN apt-get clean all && \
     apt-get update && \
-    apt-get -y install build-essential mongodb supervisor curl && \
-    curl https://install.meteor.com/ | sh && \
+    apt-get install -y supervisor curl build-essential vim git && \
     apt-get clean all
 
-#Import public keys
-COPY public-keys.tar.gz /public-keys.tar.gz
-RUN tar -zxf public-keys.tar.gz && \
-    for i in $(ls /keys); do gpg --import /keys/$i; done && \
-    rm /public-keys.tar.gz && \
-    rm -fr /keys
-
-ENV NODE_VERSION=0.10.43
-
-#Install NodeJS
-RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz" \
-  && curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt.asc" \
-  && gpg --verify SHASUMS256.txt.asc \
-  && grep " node-v$NODE_VERSION-linux-x64.tar.gz\$" SHASUMS256.txt.asc | sha256sum -c - \
-  && tar -xzf "node-v$NODE_VERSION-linux-x64.tar.gz" -C /usr/local --strip-components=1 \
-  && rm "node-v$NODE_VERSION-linux-x64.tar.gz" SHASUMS256.txt.asc
-
-#Config files
-COPY supervisord.conf /etc/supervisor/conf.d/niam.conf
+#Install Meteor
+RUN curl https://install.meteor.com/ | sh
 
 #Copy necessary repos
 COPY nia-monitor /nia-monitor
 
+#Config files
+COPY supervisord.conf /etc/supervisor/conf.d/niam.conf
+
 #Build the meteor app
-#Chaining these commands to keep the image smaller
 RUN cd /nia-monitor && \
-    (meteor build ./build --directory || exit 1) && \
-    cd build/bundle/programs/server && \
-    npm install && \
-    rm -fr /root/.meteor && \
+    meteor npm install && \
+    meteor lint &&\
     apt-get clean all
 
-ENV MONGO_HOST="192.168.99.100"
-ENV MONGO_PORT="27017"
-ENV MONGO_DB="niam"
-ENV MONGO_URI="mongodb://$MONGO_HOST:$MONGO_PORT/$MONGO_DB"
-ENV SPARQURL="http://niam.eha.io:3030/dataset/query"
-EXPOSE 80
-COPY run.sh /run.sh
-CMD bash run.sh
+EXPOSE 3000
+
+
+#Create locale settings so meteor mongo works
+RUN locale-gen en_US && localedef -i en_US -f UTF-8 en_US
+ENV LC_ALL="en_US"
+
+ENV TERM=xterm
+CMD supervisord --nodaemon --config /etc/supervisor/supervisord.conf

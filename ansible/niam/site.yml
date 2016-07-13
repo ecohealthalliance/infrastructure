@@ -1,0 +1,15 @@
+---
+- hosts: targets
+  become: yes
+  vars:
+    infrastructure_root: "../.."
+  roles:
+    - name: angstwad.docker_ubuntu
+      tags: docker
+      become_user: root
+    - name: virtuoso
+      tags: virtuoso
+    - name: niam
+      tags: niam
+  vars_files:
+    - secure.yml
