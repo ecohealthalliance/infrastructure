@@ -9,3 +9,4 @@ tater:
     - ROOT_URL=http://localhost
     - PORT=3000
     - ALLOW_TOKEN_ACCESS=true
+    - TERM=xterm
