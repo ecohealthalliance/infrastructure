@@ -1,0 +1,36 @@
+---
+- hosts: targets
+  become: yes
+  vars:
+    infrastructure_root: "../.."
+  pre_tasks:
+    - name: Install common packages from apt
+      apt: pkg={{item}} state=installed update_cache=yes
+      with_items:
+        - git
+        - python-pip
+        - python-dev
+        - curl
+      become_user: root
+    - name: Install global python modules
+      pip: name={{item}}
+      become_user: root
+      with_items:
+        - awscli
+        - virtualenv
+    - name: Create aws crendentials directory
+      file: path=~/.aws state=directory
+    - name: Create aws credentials
+      template: src=config.j2 dest=~/.aws/config
+  roles:
+    - name: angstwad.docker_ubuntu
+      tags: docker
+      become_user: root
+    - name: virtuoso
+      tags: virtuoso
+    - name: niam
+      tags: niam
+    - name: cron_backup
+      tags: cron_backup
+  vars_files:
+    - secure.yml
