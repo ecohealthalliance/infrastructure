@@ -24,10 +24,8 @@ RUN cd /nia-monitor && \
 
 EXPOSE 3000
 
-
 #Create locale settings so meteor mongo works
 RUN locale-gen en_US && localedef -i en_US -f UTF-8 en_US
 ENV LC_ALL="en_US"
-
 ENV TERM=xterm
 CMD supervisord --nodaemon --config /etc/supervisor/supervisord.conf

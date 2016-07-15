@@ -2,25 +2,8 @@
 - file: path="{{ virtuoso_data_path }}" state=directory mode="a+rwx"
   become_user: root
 - file: path="{{ virtuoso_data_path }}/toLoad" state=directory
-- name: Install common packages from apt
-  apt: pkg={{item}} state=installed update_cache=yes
-  with_items:
-    - git
-    - python-pip
-    - python-dev
-    - curl
-  become_user: root
-- name: Install global python modules
-  pip: name={{item}}
-  become_user: root
-  with_items:
-    - awscli
-    - virtualenv
 - name: Download DB dump
   command: "aws s3 cp s3://promed-database/sparql-annotation-database/dump.nq.gz {{virtuoso_data_path}}/toLoad/dump.nq.gz"
-  environment:
-    AWS_ACCESS_KEY_ID: "{{aws_access_key}}"
-    AWS_SECRET_ACCESS_KEY: "{{aws_secret_key}}"
   args:
     creates: "{{virtuoso_data_path}}/toLoad/dump.nq.gz"
 - name: Copy docker-virtuoso sourcevirtuoso_data_path
@@ -32,6 +15,7 @@
     path: "{{docker_virtuoso_path}}"
     name: virtuoso
     api_version: 1.21
+    force: true
   become_user: root
 - name: "Start virtuoso container"
   docker_container:

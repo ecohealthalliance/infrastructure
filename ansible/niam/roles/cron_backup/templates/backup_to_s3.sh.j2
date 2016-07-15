@@ -1,0 +1,7 @@
+#!/bin/bash
+DIRNAME=`date +dump_%Y-%m-%d_%H-%M`
+(
+    mkdir {{virtuoso_data_path}}/dumps/$DIRNAME &&
+    docker exec -it virtuoso-container /dump.sh dumps/$DIRNAME &&
+    aws s3 cp --recursive {{virtuoso_data_path}}/dumps/$DIRNAME s3://promed-database/sparql-annotation-database/virtuoso/$DIRNAME
+) > /root/cron.out 2> /root/cron.err

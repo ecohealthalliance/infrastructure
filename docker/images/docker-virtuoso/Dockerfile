@@ -34,6 +34,9 @@ ADD dump_nquads_procedure.sql /dump_nquads_procedure.sql
 # Add Virtuoso log cleaning script
 ADD clean-logs.sh /clean-logs.sh
 
+# Add Virtuoso dump script
+ADD dump.sh /dump.sh
+
 # Add startup script
 ADD virtuoso.sh /virtuoso.sh
 
