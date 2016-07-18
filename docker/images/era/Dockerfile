@@ -22,14 +22,14 @@ COPY era /era-webapp
 #Build the meteor app
 RUN cd /era-webapp && \
     (meteor build ./build --directory || exit 1) && \
+    apt-get install npm && \
+    meteor npm install --save googleapis && \
+    meteor npm install --save fibers && \
     cd /era-webapp/build/bundle/programs/server && \
     meteor npm install && \
     rm -fr /era-webapp/packages && \
     rm -fr /root/.meteor && \
-    apt-get clean all && \
-    apt-get install npm && \
-    meteor npm install --save googleapis && \
-    meteor npm install --save fibers
+    apt-get clean all
 
 VOLUME /shared
 EXPOSE 80
