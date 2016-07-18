@@ -26,7 +26,10 @@ RUN cd /era-webapp && \
     meteor npm install && \
     rm -fr /era-webapp/packages && \
     rm -fr /root/.meteor && \
-    apt-get clean all
+    apt-get clean all && \
+    apt-get install npm && \
+    meteor npm install --save googleapis && \
+    meteor npm install --save fibers
 
 VOLUME /shared
 EXPOSE 80
