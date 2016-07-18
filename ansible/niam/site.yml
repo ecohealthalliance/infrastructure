@@ -3,6 +3,7 @@
   become: yes
   vars:
     infrastructure_root: "../.."
+    save_images: true
   pre_tasks:
     - name: Install common packages from apt
       apt: pkg={{item}} state=installed update_cache=yes

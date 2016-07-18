@@ -3,10 +3,8 @@ cd /data
 
 mkdir -p dumps
 
-if [ ! -f ./virtuoso.ini ];
-then
-  mv /virtuoso.ini . 2>/dev/null
-fi
+rm -f virtuoso.ini
+cp /virtuoso.ini . 2>/dev/null
 
 chmod +x /clean-logs.sh
 mv /clean-logs.sh . 2>/dev/null
