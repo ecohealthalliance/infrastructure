@@ -6,22 +6,18 @@
     repo: https://github.com/ecohealthalliance/nia-monitor.git
     dest: "{{docker_niam_path}}/nia-monitor"
     version: "master"
-  become_user: root
 - name: Build niam image
   docker_image:
     path: "{{docker_niam_path}}"
     name: niam
     api_version: 1.21
     force: true
-  become_user: root
 - name: Tar and zip niam image
   shell: "docker save niam | gzip > /tmp/niam.tar.gz"
   when: save_images
-  become_user: root
 - name: Save image on s3
   command: "aws s3 cp /tmp/niam.tar.gz s3://bsve-integration/niam.tar.gz"
   when: save_images
-  become_user: root
 - name: Start niam container
   docker_container:
     name: niam-c
@@ -33,4 +29,3 @@
       - "80:3000"
     env:
       SPARQURL: "http://{{ansible_default_ipv4.address}}:8890/sparql?default-graph-uri=http://eha.io/t11"
-  become_user: root

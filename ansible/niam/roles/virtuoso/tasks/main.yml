@@ -1,12 +1,11 @@
 ---
 - file: path="{{ virtuoso_data_path }}" state=directory mode="a+rwx"
-  become_user: root
 - file: path="{{ virtuoso_data_path }}/toLoad" state=directory
-- name: Download DB dump
+- name: "Download DB dump at {{s3_virtuoso_dump_path}}"
   command: "aws s3 cp --recursive {{s3_virtuoso_dump_path}} {{virtuoso_data_path}}/toLoad"
   args:
     creates: "{{virtuoso_data_path}}/toLoad/output000001.nq.gz"
-- name: Copy docker-virtuoso sourcevirtuoso_data_path
+- name: "Copy docker-virtuoso source to {{virtuoso_data_path}}"
   synchronize:
     src: "{{infrastructure_root}}/docker/images/docker-virtuoso/"
     dest: "{{docker_virtuoso_path}}"
@@ -16,16 +15,13 @@
     name: virtuoso
     api_version: 1.21
     force: true
-  become_user: root
 - name: Tar and zip virtuoso image
-  shell: "docker save virtuoso | gzip > /tmp/virtuoso_image.tar.gz"
-  become_user: root
+  shell: "docker save virtuoso | gzip > /tmp/virtuoso.tar.gz"
   when: save_images
 - name: Save image to s3
-  command: "aws s3 cp /tmp/virtuoso_image.tar.gz s3://bsve-integration/virtuoso_image.tar.gz"
-  become_user: root
+  command: "aws s3 cp /tmp/virtuoso.tar.gz s3://bsve-integration/virtuoso.tar.gz"
   when: save_images
-- name: "Start virtuoso container"
+- name: Start virtuoso container
   docker_container:
     name: virtuoso-container
     api_version: 1.21
@@ -41,4 +37,3 @@
       DBA_PASSWORD: dba
       SPARQL_UPDATE: true
       DEFAULT_GRAPH: http://eha.io/t11
-  become_user: root

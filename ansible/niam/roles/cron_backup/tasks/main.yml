@@ -1,11 +1,9 @@
 ---
 - name: Create backup_to_s3 script
   template: src=backup_to_s3.sh.j2 dest=~/backup_to_s3.sh
-  become_user: root
 - name: Creating dump database cronjob
   cron:
     name: "Dump database"
     minute: "0"
     hour: "5"
     job: "~/backup_to_s3.sh"
-  become_user: root
