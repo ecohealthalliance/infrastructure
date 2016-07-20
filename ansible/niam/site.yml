@@ -23,6 +23,9 @@
     - name: Create aws credentials
       template: src=config.j2 dest=~/.aws/config
   roles:
+    - name: kamaln7.swapfile
+      swapfile_size: 8GB
+      tag: swap
     - name: angstwad.docker_ubuntu
       tags: docker
     - name: niam
@@ -30,7 +33,7 @@
     # The virtuoso container may have problems.
     # The first time you build and launch it, it might crash, but work when restarted.
     # It might not stop gracefully and leaves a lock file that needs to be deleted.
-    # When it is started with a new dump to load, try not to interrupt it for an hour,
+    # When it is started with a new dump to load, it will take at least an hour to load the full dataset,
     # and if the machine doesn't have enough resources it might get stuck.
     # When restarting it, you may need to wait for the transactions to replay.
     - name: virtuoso
