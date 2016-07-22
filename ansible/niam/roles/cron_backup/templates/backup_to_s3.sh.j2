@@ -1,7 +1,9 @@
 #!/bin/bash
 DIRNAME=`date +dump_%Y-%m-%d_%H-%M`
 (
+    # Remove dumps older than 5 days
+    find {{virtuoso_data_path}}/dumps/ -mtime +5 -exec rm {} \; &&
     mkdir {{virtuoso_data_path}}/dumps/$DIRNAME &&
-    docker exec -it virtuoso-container /dump.sh dumps/$DIRNAME &&
+    docker exec -i virtuoso-container /dump.sh dumps/$DIRNAME &&
     aws s3 cp --recursive {{virtuoso_data_path}}/dumps/$DIRNAME s3://promed-database/sparql-annotation-database/virtuoso/$DIRNAME
 ) > /root/cron.out 2> /root/cron.err

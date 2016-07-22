@@ -3,25 +3,24 @@ cd /data
 
 mkdir -p dumps
 
-if [ ! -f ./virtuoso.ini ];
-then
-  mv /virtuoso.ini . 2>/dev/null
-fi
+rm -f virtuoso.ini
+cp /virtuoso.ini . 2>/dev/null
 
 chmod +x /clean-logs.sh
-mv /clean-logs.sh . 2>/dev/null
+rm -f clean-logs.sh
+cp /clean-logs.sh . 2>/dev/null
 
-if [ ! -f "/.dba_pwd_set" ];
+if [ ! -f ".dba_pwd_set" ];
 then
   touch /sql-query.sql
   if [ "$DBA_PASSWORD" ]; then echo "user_set_password('dba', '$DBA_PASSWORD');" >> /sql-query.sql ; fi
   if [ "$SPARQL_UPDATE" = "true" ]; then echo "GRANT SPARQL_UPDATE to \"SPARQL\";" >> /sql-query.sql ; fi
   virtuoso-t +wait && isql-v -U dba -P dba < /dump_nquads_procedure.sql && isql-v -U dba -P dba < /sql-query.sql
   kill $(ps aux | grep '[v]irtuoso-t' | awk '{print $2}')
-  touch /.dba_pwd_set
+  touch .dba_pwd_set
 fi
 
-if [ ! -f "/.data_loaded" ];
+if [ ! -f ".data_loaded" ];
 then
     echo "starting data loading"
     pwd="dba"
@@ -36,9 +35,7 @@ then
     echo "$(cat /load_data.sql)"
     virtuoso-t +wait && isql-v -U dba -P "$pwd" < /load_data.sql
     kill $(ps aux | grep '[v]irtuoso-t' | awk '{print $2}')
-    touch /.data_loaded
+    touch .data_loaded
 fi
 
-
 virtuoso-t +wait +foreground
-

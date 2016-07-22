@@ -1,2 +1,3 @@
 docker_virtuoso_path: /tmp/docker-virtuoso
 virtuoso_data_path: /var/virtuoso
+s3_virtuoso_dump_path: "s3://promed-database/sparql-annotation-database/virtuoso/dump_2016-07-21_06-06"

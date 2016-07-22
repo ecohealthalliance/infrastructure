@@ -1,8 +1,10 @@
 ---
 - hosts: targets
   become: yes
+  become_user: root
   vars:
     infrastructure_root: "../.."
+    save_images: true
   pre_tasks:
     - name: Install common packages from apt
       apt: pkg={{item}} state=installed update_cache=yes
@@ -11,10 +13,8 @@
         - python-pip
         - python-dev
         - curl
-      become_user: root
     - name: Install global python modules
       pip: name={{item}}
-      become_user: root
       with_items:
         - awscli
         - virtualenv
@@ -23,13 +23,22 @@
     - name: Create aws credentials
       template: src=config.j2 dest=~/.aws/config
   roles:
+    - name: kamaln7.swapfile
+      swapfile_size: 16GB
+      swapfile_location: "/swapfile"
+      tag: swap
     - name: angstwad.docker_ubuntu
       tags: docker
-      become_user: root
-    - name: virtuoso
-      tags: virtuoso
     - name: niam
       tags: niam
+    # The virtuoso container may have problems.
+    # The first time you build and launch it, it might crash, but work when restarted.
+    # It might not stop gracefully and leaves a lock file that needs to be deleted.
+    # When it is started with a new dump to load, it will take at least an hour to load the full dataset,
+    # and if the machine doesn't have enough resources it might get stuck.
+    # When restarting it, you may need to wait for the transactions to replay.
+    - name: virtuoso
+      tags: virtuoso
     - name: cron_backup
       tags: cron_backup
   vars_files:

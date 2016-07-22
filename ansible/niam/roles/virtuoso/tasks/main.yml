@@ -1,12 +1,11 @@
 ---
 - file: path="{{ virtuoso_data_path }}" state=directory mode="a+rwx"
-  become_user: root
 - file: path="{{ virtuoso_data_path }}/toLoad" state=directory
-- name: Download DB dump
-  command: "aws s3 cp s3://promed-database/sparql-annotation-database/dump.nq.gz {{virtuoso_data_path}}/toLoad/dump.nq.gz"
+- name: "Download DB dump at {{s3_virtuoso_dump_path}}"
+  command: "aws s3 cp --recursive {{s3_virtuoso_dump_path}} {{virtuoso_data_path}}/toLoad"
   args:
-    creates: "{{virtuoso_data_path}}/toLoad/dump.nq.gz"
-- name: Copy docker-virtuoso sourcevirtuoso_data_path
+    creates: "{{virtuoso_data_path}}/toLoad/output000001.nq.gz"
+- name: "Copy docker-virtuoso source to {{virtuoso_data_path}}"
   synchronize:
     src: "{{infrastructure_root}}/docker/images/docker-virtuoso/"
     dest: "{{docker_virtuoso_path}}"
@@ -16,8 +15,13 @@
     name: virtuoso
     api_version: 1.21
     force: true
-  become_user: root
-- name: "Start virtuoso container"
+- name: Tar and zip virtuoso image
+  shell: "docker save virtuoso | gzip > /tmp/virtuoso.tar.gz"
+  when: save_images
+- name: Save image to s3
+  command: "aws s3 cp /tmp/virtuoso.tar.gz s3://bsve-integration/virtuoso.tar.gz"
+  when: save_images
+- name: Start virtuoso container
   docker_container:
     name: virtuoso-container
     api_version: 1.21
@@ -33,4 +37,3 @@
       DBA_PASSWORD: dba
       SPARQL_UPDATE: true
       DEFAULT_GRAPH: http://eha.io/t11
-  become_user: root
