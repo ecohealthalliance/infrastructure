@@ -13,12 +13,6 @@ RUN apt-get clean all && \
     apt-get install -y oracle-java8-installer && \
     apt-get clean all
 
-RUN pip install --upgrade setuptools
-RUN pip install ansible
-
-RUN mkdir /ansible
-COPY promed_mail_scraper/ansible /ansible
-
 # gpg keys listed at https://github.com/nodejs/node
 RUN set -ex \
   && for key in \
