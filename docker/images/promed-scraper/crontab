@@ -1,0 +1,1 @@
+0 0 * * * /cronscript.sh >> /cron.log 2>&1
