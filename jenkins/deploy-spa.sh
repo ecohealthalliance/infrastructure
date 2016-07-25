@@ -35,11 +35,10 @@ $ssh_command /bin/rm /tmp/spa.tar
 $ssh_command /bin/rm /tmp/promed-scraper.tar
 
 #Setup AWS credentials in shared directory
-scp_file /var/lib/jenkins/.aws/config
-$ssh_command /bin/mkdir -p /shared/.aws
-$ssh_command /bin/mv /tmp/config /shared/.aws
+scp_file /var/lib/jenkins/.aws/credentials
+$ssh_command "sudo /bin/mkdir -p /shared/.aws"
+$ssh_command "sudo /bin/mv /tmp/credentials /shared/.aws"
 
 #Reprovision containers
 scp_file docker/containers/spa.yml
 $ssh_command "sudo docker-compose -f /tmp/spa.yml up -d"
-
