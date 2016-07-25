@@ -1,4 +1,0 @@
-# An empty line is required at the end of this file for a valid cron file.
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-0 0 * * * /usr/local/bin/ansible-playbook --connection=local /ansible/site.yml --vault-password-file /shared/promed_vault_password --extra-vars "mongo_url=172.30.2.160:27017 SPARQLDB_URL=http://niam.eha.io:3030/dataset" > /cronjob_output.txt 2> /cronjob_err.txt
-

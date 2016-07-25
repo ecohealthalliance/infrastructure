@@ -19,10 +19,6 @@ RUN pip install ansible
 RUN mkdir /ansible
 COPY promed_mail_scraper/ansible /ansible
 
-# Create cronjob to run ProMED mail ingest
-ADD crontab /etc/cron.d/crontab
-RUN crontab /etc/cron.d/crontab
-
 # gpg keys listed at https://github.com/nodejs/node
 RUN set -ex \
   && for key in \
@@ -52,7 +48,6 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
 COPY mongod-supervisor.conf /etc/supervisor/conf.d/mongod.conf
 COPY spa-supervisor.conf /etc/supervisor/conf.d/spa.conf
 COPY spa.sh /spa.sh
-COPY cron-supervisor.conf /etc/supervisor/conf.d/cron.conf
 
 #make app dir
 RUN mkdir /spa-meteor
@@ -72,9 +67,6 @@ RUN cd /spa-meteor && \
     rm -fr /spa-meteor/packages && \
     rm -fr /root/.meteor && \
     apt-get clean all
-
-#Setup AWS config
-RUN mkdir /root/.aws
 
 VOLUME /shared
 EXPOSE 80
