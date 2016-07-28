@@ -5,7 +5,7 @@
   command: "aws s3 cp --recursive {{s3_virtuoso_dump_path}} {{virtuoso_data_path}}/toLoad"
   args:
     creates: "{{virtuoso_data_path}}/toLoad/output000001.nq.gz"
-- name: "Copy docker-virtuoso source to {{virtuoso_data_path}}"
+- name: "Copy docker-virtuoso source to {{docker_virtuoso_path}}"
   synchronize:
     src: "{{infrastructure_root}}/docker/images/docker-virtuoso/"
     dest: "{{docker_virtuoso_path}}"

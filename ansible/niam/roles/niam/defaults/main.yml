@@ -1,1 +1,2 @@
 docker_niam_path: /tmp/docker-niam
+niam_share_path: /mnt/niam-shared

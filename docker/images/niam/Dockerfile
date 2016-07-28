@@ -13,9 +13,6 @@ RUN curl https://install.meteor.com/ | sh
 #Copy necessary repos
 COPY nia-monitor /nia-monitor
 
-#Config files
-COPY supervisord.conf /etc/supervisor/conf.d/niam.conf
-
 #Build the meteor app
 RUN cd /nia-monitor && \
     meteor npm install && \
@@ -28,4 +25,8 @@ EXPOSE 3000
 RUN locale-gen en_US && localedef -i en_US -f UTF-8 en_US
 ENV LC_ALL="en_US"
 ENV TERM=xterm
-CMD supervisord --nodaemon --config /etc/supervisor/supervisord.conf
+
+RUN mkdir /shared
+VOLUME /shared
+
+CMD cd /nia-monitor && meteor run --settings /shared/meteor-settings.json
