@@ -38,4 +38,17 @@ then
     touch .data_loaded
 fi
 
+# The following error occurs after loading a large amount of data then restarting Virtuoso:
+#
+#   Unable to lock file /usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.lck (Resource temporarily unavailable).
+#   Virtuoso is already runnning (pid 45)
+#   This probably means you either do not have permission to start
+#   this server, or that virtuoso-t is already running.
+#   If you are absolutely sure that this is not the case, please try
+#   to remove the file /usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.lck and start again.
+#
+# The sleep command and lock removal are intended to avoid the issue.
+sleep 60
+rm /data/virtuoso.lck
+
 virtuoso-t +wait +foreground
