@@ -1,5 +1,6 @@
 #!/bin/bash
 DIRNAME=`date +dump_%Y-%m-%d_%H-%M`
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 (
     # Remove dumps older than 5 days
     find {{virtuoso_data_path}}/dumps/ -mtime +5 -exec rm {} \; &&
