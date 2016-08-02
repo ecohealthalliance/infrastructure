@@ -8,3 +8,10 @@
     hour: "5"
     weekday: "6"
     job: "~/backup_to_s3.sh"
+- name: Create virtuoso restart cronjob
+  cron:
+    name: "Restart virtuoso to avoid memory leak"
+    minute: "0"
+    hour: "5"
+    weekday: "1"
+    job: "/usr/bin/docker restart virtuoso-container"
