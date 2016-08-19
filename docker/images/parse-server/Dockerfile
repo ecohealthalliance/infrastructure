@@ -18,6 +18,9 @@ COPY parse-dashboard.sh /parse-dashboard.sh
 COPY parse-dashboard-config.json /parse-dashboard-config.json
 COPY parse-server.sh /parse-server.sh
 
+#Settings file is located on a shared volume on server
+RUN ln -s /shared/parse-server-config.json /gp-parse-server/settings.json
+
 EXPOSE 80
 EXPOSE 4040
 EXPOSE 1337
