@@ -4,7 +4,7 @@ era:
   environment:
     - FLIRT_MONGO_URL=mongodb://flirt-reporting.eha.io:27017/grits-net-meteor
     - BIRT_MONGO_URL=mongodb://birt.eha.io:27017/birt
-    - SPA_MONGO_URL=mongodb://spa.eha.io:27017/promed
+    - SPA_MONGO_URL=mongodb://172.30.2.160:27017/promed
     - ROOT_URL=http://era.eha.io
     - PORT=80 
     - TERM=xterm
