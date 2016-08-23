@@ -23,6 +23,8 @@ COPY era /era-webapp
 RUN cd /era-webapp && \
     (meteor build ./build --directory || exit 1) && \
     cd /era-webapp/build/bundle/programs/server && \
+    meteor npm init && \
+    meteor npm install --save googleapis && \
     meteor npm install && \
     rm -fr /era-webapp/packages && \
     rm -fr /root/.meteor && \
