@@ -1,7 +1,10 @@
 #!/bin/bash
 
 (cd ERA || git clone https://github.com/ecohealthalliance/ERA.git)
-git pull master
+cd ERA
+
+git pull origin master
+
 (docker run --name mongo-client -d mongodb sleep infinity || true)
 docker cp .scripts mongo-client:/scripts
 
