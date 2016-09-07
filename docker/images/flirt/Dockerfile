@@ -1,5 +1,8 @@
 FROM ubuntu:14.04.4
 
+# Replace shell with bash so we can source files
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
 #Install dependencies
 #Chaining these commands to keep the image smaller
 RUN apt-get clean all && \
