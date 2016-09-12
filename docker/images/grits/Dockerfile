@@ -211,4 +211,10 @@ RUN cd /usr/share/elasticsearch &&\
     bin/plugin -install com.github.richardwilly98.elasticsearch/elasticsearch-river-mongodb/2.0.1 &&\
     bin/plugin -install facet-script -url http://dl.bintray.com/content/imotov/elasticsearch-plugins/elasticsearch-facet-script-1.1.2.zip &&\
     chown -R elasticsearch:elasticsearch *
+######################################################################################################################
+
+CMD supervisord --nodaemon --config /etc/supervisor/supervisord.conf
+
+
+
 
