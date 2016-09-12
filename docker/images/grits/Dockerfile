@@ -1,9 +1,15 @@
 FROM ubuntu:14.04
 
 ### Variables ##################################################################################################
-ENV TERM=xterm
-ENV GRITS_HOME=/home/grits
-ENV MONGO_URL=mongodb://PLACE.HOLDER:27017
+ENV TERM="xterm"
+ENV GRITS_HOME="/home/grits"
+ENV MONGO_URL="mongodb://PLACE.HOLDER:27017"
+ENV METEOR_DB_NAME="diagnosis"
+ENV PORT="3000"
+ENV ROOT_URL="http://change.me"
+ENV MAIL_URL="smtp://localhost"
+ENV GRID_URL="https://eidr.ecohealthalliance.org"
+ENV NLTK_DATA="$GRITS_HOME/nltk_data"
 
 ### Need this as a pre-setup ###################################################################################
 # Replace shell with bash so we can source files
