@@ -1,7 +1,7 @@
 
 echo "*****get initial flight/legs counts*****"
-/usr/bin/mongo 192.168.1.118/grits-net-meteor --eval 'db.flights.count()'
-/usr/bin/mongo 192.168.1.118/grits-net-meteor --eval 'db.legs.count()'
+/usr/bin/mongo flirt-reporting.eha.io/grits-net-meteor --eval 'db.flights.count()'
+/usr/bin/mongo flirt-reporting.eha.io/grits-net-meteor --eval 'db.legs.count()'
 
 
 # This is the default run.sh..
@@ -27,16 +27,16 @@ sed -i 's/password/HD38jFXc/' grits_ftp_config.py
 
 echo "*****Consume/import flight data*****"
 python grits_flight_pull.py
-python grits_consume.py --type DiioAirport -m 192.168.1.118 -d grits-net-meteor tests/data/MiExpressAllAirportCodes.tsv
-python grits_consume.py --type FlightGlobal -m 192.168.1.118 -d grits-net-meteor data/EcoHealth_*.csv  &&\
+python grits_consume.py --type DiioAirport -m flirt-reporting.eha.io -d grits-net-meteor tests/data/MiExpressAllAirportCodes.tsv
+python grits_consume.py --type FlightGlobal -m flirt-reporting.eha.io -d grits-net-meteor data/EcoHealth_*.csv  &&\
 rm -fr data
 
 echo "*****Make sure indexes are good*****"
-python grits_ensure_index.py -d grits-net-meteor -m 192.168.1.118 -f
+python grits_ensure_index.py -d grits-net-meteor -m flirt-reporting.eha.io -f
 
 echo "*****Import heat map data*****"
 aws s3 sync s3://flight-network-heat-map/ ./
-mongorestore -h 192.168.1.118 -d grits-net-meteor -c heatmap ./dump/grits/heatmap.bson
+mongorestore -h flirt-reporting.eha.io -d grits-net-meteor -c heatmap ./dump/grits/heatmap.bson
 
 echo "*****Create legs collection*****"
 java -jar /flirt-legs.jar --mongohost="flirt-reporting.eha.io" mongoport="27017"
