@@ -32,14 +32,14 @@ python grits_consume.py --type FlightGlobal -m 192.168.1.118 -d grits-net-meteor
 rm -fr data
 
 echo "*****Make sure indexes are good*****"
-python grits_ensure_index.py -d grits-net-meteor -m 192.168.1.118
+python grits_ensure_index.py -d grits-net-meteor -m 192.168.1.118 -f
 
 echo "*****Import heat map data*****"
 aws s3 sync s3://flight-network-heat-map/ ./
 mongorestore -h 192.168.1.118 -d grits-net-meteor -c heatmap ./dump/grits/heatmap.bson
 
 echo "*****Create legs collection*****"
-java -jar /flirt-legs.j                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ar --mongohost="192.168.1.118" mongoport="27017"
+java -jar /flirt-legs.jar --mongohost="flirt-reporting.eha.io" mongoport="27017"
 
 echo "*****Start the app*****"
 service supervisor start
