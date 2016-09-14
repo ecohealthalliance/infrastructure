@@ -9,7 +9,7 @@ RUN apt-get clean all && \
 
 #Install moving parts for parse server
 RUN npm install -g mongodb-runner parse-dashboard
-RUN git clone https://github.com/ecohealthalliance/gq-parse-server.git /gp-parse-server
+RUN git clone https://github.com/ecohealthalliance/gq-parse-server.git /gq-parse-server
 RUN cd /gp-parse-server && npm install
 
 COPY supervisor-server.conf /etc/supervisor/conf.d/server.conf
