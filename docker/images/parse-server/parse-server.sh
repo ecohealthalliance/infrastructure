@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cd /gp-parse-server &&\
+cd /gq-parse-server &&\
 npm start
