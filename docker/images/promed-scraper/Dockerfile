@@ -22,7 +22,12 @@ RUN echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiver
 RUN apt-get update && apt-get -y install mongodb-clients
 RUN apt-get clean all
 
+COPY WITH_SECRET /usr/local/bin/WITH_SECRET
+RUN chmod +x /usr/local/bin/WITH_SECRET
+
 COPY promed_mail_scraper /promed_mail_scraper
+
+RUN WITH_SECRET /usr/local/bin/ansible-playbook --connection=local /promed_mail_scraper/ansible/site.yml --tags preloadable --vault-password-file /.secret --extra-vars "use_secure_aws_credentials=true"
 
 # Create cronjob to run ProMED mail ingest
 ADD crontab /etc/cron.d/crontab
