@@ -10,6 +10,7 @@ ENV ROOT_URL="http://change.me"
 ENV MAIL_URL="smtp://localhost"
 ENV GRID_URL="https://eidr.ecohealthalliance.org"
 ENV NLTK_DATA="$GRITS_HOME/nltk_data"
+ENV BASIC_AUTH="grits:CHANGEME"
 
 ### Need this as a pre-setup ###################################################################################
 # Replace shell with bash so we can source files
@@ -124,8 +125,13 @@ RUN cd $GRITS_HOME/annie && $GRITS_HOME/grits_env/bin/python setup.py install
 
 #Config files
 COPY grits-api/celeryd.conf /etc/supervisor/conf.d/celeryd.conf
+COPY grits-api/celery_priority.sh /celery_priority.sh
+COPY grits-api/celery_process.sh /celery_process.sh
+COPY grits-api/celery_diagnose.sh /celery_diagnose.sh
 COPY grits-api/gritsapid.conf /etc/supervisor/conf.d/gritsapid.conf
+COPY grits-api/gritsapi.sh /gritsapi.sh
 COPY grits-api/flowerd.conf /etc/supervisor/conf.d/flowerd.conf
+COPY grits-api/flower.sh /flower.sh
 COPY grits-api/diagnose_girder_HM_articles $GRITS_HOME/cron/diagnose_girder_HM_articles
 
 USER root
@@ -161,6 +167,7 @@ RUN cd $GRITS_HOME/diagnostic-dashboard &&\
 #Copy configs
 COPY diagnostic-dashboard/config $GRITS_HOME/diagnostic-dashboard/config
 COPY diagnostic-dashboard/dashboardd.conf /etc/supervisor/conf.d/dashboardd.conf
+COPY diagnostic-dashboard/dashboard.sh /dashboard.sh
 COPY diagnostic-dashboard/postfix_main.cf /etc/postfix/main.cf
 COPY diagnostic-dashboard/postfix_master.cf /etc/postfix/master.cf
 COPY diagnostic-dashboard/postfix_transport /etc/postfix/transport
