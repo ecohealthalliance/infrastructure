@@ -8,7 +8,7 @@ RUN apt-get clean all && \
     apt-get clean all
 
 #Install moving parts for parse server
-RUN npm install -g mongodb-runner parse-dashboard
+#RUN npm install -g mongodb-runner parse-dashboard
 RUN git clone https://github.com/ecohealthalliance/gq-parse-server.git /gq-parse-server
 RUN cd /gq-parse-server && npm install
 
