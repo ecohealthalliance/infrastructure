@@ -13,7 +13,7 @@ RUN git clone https://github.com/ecohealthalliance/gq-parse-server.git /gq-parse
 RUN cd /gq-parse-server && npm install
 
 COPY supervisor-server.conf /etc/supervisor/conf.d/server.conf
-COPY supervisor-dashboard.conf /etc/supervisor/conf.d/dashboard.conf
+#COPY supervisor-dashboard.conf /etc/supervisor/conf.d/dashboard.conf
 COPY parse-dashboard.sh /parse-dashboard.sh
 COPY parse-dashboard-config.json /parse-dashboard-config.json
 COPY parse-server.sh /parse-server.sh
