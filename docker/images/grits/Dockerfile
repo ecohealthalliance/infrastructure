@@ -12,6 +12,21 @@ ENV GRID_URL="https://eidr.ecohealthalliance.org"
 ENV NLTK_DATA="$GRITS_HOME/nltk_data"
 ENV BASIC_AUTH="grits:CHANGEME"
 
+#Environment variables do not get exported to all subshells.
+#Have to take this brute force approach
+RUN touch /source-vars.sh &&\
+    chmod +x /source-vars.sh &&\
+    echo "export GRITS_HOME=$GRITS_HOME" >> /source-vars.sh &&\
+    echo "export MONGO_URL=$MONGO_URL" >> /source-vars.sh &&\
+    echo "export METEOR_DB_NAME=$METEOR_DB_NAME" >> /source-vars.sh &&\
+    echo "export PORT=$PORT" >> /source-vars.sh &&\
+    echo "export ROOT_URL=$ROOT_URL" >> /source-vars.sh &&\
+    echo "export MAIL_URL=$MAIL_URL" >> /source-vars.sh &&\
+    echo "export GRID_URL=$GRID_URL" >> /source-vars.sh &&\
+    echo "export NLTK_DATA=$NLTK_DATA" >> /source-vars.sh &&\
+    echo "export BASIC_AUTH=$BASIC_AUTH" >> /source-vars.sh
+
+
 ### Need this as a pre-setup ###################################################################################
 # Replace shell with bash so we can source files
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
