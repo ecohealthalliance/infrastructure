@@ -241,6 +241,7 @@ RUN cd /usr/share/elasticsearch &&\
     chown -R elasticsearch:elasticsearch *
 ######################################################################################################################
 
+COPY scripts /scripts
 CMD supervisord --nodaemon --config /etc/supervisor/supervisord.conf
 
 
