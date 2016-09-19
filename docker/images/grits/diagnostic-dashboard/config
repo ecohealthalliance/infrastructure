@@ -1,4 +1,0 @@
-#!/bin/bash
-export PORT=""
-export ROOT_URL=""
-export MAIL_URL=""

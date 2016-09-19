@@ -1,16 +1,20 @@
 FROM ubuntu:14.04
 
+# There are config files EVERYWHERE. All of the proceeding work with vars is an attempt to tame that by
+# creating a single source-vars.sh file where ALL configs can be found and changed. This greatly
+# complicates the build process, but makes life easier of anyone having to administer/import this image
+
 ### Variables ##################################################################################################
 ENV TERM="xterm"
 ENV GRITS_HOME="/home/grits"
-ENV MONGO_URL="mongodb://PLACE.HOLDER:27017"
+ENV MONGO_URL="mongodb://CHANGEME:27017"
 ENV METEOR_DB_NAME="diagnosis"
 ENV PORT="3000"
-ENV ROOT_URL="http://change.me"
+ENV ROOT_URL="http://CHANGEME"
 ENV MAIL_URL="smtp://localhost"
 ENV GRID_URL="https://eidr.ecohealthalliance.org"
 ENV NLTK_DATA="$GRITS_HOME/nltk_data"
-ENV BASIC_AUTH="grits:CHANGEME"
+ENV BASIC_AUTH="CHANGEME"
 
 #Environment variables do not get exported to all subshells.
 #Have to take this brute force approach
@@ -24,8 +28,20 @@ RUN touch /source-vars.sh &&\
     echo "export MAIL_URL=$MAIL_URL" >> /source-vars.sh &&\
     echo "export GRID_URL=$GRID_URL" >> /source-vars.sh &&\
     echo "export NLTK_DATA=$NLTK_DATA" >> /source-vars.sh &&\
-    echo "export BASIC_AUTH=$BASIC_AUTH" >> /source-vars.sh
-
+    echo "export BASIC_AUTH=$BASIC_AUTH" >> /source-vars.sh &&\
+    echo "export AWS_ACCESS_KEY_ID=CHANGEME" >> /source-vars.sh &&\
+    echo "export AWS_SECRET_ACCESS_KEY=CHANGEME" >> /source-vars.sh &&\
+    echo "export AWS_DEFAULT_REGION=us-east-1" >> /source-vars.sh &&\
+    echo "export BROKER_URL=$MONGO_URL/tasks" >> /source-vars.sh &&\
+    echo "export BING_TRANSLATE_ID=CHANGEME" >> /source-vars.sh &&\
+    echo "export BING_TRANSLATE_SECRET=CHANGEME" >> /source-vars.sh &&\
+    echo "export GRITS_API_KEY=CHANGEME" >> /source-vars.sh &&\
+    echo "export BSVE_ENDPOINT=http://beta-search.bsvecosystem.net" >> /source-vars.sh &&\
+    echo "export BSVE_USER_NAME=CHANGEME" >> /source-vars.sh &&\
+    echo "export BSVE_API_KEY=CHANGEME" >> /source-vars.sh &&\
+    echo "export BSVE_SECRET_KEY=CHANGEME" >> /source-vars.sh &&\
+    echo "export GRITS_CURATOR_EMAIL=CHANGEME" >> /source-vars.sh &&\
+    echo "export GRITS_CURATOR_PASSWORD=CHANGEME" >> /source-vars.sh
 
 ### Need this as a pre-setup ###################################################################################
 # Replace shell with bash so we can source files
@@ -88,8 +104,25 @@ RUN pip install \
 RUN groupadd grits && adduser --ingroup grits --home $GRITS_HOME grits
 
 #Grits environment configuration
-COPY common/config $GRITS_HOME/grits_config
-RUN chown grits:grits $GRITS_HOME/grits_config
+RUN cd $GRITS_HOME &&\
+    touch grits_config &&\
+    chown grits:grits grits_config &&\
+    echo "export CLASSIFIER_DATA_ACCESS_KEY=$CLASSIFIER_DATA_ACCESS_KEY" >> grits_config &&\
+    echo "export CLASSIFIER_DATA_SECRET_KEY=$CLASSIFIER_DATA_SECRET_KEY" >> grits_config &&\
+    echo "export GIRDER_DATA_ACCESS_KEY=$GIRDER_DATA_ACCESS_KEY" >> grits_config &&\
+    echo "export GIRDER_DATA_SECRET_KEY=GIRDER_DATA_SECRET_KEY" >> grits_config &&\
+    echo "export MONGO_URL=$MONGO_URL" >> grits_config &&\
+    echo "export CELERY_BROKER=$BROKER_URL" >> grits_config &&\
+    echo "export APACHE_URL=$ROOT_URL" >> grits_config &&\
+    echo "export GIRDER_MOUNT_PATH=$GIRDER_MOUNT_PATH" >> grits_config &&\
+    echo "export GIRDER_ADMIN_PASSWORD=$GIRDER_ADMIN_PASSWORD" >> grits_config &&\
+    echo "export GIRDER_ADMIN_EMAIL=$GIRDER_ADMIN_EMAIL" >> grits_config &&\
+    echo "# Be careful to use different dump directories for production and development" >> grits_config &&\
+    echo "export BING_TRANSLATE_ID=$BING_TRANSLATE_ID" >> grits_config &&\
+    echo "export BING_TRANSLATE_SECRET=$BING_TRANSLATE_SECRET" >> grits_config &&\
+    echo "export METEOR_DB_NAME=$METEOR_DB_NAME" >> grits_config &&\
+    echo "export METEOR_MONGO=$MONGO_URL/$METEOR_DB_NAME" >> grits_config &&\
+    echo "export METEOR_PORT=$PORT" >> grits_config
 
 #Cron
 RUN mkdir $GRITS_HOME/cron $GRITS_HOME/cron/logs &&\
@@ -112,10 +145,27 @@ COPY apache/supervisor-apached.conf /etc/supervisor/conf.d/apached.conf
 
 ### Grits-API ###################################################################################################
 USER grits
-
-#Clone/configure grits-api
 RUN git clone --depth 1 https://github.com/ecohealthalliance/grits-api.git $GRITS_HOME/grits-api
-COPY grits-api/config.py $GRITS_HOME/grits-api/config.py
+
+#Configure grits-api
+RUN cd $GRITS_HOME/grits-api &&\
+    touch config.py &&\
+    chown grits:grits config.py &&\
+    echo "aws_access_key = '$AWS_ACCESS_KEY_ID'" >> config.py &&\
+    echo "aws_secret_key = '$AWS_SECRET_ACCESS_KEY'" >> config.py &&\
+    echo "BROKER_URL = '$BROKER_URL'" >> config.py &&\
+    echo "mongo_url = '$MONGO_URL'" >> config.py &&\
+    echo "bing_translate_id = '$BING_TRANSLATE_ID'" >> config.py &&\
+    echo "bing_translate_secret = '$BING_TRANSLATE_SECRET'" >> config.py &&\
+    echo "api_key = '$GRITS_API_KEY'" >> config.py &&\
+    echo "# The grits histogram app communicates with the bsve api by proxying through the grits api." >> config.py &&\
+    echo "# The BSVE api key, username, etc. here are used for authentication." >> config.py &&\
+    echo "bsve_endpoint = '$BSVE_ENDPOINT'" >> config.py &&\
+    echo "bsve_user_name = '$BSVE_USER_NAME'" >> config.py &&\
+    echo "bsve_api_key = '$BSVE_API_KEY'" >> config.py &&\
+    echo "bsve_secret_key = '$BSVE_SECRET_KEY'" >> config.py &&\
+    echo "grits_curator_email = '$GRITS_CURATOR_EMAIL'" >> config.py &&\
+    echo "grits_curator_password = '$GRITS_CURATOR_PASSWORD'" >> config.py
 
 #Install pip modules into virtenv
 RUN cd $GRITS_HOME &&\
@@ -180,7 +230,6 @@ RUN cd $GRITS_HOME/diagnostic-dashboard &&\
     npm install
 
 #Copy configs
-COPY diagnostic-dashboard/config $GRITS_HOME/diagnostic-dashboard/config
 COPY diagnostic-dashboard/dashboardd.conf /etc/supervisor/conf.d/dashboardd.conf
 COPY diagnostic-dashboard/dashboard.sh /dashboard.sh
 COPY diagnostic-dashboard/postfix_main.cf /etc/postfix/main.cf
@@ -190,6 +239,14 @@ COPY diagnostic-dashboard/postfix_alias /etc/postfix/virtual_alias
 COPY diagnostic-dashboard/postfix_access /etc/postfix/access
 COPY diagnostic-dashboard/postfix_gritsmail.sh /etc/postfix/gritsmail.sh
 COPY diagnostic-dashboard/parse_email.py /etc/postfix/parse_email.py
+
+#Generate config file
+RUN cd $GRITS_HOME/diagnostic-dashboard &&\
+    touch config &&\
+    echo "export PORT=$PORT" >> config &&\
+    echo "export MONGO_URL=$MONGO_URL/$METEOR_DB_NAME" >> config &&\
+    echo "export ROOT_URL=$ROOT_URL" >> config &&\
+    echo "export MAIL_URL=$MAIL_URL" >> config
 
 #Setup postfix
 RUN cat /etc/hostname > /etc/mailname &&\
