@@ -45,9 +45,9 @@ COPY flirt-supervisor.conf /etc/supervisor/conf.d/flirt.conf
 COPY flirt.sh /flirt.sh
 
 #Copy necessary repos
-COPY flirt-webapp /flirt-webapp
-COPY flirt-simulation-service /flirt-simulation-service
-COPY grits-net-consume /grits-net-consume
+RUN git clone --depth 1 https://github.com/ecohealthalliance/flirt.git /flirt-webapp
+RUN git clone --depth 1 https://github.com/ecohealthalliance/flirt-simulation-service.git /flirt-simulation-service
+RUN git clone --depth 1 https://github.com/ecohealthalliance/grits-net-consume.git /grits-net-consume
 
 #Build the meteor app
 #Chaining these commands to keep the image smaller
