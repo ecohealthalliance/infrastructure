@@ -1,0 +1,3 @@
+/^grits@/ OK
+!/^grits@/ REJECT
+

@@ -1,4 +1,3 @@
-
 echo "*****get initial flight/legs counts*****"
 /usr/bin/mongo flirt-reporting.eha.io/grits-net-meteor --eval 'db.flights.count()'
 /usr/bin/mongo flirt-reporting.eha.io/grits-net-meteor --eval 'db.legs.count()'
