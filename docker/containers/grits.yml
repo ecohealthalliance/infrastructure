@@ -7,4 +7,5 @@ grits:
     - "80:80"
     - "443:443"
   restart: always
-
+  volumes:
+    - /etc/letsencrypt:/etc/letsencrypt
