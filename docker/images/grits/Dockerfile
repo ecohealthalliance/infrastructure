@@ -9,7 +9,7 @@ ENV TERM="xterm"
 ENV GRITS_HOME="/home/grits"
 ENV MONGO_URL="mongodb://CHANGEME:27017"
 ENV METEOR_DB_NAME="diagnosis"
-ENV PORT="3000"
+ENV PORT="3001"
 ENV ROOT_URL="http://CHANGEME"
 ENV MAIL_URL="smtp://localhost"
 ENV GRID_URL="https://eidr.ecohealthalliance.org"
@@ -215,7 +215,6 @@ RUN rm -rf /var/lib/tomcat7/webapps/ROOT* &&\
 
 ### Diagnostic-Dashboard ##########################################################################################
 ENV DOMAIN=eha.io
-ENV METEOR_PORT=3000
 
 #Clone diagnostic dashboard repo
 RUN git clone --depth 1 https://github.com/ecohealthalliance/diagnostic-dashboard.git $GRITS_HOME/diagnostic-dashboard
