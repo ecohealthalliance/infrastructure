@@ -299,6 +299,7 @@ RUN cd /usr/share/elasticsearch &&\
 ######################################################################################################################
 
 COPY scripts /scripts
+VOLUME /etc/letsencrypt
 CMD supervisord --nodaemon --config /etc/supervisor/supervisord.conf
 
 
