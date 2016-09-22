@@ -7,8 +7,4 @@ grits:
     - "80:80"
     - "443:443"
   restart: always
-  environment:
-    - GIRDER_MONGO_URI=mongodb://grits.eha.io:27017/girder
-    - MONGO_URL=mongodb://grits.eha.io:27017/
-    - TERM=xterm
 
