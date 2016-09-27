@@ -1,9 +1,3 @@
-
-echo "*****get initial flight/legs counts*****"
-/usr/bin/mongo flirt-reporting.eha.io/grits-net-meteor --eval 'db.flights.count()'
-/usr/bin/mongo flirt-reporting.eha.io/grits-net-meteor --eval 'db.legs.count()'
-
-
 # This is the default run.sh..
 # Should only be executed on first run.
 # If you have a prepopulated DB, just execute the container with the last line
@@ -26,7 +20,10 @@ sed -i 's/username/ECOHEALTH/' grits_ftp_config.py
 sed -i 's/password/HD38jFXc/' grits_ftp_config.py
 
 echo "*****Consume/import flight data*****"
-python grits_flight_pull.py
+python grits_flight_pull.py -m flirt-reporting.eha.io -d grits-net-meteor
+# if no file was downloaded then exit the script without running updates
+if ! ls data/*.csv 1> /dev/null 2>&1; then
+  exit 1
 python grits_consume.py --type DiioAirport -m flirt-reporting.eha.io -d grits-net-meteor tests/data/MiExpressAllAirportCodes.tsv
 python grits_consume.py --type FlightGlobal -m flirt-reporting.eha.io -d grits-net-meteor data/EcoHealth_*.csv  &&\
 rm -fr data
