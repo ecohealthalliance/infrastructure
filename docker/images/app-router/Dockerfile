@@ -27,6 +27,6 @@ LABEL app="app-router"
 EXPOSE 80
 EXPOSE 443
 EXPOSE 22
-
+VOLUME /etc/letsencrypt
 ADD run.sh /run.sh
 CMD /bin/bash /run.sh

@@ -8,18 +8,18 @@ RUN apt-get clean all && \
     apt-get clean all
 
 #Install moving parts for parse server
-RUN npm install -g mongodb-runner parse-dashboard
+#RUN npm install -g mongodb-runner parse-dashboard
 RUN git clone https://github.com/ecohealthalliance/gq-parse-server.git /gq-parse-server
-RUN cd /gp-parse-server && npm install
+RUN cd /gq-parse-server && npm install
 
 COPY supervisor-server.conf /etc/supervisor/conf.d/server.conf
-COPY supervisor-dashboard.conf /etc/supervisor/conf.d/dashboard.conf
+#COPY supervisor-dashboard.conf /etc/supervisor/conf.d/dashboard.conf
 COPY parse-dashboard.sh /parse-dashboard.sh
 COPY parse-dashboard-config.json /parse-dashboard-config.json
 COPY parse-server.sh /parse-server.sh
 
 #Settings file is located on a shared volume on server
-RUN ln -s /shared/parse-server-config.json /gp-parse-server/settings.json
+RUN ln -s /shared/parse-server-config.json /gq-parse-server/settings.json
 
 EXPOSE 80
 EXPOSE 4040
