@@ -55,6 +55,7 @@ COPY flirt-sidebar /spa-meteor/packages/flirt-sidebar
 
 #Build the meteor app
 RUN cd /spa-meteor && \
+    (meteor npm install) && \
     (meteor build ./spabuild --directory || exit 1) && \
     cd /spa-meteor/spabuild/bundle/programs/server && \
     npm install && \
