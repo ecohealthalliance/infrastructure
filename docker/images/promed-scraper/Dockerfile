@@ -29,10 +29,6 @@ COPY promed_mail_scraper /promed_mail_scraper
 
 RUN WITH_SECRET /usr/local/bin/ansible-playbook --connection=local /promed_mail_scraper/ansible/site.yml --tags preloadable --vault-password-file /.secret --extra-vars "use_secure_aws_credentials=true"
 
-# Create cronjob to run ProMED mail ingest
-ADD crontab /etc/cron.d/crontab
-RUN crontab /etc/cron.d/crontab
-
 RUN mkdir /shared
 
 ADD cronjob.sh /cronjob.sh
