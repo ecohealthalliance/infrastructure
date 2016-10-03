@@ -1,0 +1,15 @@
+era:
+  container_name: era
+  image: era
+  environment:
+    - FLIRT_MONGO_URL=mongodb://flirt-reporting.eha.io:27017/grits-net-meteor
+    - BIRT_MONGO_URL=mongodb://birt.eha.io:27017/birt
+    - ROOT_URL=http://era.eha.io
+    - PORT=80 
+    - TERM=xterm
+  ports:
+    - "80:80"
+  restart: always
+  volumes:
+    - /shared:/shared
+  command: supervisord --nodaemon --config /etc/supervisor/supervisord.conf

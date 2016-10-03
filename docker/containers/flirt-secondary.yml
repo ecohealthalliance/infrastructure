@@ -1,0 +1,20 @@
+flirt:
+  container_name: flirt
+  image: flirt
+  environment:
+    - MONGO_URL=mongodb://flirt-reporting.eha.io/grits-net-meteor
+    - MONGO_URI=mongodb://flirt-reporting.eha.io
+    - MONGO_HOST=flirt-reporting.eha.io
+    - MONGO_DB=grits-net-meteor
+    - MONGO_PORT=27017
+    - SIMULATION_PORT=45000
+    - ROOT_URL=http://52.23.65.236
+    - PORT=3000
+    - TERM=xterm
+  ports:
+    - "3000:3000"
+  restart: always
+  volumes:
+    - /shared:/shared:ro
+  command: supervisord --nodaemon --config /etc/supervisor/supervisord.conf
+
