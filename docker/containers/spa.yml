@@ -19,6 +19,7 @@ promed-scraper:
     - MONGO_URL=172.30.2.160:27017
     - SPARQLDB_URL=http://niam.eha.io:8890/sparql-auth?default-graph-uri=http://eha.io/t11
     - TERM=xterm
+    - GOOGLE_TRANSLATE_KEY=AIzaSyAYY0raBaOLjdFGpe2A3NZ3O9CaYgYfQ-M
   restart: always
   volumes:
     - /shared:/shared
