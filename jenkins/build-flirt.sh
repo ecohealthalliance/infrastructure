@@ -1,5 +1,5 @@
 #!/bin/bash
 #This is a jenkins script
 
-docker build -t flirt /opt/infrastructure/docker/images/flirt
+docker build --no-cache -t flirt /opt/infrastructure/docker/images/flirt
 
