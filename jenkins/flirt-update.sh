@@ -39,5 +39,8 @@ mongorestore -h flirt-reporting.eha.io -d grits-net-meteor -c heatmap ./dump/gri
 echo "*****Create legs collection*****"
 java -jar /flirt-legs.jar --mongohost="flirt-reporting.eha.io" mongoport="27017"
 
+echo "*****Update flight counts*****"
+python grits_update_counts.py -m flirt-reporting.eha.io -d grits-net-meteor 
+
 echo "*****Start the app*****"
 service supervisor start
