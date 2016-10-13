@@ -38,5 +38,5 @@ $ssh_command "sudo /bin/mkdir -p /shared/.aws" &&\
 $ssh_command "sudo /bin/mv /tmp/credentials /shared/.aws"
 
 #Reprovision containers
-# scp_file docker/containers/spa.yml &&\
-# $ssh_command "sudo docker-compose -f /tmp/spa.yml up -d"
+# scp_file docker/containers/promed-scraper.yml &&\
+# $ssh_command "sudo docker-compose -f /tmp/promed-scraper.yml up -d"
