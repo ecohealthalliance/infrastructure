@@ -29,4 +29,4 @@ ENV TERM=xterm
 RUN mkdir /shared
 VOLUME /shared
 
-CMD cd /nia-monitor && meteor run --settings /shared/meteor-settings.json
+CMD cd /nia-monitor && meteor run --production --settings /shared/meteor-settings.json
