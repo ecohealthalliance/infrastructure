@@ -13,4 +13,9 @@ $remote_command "sudo docker-compose -f /opt/infrastructure/docker/containers/gr
 
 #Make sure grits has classifiers and disease lables
 $remote_command "sudo docker cp /home/ubuntu/source-vars.sh.backup grits:/source-vars.sh"
-$remote_command "sudo docker exec -ti grits bash -c 'source /source-vars.sh && /scripts/update-settings.sh && /scripts/classifiers.sh && /scripts/disease-label-autocomplete.sh"
+$remote_command "sudo docker exec -ti grits bash -c 'source /source-vars.sh && /scripts/update-settings.sh && /scripts/classifiers.sh && /scripts/disease-label-autocomplete.sh'"
+
+#Restart grits
+$remote_command "sudo docker kill grits && docker start grits"
+sleep 10
+$remote_command "sudo docker exec -ti grits supervisorctl start all"
