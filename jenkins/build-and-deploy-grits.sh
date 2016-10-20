@@ -10,3 +10,7 @@ $remote_command "sudo docker build --no-cache -t grits /opt/infrastructure/docke
 
 #Instantiate the new image
 $remote_command "sudo docker-compose -f /opt/infrastructure/docker/containers/grits.yml up -d"
+
+#Make sure grits has classifiers and disease lables
+$remote_command "sudo docker cp /home/ubuntu/source-vars.sh.backup grits:/source-vars.sh"
+$remote_command "sudo docker exec -ti grits bash -c 'source /source-vars.sh && /scripts/update-settings.sh && /scripts/classifiers.sh && /scripts/disease-label-autocomplete.sh"
