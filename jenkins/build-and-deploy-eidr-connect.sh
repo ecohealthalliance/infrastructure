@@ -9,6 +9,9 @@ $remote_command "cd /opt/eidr-connect && git pull"
 #Build the new image
 $remote_command "sudo docker build --no-cache -t eidr-connect /opt/eidr-connect"
 
+#Forcefully remove previous running container
+$remote_command "sudo docker rm -f eidr-connect"
+
 #Instantiate the new image
 $remote_command "sudo docker-compose -f /opt/eidr-connect/eidr-connect.yml up -d"
 
