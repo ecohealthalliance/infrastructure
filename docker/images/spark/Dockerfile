@@ -20,7 +20,8 @@ RUN apt-get install -y \
             openjdk-9-jre \
             less \
             python \
-            python-pip
+            python-pip \
+            scala \
             && \
     apt-get clean all
 
