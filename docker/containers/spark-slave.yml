@@ -1,0 +1,8 @@
+spark-slave:
+  container_name: spark-slave
+  image: spark
+  ports:
+    - "8081:8081"
+  restart: always
+  command: bash -c "/spark-2.0.1-bin-hadoop2.7/sbin/start-slave.sh spark://192.168.1.3:7077 && sleep infinity"
+
