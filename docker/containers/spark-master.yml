@@ -1,0 +1,7 @@
+spark-master:
+  container_name: spark-master
+  image: spark
+  ports:
+    - "8080:8080"
+    - "7077:7077"
+  restart: always

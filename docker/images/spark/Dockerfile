@@ -14,11 +14,16 @@ RUN apt-get update && apt-get -y install lsb-release &&\
     apt-get update
 
 #Install deb packages
-RUN apt-get install -y vim wget openjdk-9-jre && \
+RUN apt-get install -y \
+            vim \
+            wget \
+            openjdk-9-jre \
+            less \
+            && \
     apt-get clean all
 
 #Get spark
-RUN http://d3kbcqa49mib13.cloudfront.net/spark-2.0.1-bin-hadoop2.7.tgz &&\
+RUN wget http://d3kbcqa49mib13.cloudfront.net/spark-2.0.1-bin-hadoop2.7.tgz &&\
     tar -zxf spark-2.0.1-bin-hadoop2.7.tgz &&\
     rm spark-2.0.1-bin-hadoop2.7.tgz
 
@@ -26,4 +31,4 @@ EXPOSE 7077
 EXPOSE 8080
 EXPOSE 8081
 
-CMD /spark-2.0.1-bin-hadoop2.7/sbin/start-master.sh
+CMD /spark-2.0.1-bin-hadoop2.7/sbin/start-master.sh && sleep infinity
