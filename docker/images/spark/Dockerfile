@@ -19,6 +19,8 @@ RUN apt-get install -y \
             wget \
             openjdk-9-jre \
             less \
+            python \
+            python-pip
             && \
     apt-get clean all
 
