@@ -30,6 +30,12 @@ RUN wget http://d3kbcqa49mib13.cloudfront.net/spark-2.0.1-bin-hadoop2.7.tgz &&\
     tar -zxf spark-2.0.1-bin-hadoop2.7.tgz &&\
     rm spark-2.0.1-bin-hadoop2.7.tgz
 
+#Install pip modules
+RUN pip install --upgrade pip &&\
+    pip install py4j
+
+ENV PYTHONPATH=/spark-2.0.1-bin-hadoop2.7/python/:$PYTHONPATH
+
 EXPOSE 7077
 EXPOSE 8080
 EXPOSE 8081
