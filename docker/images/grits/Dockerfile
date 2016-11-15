@@ -215,6 +215,7 @@ RUN rm -rf /var/lib/tomcat7/webapps/ROOT* &&\
 
 ### Diagnostic-Dashboard ##########################################################################################
 ENV DOMAIN=eha.io
+USER grits
 
 #Clone diagnostic dashboard repo
 RUN git clone --depth 1 https://github.com/ecohealthalliance/diagnostic-dashboard.git $GRITS_HOME/diagnostic-dashboard
@@ -229,6 +230,7 @@ RUN cd $GRITS_HOME/diagnostic-dashboard &&\
     npm install
 
 #Copy configs
+USER root
 COPY diagnostic-dashboard/dashboardd.conf /etc/supervisor/conf.d/dashboardd.conf
 COPY diagnostic-dashboard/dashboard.sh /dashboard.sh
 COPY diagnostic-dashboard/postfix_main.cf /etc/postfix/main.cf
