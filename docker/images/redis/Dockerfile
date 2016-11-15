@@ -21,4 +21,5 @@ RUN apt-get install -y \
     apt-get clean all
 
 EXPOSE 6379
-CMD /usr/bin/redis-server --port 6369
+CMD /usr/bin/redis-server --port 6379
+
