@@ -200,6 +200,10 @@ COPY grits-api/flower.sh /flower.sh
 COPY grits-api/diagnose_girder_HM_articles $GRITS_HOME/cron/diagnose_girder_HM_articles
 
 USER root
+
+#Install meteor
+RUN curl https://install.meteor.com | /bin/sh
+
 ### JVM-NLP ######################################################################################################
 #Copy in config files
 COPY jvm-nlp/tomcat7 /etc/default/tomcat7
@@ -215,12 +219,10 @@ RUN rm -rf /var/lib/tomcat7/webapps/ROOT* &&\
 
 ### Diagnostic-Dashboard ##########################################################################################
 ENV DOMAIN=eha.io
+USER grits
 
 #Clone diagnostic dashboard repo
 RUN git clone --depth 1 https://github.com/ecohealthalliance/diagnostic-dashboard.git $GRITS_HOME/diagnostic-dashboard
-
-#Install meteor
-RUN curl https://install.meteor.com | /bin/sh
 
 #Bundle diagnostic-dashboard and install dependencies
 RUN cd $GRITS_HOME/diagnostic-dashboard &&\
@@ -229,6 +231,7 @@ RUN cd $GRITS_HOME/diagnostic-dashboard &&\
     npm install
 
 #Copy configs
+USER root
 COPY diagnostic-dashboard/dashboardd.conf /etc/supervisor/conf.d/dashboardd.conf
 COPY diagnostic-dashboard/dashboard.sh /dashboard.sh
 COPY diagnostic-dashboard/postfix_main.cf /etc/postfix/main.cf
