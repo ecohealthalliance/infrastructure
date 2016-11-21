@@ -32,7 +32,7 @@ RUN touch /source-vars.sh &&\
     echo "export AWS_ACCESS_KEY_ID=CHANGEME" >> /source-vars.sh &&\
     echo "export AWS_SECRET_ACCESS_KEY=CHANGEME" >> /source-vars.sh &&\
     echo "export AWS_DEFAULT_REGION=us-east-1" >> /source-vars.sh &&\
-    echo "export BROKER_URL=$MONGO_URL/tasks" >> /source-vars.sh &&\
+    echo "export BROKER_URL=redis://CHANGME:6379/0" >> /source-vars.sh &&\
     echo "export BING_TRANSLATE_ID=CHANGEME" >> /source-vars.sh &&\
     echo "export BING_TRANSLATE_SECRET=CHANGEME" >> /source-vars.sh &&\
     echo "export GRITS_API_KEY=CHANGEME" >> /source-vars.sh &&\
