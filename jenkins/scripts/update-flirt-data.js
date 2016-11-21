@@ -13,14 +13,14 @@ while(startDate < endDate){
       {
         effectiveDate: {$lte: startDate},
         discontinuedDate: {$gte: startDate}
-      }
+      }, {}
     ).count()
   db.flightCounts.insert({date: startDate, count: counts})
   printjson({date: startDate, count: counts})
   startDate.setHours(startDate.getHours() + 25) //need to do this to account for daylight savings time
   startDate.setUTCHours(0,0,0,0)
 }
-
+print("Done with flight counts!")
 // update day counts --------------------------------------------------------------
 db.legs.ensureIndex({day1:1})
 db.legs.ensureIndex({day2:1})
@@ -85,7 +85,7 @@ db.dayCounts.insert({day: "Sunday", count: dayCounts[0].sunday})
 // db.legs.dropIndex({day6:1})
 // db.legs.dropIndex({day7:1})
 
-
+print("Done with dayCounts!")
 // update airport counts -----------------------------------------------------------
 // I looked at doing this all in one query but it was so giant and complicated that I decided to 
 // break it up into multiple queries to simplify things. 
