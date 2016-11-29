@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 # Purpose: Remove docker images labeled as "none"
 # Author: Freddie Rosario <rosario@ecohealthalliance.org>
 
