@@ -2,10 +2,9 @@
 # Purpose: Remove docker images labeled as "none"
 # Author: Freddie Rosario <rosario@ecohealthalliance.org>
 
-remove_orphans="sudo docker images|grep none|awk '{print $3}'|xargs sudo docker rmi"
 
 cleanup(){
-  ssh -ti /keys/infrastructure.pem ubuntu@$1 $remove_orphans;
+  ssh -ti /keys/infrastructure.pem ubuntu@$1 "sudo docker images|grep none|awk '{print $3}'|xargs sudo docker rmi";
 }
 
 docker_servers=(
@@ -19,10 +18,20 @@ docker_servers=(
   spa.eha.io
                )
 
-#Remove stopped containers and local orphans on jenkins itself
+#Cleanup jenkins itself
 echo "Cleaning Jenkins..."
-docker ps -a|egrep "Exited|Created"|awk '{print $1}'|xargs docker rm -f
-$remove_orphans
+docker ps -a |egrep "Exited|Created"
+
+#Check for and remove stopped containers
+if [[ $? -eq 0 ]];then
+  docker ps -a|egrep "Exited|Created"|awk '{print $1}'|xargs docker rm -f
+fi
+
+#Check for none images
+docker images|grep none
+if [[ $? -eq 0 ]];then
+  docker images|grep none|awk '{print $3}'|xargs docker rmi
+fi
 
 #SSH to each machine, and clean up
 for server in $docker_servers;do
