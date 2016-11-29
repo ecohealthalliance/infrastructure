@@ -21,14 +21,17 @@ docker_servers=(
                )
 
 #Remove stopped containers and local orphans on jenkins itself
+echo "Cleaning Jenkins..."
 docker ps -a|egrep "Exited|Created"|awk '{print $1}'|xargs docker rm -f
 $remove_orphans
 
 #SSH to each machine, and clean up
 for server in $docker_servers;do
+  echo "Cleaning $server..."
   cleanup $server;
 done
 
 #NIAM access is a little different
+echo "Cleaing Niam..."
 ssh -ti ubuntu@niam.eha.io $remove_orphans
 
