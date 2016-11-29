@@ -20,7 +20,8 @@ docker_servers=(
   spa.eha.io
                )
 
-#Remove local orphans on jenkins itself
+#Remove stopped containers and local orphans on jenkins itself
+docker ps -a|egrep "Exited|Created"|awk '{print $1}'|xargs docker rm -f
 $remove_orphans
 
 #SSH to each machine, and clean up
