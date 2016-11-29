@@ -25,3 +25,14 @@ mongodb:
     - /mnt/mongo:/var/lib
     - /var/log:/var/log
 
+app-router:
+  container_name: app-router
+  image: app-router
+  ports:
+    - "80:80"
+    - "443:443"
+  restart: always
+  volumes:
+    - /var/log:/var/log
+    - /etc/letsencrypt/:/etc/letsencrypt/
+
