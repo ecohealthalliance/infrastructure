@@ -4,7 +4,7 @@
 
 remove_stopped_containers="docker ps -a|egrep \"Exited|Created\"|awk '{print $1}'|xargs docker rm -f"
 remove_orphans="docker images|grep none|awk '{print $3}'|xargs docker rmi"
-sudo_remove_orphans="sudo docker images|grep none|awk '{print $3}'|xargs sudo docker rmi"
+sudo_remove_orphans="(sudo docker images|grep none|awk '{print $3}'|xargs sudo docker rmi) || true"
 
 cleanup(){
   ssh -i /keys/infrastructure.pem ubuntu@$1 $sudo_remove_orphans
