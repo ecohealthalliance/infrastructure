@@ -10,8 +10,8 @@ cleanup(){
 }
 
 docker_servers=(
-  dev-parse.eha.io
-  parse.eha.io
+  dev-survey.eha.io
+  survey.eha.io
   eidr-connect.eha.io
   grits.eha.io
   grits-dev.eha.io
