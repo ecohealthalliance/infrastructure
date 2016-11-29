@@ -1,5 +1,4 @@
-#!/bin/bash
-# Name: docker-clean-orphans.sh
+#!/bin/bash -e
 # Purpose: Remove docker images labeled as "none"
 # Author: Freddie Rosario <rosario@ecohealthalliance.org>
 
@@ -33,5 +32,5 @@ done
 
 #NIAM access is a little different
 echo "Cleaing Niam..."
-ssh -ti ubuntu@niam.eha.io $remove_orphans
+ssh -t ubuntu@niam.eha.io $remove_orphans
 
