@@ -3,7 +3,7 @@
 # Purpose: Remove docker images labeled as "none"
 # Author: Freddie Rosario <rosario@ecohealthalliance.org>
 
-remove_orphans="docker images|grep none|awk '{print $3}'|xargs docker rmi"
+remove_orphans="sudo docker images|grep none|awk '{print $3}'|xargs sudo docker rmi"
 
 cleanup(){
   ssh -ti /keys/infrastructure.pem ubuntu@$1 $remove_orphans;
