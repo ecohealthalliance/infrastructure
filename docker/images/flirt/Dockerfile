@@ -49,14 +49,21 @@ RUN git clone --depth 1 https://github.com/ecohealthalliance/flirt.git /flirt-we
 RUN git clone --depth 1 https://github.com/ecohealthalliance/flirt-simulation-service.git /flirt-simulation-service
 RUN git clone --depth 1 https://github.com/ecohealthalliance/grits-net-consume.git /grits-net-consume
 
+#Create and use meteor user for build
+RUN groupadd meteor && adduser --ingroup meteor --disabled-password --gecos "" --home /home/meteor meteor
+RUN chown -R meteor:meteor /flirt-webapp
+USER meteor
+
 #Build the meteor app
 #Chaining these commands to keep the image smaller
 RUN cd /flirt-webapp/app && \
     (meteor build ./build --directory || exit 1) && \
     cd /flirt-webapp/app/build/bundle/programs/server && \
     npm install && \
-    rm -fr /root/.meteor && \
-    apt-get clean all
+    apt-get clean all && \
+    chown -R root /flirt-webapp
+
+USER root
 
 #Setup AWS config
 RUN mkdir /root/.aws
