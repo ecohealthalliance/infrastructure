@@ -21,6 +21,16 @@ docker_servers=(
   spa.eha.io
                )
 
+#SSH to each machine, and clean up
+for server in "${docker_servers[@]}"; do
+  echo "Cleaning $server..."
+  cleanup $server;
+done
+
+#NIAM access is a little different
+echo "Cleaing Niam..."
+ssh ubuntu@niam.eha.io $sudo_remove_orphans
+
 #Cleanup jenkins itself
 echo "Cleaning Jenkins..."
 docker ps -a |egrep "Exited|Created"
@@ -36,14 +46,3 @@ if [[ $? -eq 0 ]];then
   $remove_orphans
 fi
 
-#SSH to each machine, and clean up
-for server in "${docker_servers[@]}"; do
-  echo "Cleaning $server..."
-  cleanup $server;
-done
-
-#NIAM access is a little different
-echo "Cleaing Niam..."
-ssh ubuntu@niam.eha.io $sudo_remove_orphans
-
-echo "All done!"
