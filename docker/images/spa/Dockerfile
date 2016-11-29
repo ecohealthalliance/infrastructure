@@ -53,6 +53,8 @@ RUN cp /spa-meteor/settings-development.json /shared/settings-production.json
 #submodule requires a submodule and that's not coming through. make sure it's there.
 COPY flirt-sidebar /spa-meteor/packages/flirt-sidebar
 
+ENV METEOR_ALLOW_SUPERUSER=true
+
 #Build the meteor app
 RUN cd /spa-meteor && \
     (meteor npm install) && \
