@@ -9,5 +9,5 @@ $remote_command "cd /opt/infrastructure && git pull"
 $remote_command "sudo docker build --no-cache -t birt /opt/infrastructure/docker/images/birt"
 
 #Instantiate the new image
-$remote_command "sudo docker-compose -f /opt/infrastructure/docker/containers/birt.yml up -d"
+$remote_command "sudo docker-compose -f /opt/infrastructure/docker/containers/birt.yml up -d birt"
 
