@@ -1,11 +1,30 @@
-FROM ubuntu:14.04.4
+FROM ubuntu:14.04
 
 #Install dependencies
 #Chaining these commands to keep the image smaller
 RUN apt-get clean all && \
     apt-get update && \
-    apt-get -y install build-essential openssh-server python python-dev python-setuptools python-pip mongodb-clients mongodb supervisor python-software-properties debconf-utils software-properties-common curl && \
-    pip install virtualenv virtualenvwrapper awscli && \
+    apt-get -y install \
+                build-essential \
+                openssh-server \
+                python \
+                python-dev \
+                python-setuptools \
+                python-pip \
+                mongodb-clients \
+                mongodb \
+                supervisor \
+                python-software-properties \
+                debconf-utils \
+                software-properties-common \
+                curl \
+                git \
+    && \
+    pip install \
+                virtualenv \
+                virtualenvwrapper \
+                awscli \
+    && \
     curl https://install.meteor.com/ | sh && \
     add-apt-repository -y ppa:webupd8team/java && \
     apt-get update && \
@@ -44,24 +63,28 @@ COPY birt-supervisor.conf /etc/supervisor/conf.d/birt.conf
 COPY birt.sh /birt.sh
 
 #make app dir
-RUN mkdir /birt-meteor
-COPY birt /birt-meteor
+RUN git clone --depth 1 https://github.com/ecohealthalliance/birt.git /birt-meteor
+RUN git clone --depth 1 https://github.com/ecohealthalliance/flirt-sidebar.git /birt-meteor/flirt-sidebar
 RUN cp -R /birt-meteor/flirt-sidebar /birt-meteor/app/packages/ &&\
     rm -fr /birt-meteor/flirt-sidebar
 
 RUN mkdir /shared
 #RUN cp /birt-meteor/settings-development.json /shared/settings-production.json
 
+#Create meteor user
+RUN groupadd meteor && adduser --ingroup meteor --disabled-password --gecos "" --home /home/meteor meteor
+
 #Build the meteor app
+RUN chown -R meteor:meteor /birt-meteor
+USER meteor
 RUN cd /birt-meteor/app && \
     (meteor build ./birtbuild --directory || exit 1) && \
     cd /birt-meteor/app/birtbuild/bundle/programs/server && \
     npm install && \
-    rm -fr /birt-meteor/app/packages && \
-    rm -fr /root/.meteor && \
-    apt-get clean all
+    rm -fr /birt-meteor/app/packages
 
 #Setup AWS config
+USER root
 RUN mkdir /root/.aws
 
 VOLUME /shared
