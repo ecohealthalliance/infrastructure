@@ -5,12 +5,11 @@
 #Dump the freshly built image into a tarball
 /usr/bin/docker save flirt > /tmp/flirt.tar
 /bin/echo "Docker image exported"
-/bin/gzip -1 /tmp/flirt.tar 
-/bin/echo "Exported image now compressed"
+# /bin/gzip -1 /tmp/flirt.tar 
+# /bin/echo "Exported image now compressed"
 
 
 #Import image on demo box
-/bin/gzip -d /tmp/flirt.tar.gz
 /usr/bin/sudo /usr/bin/docker load < /tmp/flirt.tar
 /bin/echo "Image now imported on demo box"
 
