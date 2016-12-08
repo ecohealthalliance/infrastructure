@@ -15,7 +15,6 @@
 /bin/echo "Image now imported on demo box"
 
 #Clean up old data
-/bin/rm /tmp/flirt.tar.gz
 /bin/rm /tmp/flirt.tar
 
 #Reprovision flirt container
