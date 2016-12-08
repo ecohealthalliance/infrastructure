@@ -40,6 +40,7 @@ RUN touch /source-vars.sh &&\
     echo "export BSVE_USER_NAME=CHANGEME" >> /source-vars.sh &&\
     echo "export BSVE_API_KEY=CHANGEME" >> /source-vars.sh &&\
     echo "export BSVE_SECRET_KEY=CHANGEME" >> /source-vars.sh &&\
+    echo "export BSVE_ACCESS_KEY=loremipsumhello714902" >> /source-vars.sh &&\
     echo "export GRITS_CURATOR_EMAIL=CHANGEME" >> /source-vars.sh &&\
     echo "export GRITS_CURATOR_PASSWORD=CHANGEME" >> /source-vars.sh
 
