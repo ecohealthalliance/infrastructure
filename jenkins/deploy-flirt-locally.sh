@@ -18,4 +18,4 @@
 
 #Reprovision flirt container
 # scp_file /opt/infrastructure/docker/containers/flirt.yml
-sudo docker-compose -f /tmp/flirt.yml up -d
+sudo docker-compose -f /opt/infrastructure/docker/containers/flirt.yml up -d
