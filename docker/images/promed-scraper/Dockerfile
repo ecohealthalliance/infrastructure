@@ -4,7 +4,7 @@ FROM ubuntu:14.04.4
 #Chaining these commands to keep the image smaller
 RUN apt-get clean all && \
     apt-get update && \
-    apt-get -y install build-essential openssh-server python python-dev python-setuptools python-pip mongodb-clients mongodb python-software-properties debconf-utils software-properties-common curl libffi-dev libssl-dev acl git make && \
+    apt-get -y install build-essential openssh-server python python-dev python-setuptools python-pip mongodb-clients mongodb python-software-properties debconf-utils software-properties-common curl libffi-dev libssl-dev libyaml-dev acl git make && \
     pip install virtualenv virtualenvwrapper awscli && \
     add-apt-repository -y ppa:webupd8team/java && \
     apt-get update && \
