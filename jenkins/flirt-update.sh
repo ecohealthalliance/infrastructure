@@ -23,7 +23,7 @@ echo "*****Consume/import flight data*****"
 python grits_flight_pull.py -m flirt-reporting.eha.io -d grits-net-meteor
 # if no file was downloaded then exit the script without running updates
 if ! ls data/*.csv 1> /dev/null 2>&1; then
-  exit 1
+  exit 0
 fi
 python grits_consume.py --type DiioAirport -m flirt-reporting.eha.io -d grits-net-meteor tests/data/MiExpressAllAirportCodes.tsv
 python grits_consume.py --type FlightGlobal -m flirt-reporting.eha.io -d grits-net-meteor data/EcoHealth_*.csv  &&\
