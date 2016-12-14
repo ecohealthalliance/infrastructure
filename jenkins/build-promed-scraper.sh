@@ -11,4 +11,4 @@ git clone -b master git@github.com:ecohealthalliance/promed_mail_scraper.git /op
 nc -l 14242 < /vault-passwords/grits &
 docker build --no-cache -t promed-scraper docker/images/promed-scraper
 # Ensure the netcat process terminates
-nc localhost 14242
+nc -v localhost 14242
