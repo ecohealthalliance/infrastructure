@@ -27,13 +27,13 @@ docker ps -a |egrep "Exited|Created"
 
 #Check for and remove stopped containers
 if [[ $? -eq 0 ]];then
-  $remove_stopped_containers
+  docker ps -a|egrep "Exited|Created"|awk '{print $1}'|xargs docker rm -f
 fi
 
 #Check for none images
 docker images|grep none
 if [[ $? -eq 0 ]];then
-  $remove_orphans
+  docker images|grep none|awk '{print $3}'|xargs docker rmi
 fi
 
 #SSH to each machine, and clean up
