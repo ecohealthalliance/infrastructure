@@ -21,6 +21,21 @@ docker_servers=(
   spa.eha.io
                )
 
+#Cleanup jenkins itself
+echo "Cleaning Jenkins..."
+docker ps -a |egrep "Exited|Created"
+
+#Check for and remove stopped containers
+if [[ $? -eq 0 ]];then
+  docker ps -a|egrep "Exited|Created"|awk '{print $1}'|xargs docker rm -f
+fi
+
+#Check for none images
+docker images|grep none
+if [[ $? -eq 0 ]];then
+  docker images|grep none|awk '{print $3}'|xargs docker rmi
+fi
+
 #SSH to each machine, and clean up
 for server in "${docker_servers[@]}"; do
   echo "Cleaning $server..."
@@ -31,18 +46,4 @@ done
 echo "Cleaing Niam..."
 ssh ubuntu@niam.eha.io $sudo_remove_orphans
 
-#Cleanup jenkins itself
-echo "Cleaning Jenkins..."
-docker ps -a |egrep "Exited|Created"
-
-#Check for and remove stopped containers
-if [[ $? -eq 0 ]];then
-  $remove_stopped_containers
-fi
-
-#Check for none images
-docker images|grep none
-if [[ $? -eq 0 ]];then
-  $remove_orphans
-fi
 
