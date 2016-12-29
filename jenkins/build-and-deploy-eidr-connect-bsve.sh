@@ -13,6 +13,6 @@ $remote_command "sudo docker build --no-cache -t eidr-connect /opt/eidr-connect"
 $remote_command "sudo docker rm -f eidr-connect.eha.io"
 
 #Instantiate the new image
-$remote_command "sudo docker-compose -f /opt/eidr-connect/eidr-connect.yml up -d"
+$remote_command "sudo docker-compose -f /opt/eidr-connect/eidr-connect.yml up -d eidr-connect.eha.io"
 
 
