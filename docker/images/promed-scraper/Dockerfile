@@ -4,7 +4,7 @@ FROM ubuntu:14.04.4
 #Chaining these commands to keep the image smaller
 RUN apt-get clean all && \
     apt-get update && \
-    apt-get -y install build-essential openssh-server python python-dev python-setuptools python-pip mongodb-clients mongodb python-software-properties debconf-utils software-properties-common curl libffi-dev libssl-dev acl git make && \
+    apt-get -y install build-essential openssh-server python python-dev python-setuptools python-pip python-software-properties debconf-utils software-properties-common curl libffi-dev libssl-dev acl git make && \
     pip install virtualenv virtualenvwrapper awscli && \
     add-apt-repository -y ppa:webupd8team/java && \
     apt-get update && \
@@ -19,7 +19,7 @@ RUN pip install ansible
 RUN echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe" >> /etc/apt/sources.list
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
 RUN echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" > /etc/apt/sources.list.d/mongodb-org-3.2.list
-RUN apt-get update && apt-get -y install mongodb-clients
+RUN apt-get update && apt-get -y install mongodb-org
 RUN apt-get clean all
 
 COPY WITH_SECRET /usr/local/bin/WITH_SECRET
