@@ -31,4 +31,4 @@ RUN groupadd meteor && adduser --ingroup meteor --disabled-password --gecos "" -
 RUN chown -R meteor:meteor /nia-monitor
 USER meteor
 
-CMD cd /nia-monitor && meteor run --production --settings /shared/meteor-settings.json
+CMD cd /nia-monitor && git rev-parse HEAD > revision.txt && meteor run --production --settings /shared/meteor-settings.json
