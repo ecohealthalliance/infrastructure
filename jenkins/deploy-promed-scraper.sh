@@ -12,6 +12,9 @@
 aws s3 cp /tmp/promed-scraper.tar.gz s3://bsve-integration/promed-scraper.tar.gz &&\
 /bin/echo "Images uploaded"
 
+/bin/echo "Notify the BSVE to redeploy"
+aws sns publish --topic-arn arn:aws:sns:us-east-1:789867670404:EHA-Git-Lambda --message '{"app":"promed-scraper"}' --profile bsve-user
+
 #Useful alias/function
 export ssh_command="/usr/bin/ssh -i /keys/infrastructure.pem  ubuntu@spa.eha.io "
 function scp_file { /usr/bin/scp -i /keys/infrastructure.pem $1 ubuntu@spa.eha.io:/tmp/; }
