@@ -19,3 +19,13 @@ $remote_command "sudo docker exec grits bash -c 'source /source-vars.sh && /scri
 $remote_command "sudo docker kill grits && sudo docker start grits"
 sleep 10
 $remote_command "sudo docker exec grits supervisorctl start all"
+
+#Upload new docker image to S3
+$remote_command "
+  sudo rm /tmp/grits.tar.gz
+  sudo docker save grits > /tmp/grits.tar &&\
+  sudo gzip -1 /tmp/grits.tar &&\
+  sudo aws s3 cp /tmp/grits.tar.gz s3://bsve-integration/grits.tar.gz
+  sudo rm /tmp/grits.tar.gz
+"
+
