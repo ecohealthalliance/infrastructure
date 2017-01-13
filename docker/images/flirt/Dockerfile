@@ -54,6 +54,7 @@ ENV METEOR_ALLOW_SUPERUSER=true
 #Build the meteor app
 #Chaining these commands to keep the image smaller
 RUN cd /flirt-webapp/app && \
+    git rev-parse HEAD > revision.txt && \ 
     (meteor build ./build --directory || exit 1) && \
     cd /flirt-webapp/app/build/bundle/programs/server && \
     npm install && \

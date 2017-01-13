@@ -227,6 +227,7 @@ RUN git clone --depth 1 https://github.com/ecohealthalliance/diagnostic-dashboar
 
 #Bundle diagnostic-dashboard and install dependencies
 RUN cd $GRITS_HOME/diagnostic-dashboard &&\
+    git rev-parse HEAD > revision.txt &&\
     meteor bundle --directory bundle &&\
     cd bundle/programs/server &&\
     npm install

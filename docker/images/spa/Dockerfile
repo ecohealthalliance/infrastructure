@@ -57,6 +57,7 @@ ENV METEOR_ALLOW_SUPERUSER=true
 
 #Build the meteor app
 RUN cd /spa-meteor && \
+    git rev-parse HEAD > revision.txt && \
     (meteor npm install) && \
     (meteor build ./spabuild --directory || exit 1) && \
     cd /spa-meteor/spabuild/bundle/programs/server && \

@@ -78,6 +78,7 @@ RUN groupadd meteor && adduser --ingroup meteor --disabled-password --gecos "" -
 RUN chown -R meteor:meteor /birt-meteor
 USER meteor
 RUN cd /birt-meteor/app && \
+    git rev-parse HEAD > revision.txt && \
     (meteor build ./birtbuild --directory || exit 1) && \
     cd /birt-meteor/app/birtbuild/bundle/programs/server && \
     npm install && \
