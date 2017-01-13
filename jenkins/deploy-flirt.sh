@@ -26,3 +26,11 @@ $ssh_command /bin/rm /tmp/flirt.tar
 scp_file /opt/infrastructure/docker/containers/flirt.yml
 $ssh_command "sudo docker-compose -f /tmp/flirt.yml up -d"
 
+#Upload new docker image to S3
+$ssh_command "
+  sudo rm /tmp/flirt.tar.gz
+  sudo docker save flirt > /tmp/flirt.tar &&\
+  sudo gzip -1 /tmp/flirt.tar &&\
+  sudo aws s3 cp /tmp/flirt.tar.gz s3://bsve-integration/flirt.tar.gz
+  sudo rm /tmp/flirt.tar.gz
+"
