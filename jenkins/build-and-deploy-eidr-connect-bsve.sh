@@ -8,7 +8,7 @@ git clone https://github.com/ecohealthalliance/eidr-connect.git
 cd eidr-connect
 
 git checkout master && git pull
-sudo docker build --no-cache -t eidr-connect /opt/eidr-connect
+sudo docker build --no-cache -t eidr-connect .
 
 sudo docker save eidr-connect > /tmp/eidr-connect.tar
 sudo gzip -1 /tmp/eidr-connect.tar
@@ -25,7 +25,7 @@ $ssh_command "/usr/bin/sudo /usr/bin/docker load < /tmp/eidr-connect.tar" &&\
 /bin/echo "Images now imported on remote"
 
 #Reprovision containers
-scp_file /opt/eidr-connect/eidr-connect-bsve.yml
+scp_file eidr-connect-bsve.yml
 #Forcefully remove previous running container
 $remote_command "sudo docker rm -f eidr-connect-bsve.eha.io || true"
 #Instantiate the new image
