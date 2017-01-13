@@ -37,3 +37,12 @@ $ssh_command "sudo /bin/mv /tmp/credentials /shared/.aws"
 #Reprovision containers
 scp_file docker/containers/spa.yml &&\
 $ssh_command "sudo docker-compose -f /tmp/spa.yml up -d"
+
+#Upload new docker image to S3
+$ssh_command "
+  sudo rm /tmp/spa.tar.gz
+  sudo docker save spa > /tmp/spa.tar &&\
+  sudo gzip -1 /tmp/spa.tar &&\
+  sudo aws s3 cp /tmp/spa.tar.gz s3://bsve-integration/spa.tar.gz
+  sudo rm /tmp/spa.tar.gz
+"
