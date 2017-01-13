@@ -20,7 +20,7 @@ sudo aws s3 cp /tmp/eidr-connect.tar.gz s3://bsve-integration/eidr-connect.tar.g
 aws sns publish --topic-arn arn:aws:sns:us-east-1:789867670404:EHA-Git-Lambda --message '{"app":"eidr-connect"}' --profile bsve-user
 
 scp_file /tmp/eidr-connect.tar.gz &&\
-$ssh_command /bin/gzip -d /tmp/eidr-connect.tar.gz &&\
+$ssh_command "/bin/gzip -d /tmp/eidr-connect.tar.gz" &&\
 $ssh_command "/usr/bin/sudo /usr/bin/docker load < /tmp/eidr-connect.tar" &&\
 /bin/echo "Images now imported on remote"
 
@@ -29,6 +29,6 @@ scp_file eidr-connect-bsve.yml
 #Forcefully remove previous running container
 $remote_command "sudo docker rm -f eidr-connect-bsve.eha.io || true"
 #Instantiate the new image
-$remote_command "sudo docker-compose -f eidr-connect-bsve.yml up -d eidr-connect-bsve.eha.io"
+$remote_command "sudo docker-compose -f /tmp/eidr-connect-bsve.yml up -d eidr-connect-bsve.eha.io"
 
 sudo rm /tmp/eidr-connect.tar.gz
