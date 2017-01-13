@@ -20,8 +20,8 @@ sudo aws s3 cp /tmp/eidr-connect.tar.gz s3://bsve-integration/eidr-connect.tar.g
 aws sns publish --topic-arn arn:aws:sns:us-east-1:789867670404:EHA-Git-Lambda --message '{"app":"eidr-connect"}' --profile bsve-user
 
 scp_file /tmp/eidr-connect.tar.gz &&\
-$ssh_command "/bin/gzip -d /tmp/eidr-connect.tar.gz" &&\
-$ssh_command "/usr/bin/sudo /usr/bin/docker load < /tmp/eidr-connect.tar" &&\
+$remote_command "/bin/gzip -d /tmp/eidr-connect.tar.gz" &&\
+$remote_command "/usr/bin/sudo /usr/bin/docker load < /tmp/eidr-connect.tar" &&\
 /bin/echo "Images now imported on remote"
 
 #Reprovision containers
