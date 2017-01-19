@@ -1,4 +1,4 @@
-FROM ubuntu:14.04.4
+FROM ubuntu:14.04
 
 #Install dependencies
 #Chaining these commands to keep the image smaller
@@ -45,6 +45,7 @@ COPY spa.sh /spa.sh
 
 #App dir
 RUN git clone --depth 1 https://github.com/ecohealthalliance/spa.git /spa-meteor
+RUN rm -fr /spa-meteor/packages/flirt-sidebar; git clone --depth 1 https://github.com/ecohealthalliance/flirt-sidebar.git /spa-meteor/packages/flirt-sidebar
 
 RUN mkdir /shared
 RUN cp /spa-meteor/settings-development.json /shared/settings-production.json
