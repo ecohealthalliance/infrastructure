@@ -43,9 +43,8 @@ COPY mongod-supervisor.conf /etc/supervisor/conf.d/mongod.conf
 COPY spa-supervisor.conf /etc/supervisor/conf.d/spa.conf
 COPY spa.sh /spa.sh
 
-#make app dir
-RUN mkdir /spa-meteor
-COPY spa /spa-meteor
+#App dir
+RUN git clone --depth 1 https://github.com/ecohealthalliance/spa /spa-meteor
 
 RUN mkdir /shared
 RUN cp /spa-meteor/settings-development.json /shared/settings-production.json
