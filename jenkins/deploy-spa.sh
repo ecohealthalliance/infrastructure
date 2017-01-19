@@ -2,6 +2,8 @@
 #Note: This script is intended for jenkins.
 #Please run this from the top level of the infrastructure repo
 
+rm -fr /tmp/spa.tar*
+
 #Dump the freshly built images into a tarball
 /usr/bin/docker save spa > /tmp/spa.tar &&\
 /bin/echo "Docker images exported" &&\
@@ -20,6 +22,7 @@ export ssh_command="/usr/bin/ssh -i /keys/infrastructure.pem  ubuntu@spa.eha.io 
 function scp_file { /usr/bin/scp -i /keys/infrastructure.pem $1 ubuntu@spa.eha.io:/tmp/; }
 
 #Import images on demo box
+$ssh_command rm -fr /tmp/spa.tar*
 scp_file /tmp/spa.tar.gz &&\
 $ssh_command /bin/gzip -d /tmp/spa.tar.gz &&\
 $ssh_command "/usr/bin/sudo /usr/bin/docker load < /tmp/spa.tar" &&\
