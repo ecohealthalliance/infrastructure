@@ -4,14 +4,13 @@ FROM ubuntu:14.04.4
 #Chaining these commands to keep the image smaller
 RUN apt-get clean all && \
     apt-get update && \
-    apt-get -y install build-essential openssh-server python python-dev python-setuptools python-pip mongodb-clients mongodb supervisor python-software-properties debconf-utils software-properties-common curl libffi-dev libssl-dev && \
+    apt-get -y install build-essential openssh-server python python-dev python-setuptools python-pip mongodb-clients mongodb supervisor python-software-properties debconf-utils software-properties-common curl libffi-dev libssl-dev git-all && \
     pip install virtualenv virtualenvwrapper awscli && \
     curl https://install.meteor.com/ | sh && \
     add-apt-repository -y ppa:webupd8team/java && \
     apt-get update && \
     echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | debconf-set-selections && \
     apt-get install -y oracle-java8-installer && \
-    apt-get install git-all && \
     apt-get clean all
 
 # gpg keys listed at https://github.com/nodejs/node
