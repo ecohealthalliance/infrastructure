@@ -11,6 +11,7 @@ RUN apt-get clean all && \
     apt-get update && \
     echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | debconf-set-selections && \
     apt-get install -y oracle-java8-installer && \
+    apt-get install git-all && \
     apt-get clean all
 
 # gpg keys listed at https://github.com/nodejs/node
