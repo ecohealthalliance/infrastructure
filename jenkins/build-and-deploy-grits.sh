@@ -9,7 +9,7 @@ $remote_command "cd /opt/infrastructure && git pull"
 $remote_command "sudo docker build --no-cache -t grits /opt/infrastructure/docker/images/grits"
 
 #Instantiate the new image
-$remote_command "sudo docker-compose -f /opt/infrastructure/docker/containers/grits.yml up -d"
+$remote_command "sudo docker-compose -f /opt/infrastructure/docker/containers/grits.yml up -d grits"
 
 #Make sure grits has classifiers and disease lables
 $remote_command "sudo docker cp /home/ubuntu/source-vars.sh.backup grits:/source-vars.sh"
