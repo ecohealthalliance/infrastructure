@@ -10,6 +10,7 @@ cd eidr-connect
 git checkout master && git pull
 sudo docker build --no-cache -t eidr-connect .
 
+rm /tmp/eidr-connect.tar*
 sudo docker save eidr-connect > /tmp/eidr-connect.tar
 sudo gzip -1 /tmp/eidr-connect.tar
 
