@@ -7,7 +7,7 @@ function scp_file { /usr/bin/scp -i /keys/infrastructure.pem $1 ubuntu@eidr-conn
 git clone https://github.com/ecohealthalliance/eidr-connect.git
 cd eidr-connect
 
-git checkout master && git pull
+git checkout master; git pull
 sudo docker build --no-cache -t eidr-connect .
 
 rm /tmp/eidr-connect.tar*
