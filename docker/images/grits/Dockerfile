@@ -300,6 +300,14 @@ RUN cd /usr/share/elasticsearch &&\
     bin/plugin -install com.github.richardwilly98.elasticsearch/elasticsearch-river-mongodb/2.0.1 &&\
     bin/plugin -install facet-script -url http://dl.bintray.com/content/imotov/elasticsearch-plugins/elasticsearch-facet-script-1.1.2.zip &&\
     chown -R elasticsearch:elasticsearch *
+
+######################################################################################################################
+#Bundle classifier data
+RUN mkdir $GRITS_HOME/classifiers/ &&\
+    aws --no-sign-request s3 sync s3://classifier-data/classifiers/ $GRITS_HOME/classifiers/ &&\
+    export CLASSIFIER_PATH=$(ls -t $GRITS_HOME/classifiers/*/*.p | head -1 | xargs dirname) &&\
+    ln -s $CLASSIFIER_PATH $GRITS_HOME/grits-api/current_classifier
+
 ######################################################################################################################
 
 COPY scripts /scripts
