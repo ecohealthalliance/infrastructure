@@ -310,6 +310,8 @@ RUN mkdir $GRITS_HOME/classifiers/ &&\
 
 ######################################################################################################################
 
+COPY logging/logging.sh /logging.sh
+COPY logging/supervisor-logging.conf /etc/supervisor/conf.d/supervisor-logging.conf
 COPY scripts /scripts
 VOLUME /etc/letsencrypt
 CMD supervisord --nodaemon --config /etc/supervisor/supervisord.conf
