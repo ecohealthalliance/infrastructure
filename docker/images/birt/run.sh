@@ -4,5 +4,9 @@
 aws s3 sync s3://promed-database/ ./
 mongorestore -h 172.30.2.160 -d promed -c blindspots ./dump/promed/blindspots.bson
 
+#Run the annual sightings script
+cd /birt-meteor/tools &&\
+npm run-script annualSightings
+
 #Start the app
 service supervisor start

@@ -88,6 +88,12 @@ RUN cd /birt-meteor/app && \
 USER root
 RUN mkdir /root/.aws
 
+#Take care of annual sightings script dependencies
+RUN cd /birt-meteor/tools &&\
+    npm install . &&\
+    npm run-script clean &&\
+    npm run-script build
+
 VOLUME /shared
 EXPOSE 80
 COPY run.sh /run.sh
