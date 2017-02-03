@@ -6,7 +6,7 @@ mongorestore -h 172.30.2.160 -d promed -c blindspots ./dump/promed/blindspots.bs
 
 #Run the annual sightings script
 cd /birt-meteor/tools &&\
-npm run-script annualSightings
+npm run-script annualSighting -u $MONGO_URL
 
 #Start the app
 service supervisor start
