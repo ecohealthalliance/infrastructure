@@ -20,7 +20,7 @@ key_dir = "/keys/"
 
 for name in servers.keys():
   print "Checking " + name + "..."
-  SSH = "/usr/bin/ssh -i " + key_dir + servers[name][0] + " ubuntu@" + servers[name][1] + " 'pgrep mongod'"
+  SSH = "/usr/bin/ssh ubuntu@" + servers[name][1] + " 'pgrep mongod'"
   return_code = os.system(SSH)
   if return_code != 0:
     print "Problem checking for running mongodb on " + name
