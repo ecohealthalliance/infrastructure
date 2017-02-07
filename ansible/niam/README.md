@@ -13,7 +13,7 @@ ansible-galaxy install -r requirements.yml
 ### to deploy on the EHA niam instance
 
 ```
-ansible-playbook site.yml --become-user=ubuntu --vault-password-file ~/.keys/.grits_vault_password --private-key infrastructure.pem
+ansible-playbook site.yml --become-user=ubuntu --vault-password-file ~/.keys/.grits_vault_password
 ```
 
 ### to deploy locally

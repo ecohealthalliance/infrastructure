@@ -33,6 +33,10 @@
       swapfile_location: "/swapfile"
       tags: swap
     - name: angstwad.docker_ubuntu
+      # Due to this bug the version need to be pinned.
+      # https://github.com/ansible/ansible/issues/20492
+      pip_version_docker_compose: '1.9.0'
+      pip_version_docker_py: '1.10.6'
       tags: docker
     - name: thefinn93.letsencrypt
       letsencrypt_cert_domains:
