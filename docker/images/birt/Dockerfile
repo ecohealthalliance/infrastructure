@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 
 #Install dependencies
 #Chaining these commands to keep the image smaller
@@ -87,6 +87,12 @@ RUN cd /birt-meteor/app && \
 #Setup AWS config
 USER root
 RUN mkdir /root/.aws
+
+#Take care of annual sightings script dependencies
+RUN cd /birt-meteor/tools &&\
+    npm install . &&\
+    npm run-script clean &&\
+    npm run-script build
 
 VOLUME /shared
 EXPOSE 80
