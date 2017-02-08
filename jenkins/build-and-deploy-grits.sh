@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export remote_command="/usr/bin/ssh -i /keys/infrastructure.pem  ubuntu@grits.eha.io "
+export remote_command="/usr/bin/ssh -i /var/lib/jenkins/.ssh/id_rsa  ubuntu@grits.eha.io "
 
 #Make sure repo is up to date
 $remote_command "cd /opt/infrastructure && git pull"
