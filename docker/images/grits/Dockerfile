@@ -14,6 +14,7 @@ ENV ROOT_URL="http://CHANGEME"
 ENV MAIL_URL="smtp://localhost"
 ENV GRID_URL="https://eidr.ecohealthalliance.org"
 ENV NLTK_DATA="$GRITS_HOME/nltk_data"
+ENV ANNOTATOR_DB_PATH="$GRITS_HOME/.annotator.sqlitedb"
 ENV BASIC_AUTH="CHANGEME"
 
 #Environment variables do not get exported to all subshells.
