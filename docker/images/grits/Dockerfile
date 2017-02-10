@@ -187,7 +187,7 @@ RUN cd $GRITS_HOME &&\
 
 #Clone/install annie
 RUN git clone --depth 1 https://github.com/ecohealthalliance/annie.git $GRITS_HOME/annie
-RUN cd $GRITS_HOME/annie && $GRITS_HOME/grits_env/bin/python setup.py install
+RUN cd $GRITS_HOME/annie && $GRITS_HOME/grits_env/bin/python setup.py install && $GRITS_HOME/grits_env/bin/python -m annotator.sqlite_import_geonames
 
 #Config files
 COPY grits-api/celeryd.conf /etc/supervisor/conf.d/celeryd.conf
