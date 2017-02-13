@@ -259,49 +259,6 @@ RUN cat /etc/hostname > /etc/mailname &&\
     postmap /etc/postfix/virtual_alias &&\
     postmap /etc/postfix/access
 
-### ElasticSearch ##################################################################################################
-#Configure timezone
-RUN echo "America/New_York" > /etc/timezone; dpkg-reconfigure --frontend noninteractive tzdata
-
-#Add repo
-RUN add-apt-repository ppa:webupd8team/java && apt-get update
-
-#Accept and install Oracle Java with dependencies
-RUN echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections; echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections creates=/usr/lib/jvm/java-7-oracle &&\
-    apt-get -y install oracle-java7-installer htop ntp unzip
-
-#Create elasticsearch user
-RUN groupadd elasticsearch && adduser --no-create-home --disabled-password --ingroup elasticsearch elasticsearch
-
-#Install elasticsearch
-RUN curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.5.deb &&\
-    dpkg -i -E --force-confnew elasticsearch-0.90.5.deb
-
-#Configure directories
-RUN for dir in "/usr/share/elasticsearch /usr/share/elasticsearch/plugins /var/log/elasticsearch /var/lib/elasticsearch /tmp/elasticsearch /etc/elasticsearch";do \
-      mkdir -p $dir && chown -R elasticsearch:elasticsearch $dir; \
-    done
-
-#Configure system configs
-RUN echo "elasticsearch     -    nofile    65535" >> /etc/security/limits.conf &&\
-    echo "elasticsearch     -    memlock   unlimited" >> /etc/security/limits.conf &&\
-    echo "session    required   pam_limits.so" >> /etc/pam.d/su &&\
-    echo "session    required   pam_limits.so" >> /etc/pam.d/common-session &&\
-    echo "session    required   pam_limits.so" >> /etc/pam.d/common-session-noninteractive &&\
-    echo "session    required   pam_limits.so" >> /etc/pam.d/sudo
-
-#Copy in config files
-COPY elasticsearch/elasticsearch-init.d /etc/init.d/elasticsearch
-COPY elasticsearch/elasticsearch.yml /etc/elasticsearch//etc/elasticsearch
-COPY elasticsearch/elasticsearch.default /etc/default/elasticsearch
-
-#Install plugins
-RUN cd /usr/share/elasticsearch &&\
-    bin/plugin -install elasticsearch/elasticsearch-mapper-attachments/2.2.1 &&\
-    bin/plugin -install com.github.richardwilly98.elasticsearch/elasticsearch-river-mongodb/2.0.1 &&\
-    bin/plugin -install facet-script -url http://dl.bintray.com/content/imotov/elasticsearch-plugins/elasticsearch-facet-script-1.1.2.zip &&\
-    chown -R elasticsearch:elasticsearch *
-
 ######################################################################################################################
 #Bundle classifier data
 RUN mkdir $GRITS_HOME/classifiers/ &&\
