@@ -14,7 +14,7 @@ ENV ROOT_URL="http://CHANGEME"
 ENV MAIL_URL="smtp://localhost"
 ENV GRID_URL="https://eidr.ecohealthalliance.org"
 ENV NLTK_DATA="$GRITS_HOME/nltk_data"
-ENV ANNOTATOR_DB_PATH="$GRITS_HOME/.annotator.sqlitedb"
+ENV ANNOTATOR_DB_PATH="/shared/.annotator.sqlitedb"
 ENV BASIC_AUTH="CHANGEME"
 
 #Environment variables do not get exported to all subshells.
@@ -188,7 +188,7 @@ RUN cd $GRITS_HOME &&\
 
 #Clone/install annie
 RUN git clone https://github.com/ecohealthalliance/annie.git $GRITS_HOME/annie
-RUN cd $GRITS_HOME/annie && git reset --hard ca54b0e49776cc482b2bee6c7161d1a4e15946e6 && $GRITS_HOME/grits_env/bin/python setup.py install
+RUN cd $GRITS_HOME/annie && $GRITS_HOME/grits_env/bin/python setup.py install
 
 #Config files
 COPY grits-api/celeryd.conf /etc/supervisor/conf.d/celeryd.conf
@@ -315,8 +315,5 @@ COPY logging/logging.sh /logging.sh
 COPY logging/supervisor-logging.conf /etc/supervisor/conf.d/supervisor-logging.conf
 COPY scripts /scripts
 VOLUME /etc/letsencrypt
-CMD supervisord --nodaemon --config /etc/supervisor/supervisord.conf
-
-
-
-
+COPY run.sh /run.sh
+CMD bash run.sh
