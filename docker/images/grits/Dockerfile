@@ -54,7 +54,7 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 #Enable universe repo
-RUN apt-get update && apt-get -y install lsb-release &&\
+RUN apt-get update && apt-get -y install lsb-release wget &&\
     echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe" >> /etc/apt/sources.list &&\
     apt-get update
 
