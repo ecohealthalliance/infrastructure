@@ -16,6 +16,7 @@ ENV GRID_URL="https://eidr.ecohealthalliance.org"
 ENV NLTK_DATA="$GRITS_HOME/nltk_data"
 ENV ANNOTATOR_DB_PATH="/shared/.annotator.sqlitedb"
 ENV BASIC_AUTH="CHANGEME"
+ENV GEONAME_LOOKUP_URL="https://geoname-lookup.eha.io"
 
 #Environment variables do not get exported to all subshells.
 #Have to take this brute force approach
