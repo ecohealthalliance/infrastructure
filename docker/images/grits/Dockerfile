@@ -273,5 +273,6 @@ COPY logging/logging.sh /logging.sh
 COPY logging/supervisor-logging.conf /etc/supervisor/conf.d/supervisor-logging.conf
 COPY scripts /scripts
 VOLUME /etc/letsencrypt
+VOLUME /home/grits
 COPY run.sh /run.sh
 CMD bash run.sh
