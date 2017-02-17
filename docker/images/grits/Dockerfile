@@ -225,7 +225,8 @@ ENV DOMAIN=eha.io
 USER grits
 
 #Clone diagnostic dashboard repo
-RUN git clone --depth 1 https://github.com/ecohealthalliance/diagnostic-dashboard.git $GRITS_HOME/diagnostic-dashboard
+RUN git clone https://github.com/ecohealthalliance/diagnostic-dashboard.git $GRITS_HOME/diagnostic-dashboard && cd $GRITS_HOME/diagnostic-dashboard && git reset --hard ffca276224434866f3de21bb3caa2ad64c387d9c
+
 
 #Bundle diagnostic-dashboard and install dependencies
 RUN cd $GRITS_HOME/diagnostic-dashboard &&\
@@ -273,6 +274,6 @@ COPY logging/logging.sh /logging.sh
 COPY logging/supervisor-logging.conf /etc/supervisor/conf.d/supervisor-logging.conf
 COPY scripts /scripts
 VOLUME /etc/letsencrypt
-VOLUME /home/grits
+#VOLUME /home/grits
 COPY run.sh /run.sh
 CMD bash run.sh
