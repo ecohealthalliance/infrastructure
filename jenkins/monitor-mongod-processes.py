@@ -6,6 +6,7 @@
 import os,sys
 
 # "Useful name": ["ssh_key", "ip address or fqdn"]
+# infrastructure key file no longer used, but leaving in anyway
 servers = {
   "grits.eha.io": ["infrastructure.pem", "grits.eha.io"],
   "mongodb01.tater.io": ["infrastructure.pem", "mongodb01.tater.io"]

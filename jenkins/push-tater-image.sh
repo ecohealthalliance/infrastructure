@@ -7,8 +7,8 @@ docker save tater > /tmp/tater.tar
 gzip -1 /tmp/tater.tar
 
 #Useful alias/function
-function ssh_command () { /usr/bin/ssh -i /keys/infrastructure.pem  ubuntu@$1 $2; }
-function scp_file () { /usr/bin/scp -i /keys/infrastructure.pem $1 ubuntu@$2:/tmp/; }
+function ssh_command () { /usr/bin/ssh -i /var/lib/jenkins/.ssh/id_rsa  ubuntu@$1 $2; }
+function scp_file () { /usr/bin/scp -i /var/lib/jenkins/.ssh/id_rsa $1 ubuntu@$2:/tmp/; }
 
 SERVERS=(po.tater.io tots01.tater.io)
 

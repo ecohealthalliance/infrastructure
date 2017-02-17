@@ -8,9 +8,9 @@ deploy_instance () {
   echo "Deploying $INSTANCE_NAME:"
   echo
 
-  scp -i /keys/infrastructure.pem docker/containers/tater/$INSTANCE_NAME ubuntu@po.tater.io:/tmp
+  scp -i /var/lib/jenkins/.ssh/id_rsa docker/containers/tater/$INSTANCE_NAME ubuntu@po.tater.io:/tmp
 
-  remote_ssh="ssh -i /keys/infrastructure.pem ubuntu@po.tater.io"
+  remote_ssh="ssh -i /var/lib/jenkins/.ssh/id_rsa ubuntu@po.tater.io"
   remote_ssh="$remote_ssh export DOCKER_HOST='tcp://10.0.0.116:3376';"
   remote_ssh="$remote_ssh export DOCKER_MACHINE_NAME='po.tater.io';"
   remote_ssh="$remote_ssh export DOCKER_TLS_VERIFY='1';"

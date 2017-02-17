@@ -15,9 +15,9 @@ export PYTHONPATH="$(pwd)/pyhaproxy"
 
 
 #Destroy container
-/usr/bin/scp -i /keys/infrastructure.pem docker/containers/tater/$instance_name  ubuntu@po.tater.io:/tmp/ && \
-/usr/bin/ssh -i /keys/infrastructure.pem  ubuntu@po.tater.io "sudo --login docker-compose -f /tmp/$instance_name stop"
-/usr/bin/ssh -i /keys/infrastructure.pem  ubuntu@po.tater.io "sudo --login docker-compose -f /tmp/$instance_name rm -f"
+/usr/bin/scp -i /var/lib/jenkins/.ssh/id_rsa docker/containers/tater/$instance_name  ubuntu@po.tater.io:/tmp/ && \
+/usr/bin/ssh -i /var/lib/jenkins/.ssh/id_rsa  ubuntu@po.tater.io "sudo --login docker-compose -f /tmp/$instance_name stop"
+/usr/bin/ssh -i /var/lib/jenkins/.ssh/id_rsa  ubuntu@po.tater.io "sudo --login docker-compose -f /tmp/$instance_name rm -f"
 
 
 #Destroy docker-compose file

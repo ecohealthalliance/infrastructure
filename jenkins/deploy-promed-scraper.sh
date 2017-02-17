@@ -18,8 +18,8 @@ if [ "$NOTIFY_BSVE" = true ]; then
 fi
 
 #Useful alias/function
-export ssh_command="/usr/bin/ssh -i /keys/infrastructure.pem  ubuntu@spa.eha.io "
-function scp_file { /usr/bin/scp -i /keys/infrastructure.pem $1 ubuntu@spa.eha.io:/tmp/; }
+export ssh_command="/usr/bin/ssh -i /var/lib/jenkins/.ssh/id_rsa  ubuntu@spa.eha.io "
+function scp_file { /usr/bin/scp -i /var/lib/jenkins/.ssh/id_rsa $1 ubuntu@spa.eha.io:/tmp/; }
 
 #Import images on demo box
 scp_file /tmp/promed-scraper.tar.gz &&\

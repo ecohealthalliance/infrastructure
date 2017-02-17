@@ -1,7 +1,7 @@
 #!/bin/bash
 #Note: This script is intended for jenkins.
 
-export remote_command="ssh -ti /keys/infrastructure.pem ubuntu@dev-survey.eha.io"
+export remote_command="ssh -ti /var/lib/jenkins/.ssh/id_rsa ubuntu@dev-survey.eha.io"
 
 #Make sure repo is up to date
 $remote_command "cd /opt/infrastructure && git pull"

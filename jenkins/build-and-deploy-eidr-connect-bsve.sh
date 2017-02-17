@@ -1,7 +1,7 @@
 #!/bin/bash
 #Note: This script is intended for jenkins.
 
-export remote_command="ssh -ti /keys/infrastructure.pem ubuntu@eidr-connect-bsve.eha.io"
+export remote_command="ssh -ti /var/lib/jenkins/.ssh/id_rsa ubuntu@eidr-connect-bsve.eha.io"
 function scp_file { /usr/bin/scp -i /var/lib/jenkins/.ssh/id_rsa $1 ubuntu@eidr-connect-bsve.eha.io:/tmp/; }
 
 git clone https://github.com/ecohealthalliance/eidr-connect.git

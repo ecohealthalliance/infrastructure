@@ -7,7 +7,7 @@ remove_orphans="docker images|grep none|awk '{print $3}'|xargs docker rmi"
 sudo_remove_orphans="(sudo docker images|grep none|awk '{print $3}'|xargs sudo docker rmi) || true"
 
 cleanup(){
-  ssh -i /keys/infrastructure.pem ubuntu@$1 $sudo_remove_orphans
+  ssh -i /var/lib/jenkins/.ssh/id_rsa ubuntu@$1 $sudo_remove_orphans
 }
 
 docker_servers=(

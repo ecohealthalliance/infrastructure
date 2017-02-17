@@ -9,8 +9,8 @@
 /bin/echo "Exported image now compressed"
 
 #Useful alias/function
-export ssh_command="/usr/bin/ssh -i /keys/infrastructure.pem  ubuntu@era.eha.io "
-function scp_file { /usr/bin/scp -i /keys/infrastructure.pem $1 ubuntu@era.eha.io:/tmp/; }
+export ssh_command="/usr/bin/ssh -i /var/lib/jenkins/.ssh/id_rsa  ubuntu@era.eha.io "
+function scp_file { /usr/bin/scp -i /var/lib/jenkins/.ssh/id_rsa $1 ubuntu@era.eha.io:/tmp/; }
 
 #Import image on demo box
 scp_file /tmp/era.tar.gz
