@@ -14,7 +14,7 @@ docker build --no-cache -t promed-scraper docker/images/promed-scraper
 
 docker save promed-scraper > /tmp/promed-scraper.tar &&\
 echo "Docker image exported" &&\
-zip -1 /tmp/promed-scraper.tar &&\
+gzip -1 /tmp/promed-scraper.tar &&\
 echo "Exported image now compressed" &&\
 aws s3 cp /tmp/promed-scraper.tar.gz s3://bsve-integration/promed-scraper.tar.gz &&\
 echo "Compressed image backed up to s3://bsve-integration/promed-scraper.tar.gz"
