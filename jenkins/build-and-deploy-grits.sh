@@ -29,5 +29,8 @@ $remote_command "
   sudo rm /tmp/grits.tar.gz
 "
 
-#Notify BSVE to redeploy grits
-aws sns publish --topic-arn arn:aws:sns:us-east-1:789867670404:EHA-Git-Lambda --message '{"app":"grits"}' --profile bsve-user
+
+if [ "$NOTIFY_BSVE" = true ]; then
+  /bin/echo "Notify BSVE to redeploy grits"
+  aws sns publish --topic-arn arn:aws:sns:us-east-1:789867670404:EHA-Git-Lambda --message '{"app":"grits"}' --profile bsve-user
+fi
