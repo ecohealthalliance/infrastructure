@@ -12,8 +12,10 @@
 aws s3 cp /tmp/promed-scraper.tar.gz s3://bsve-integration/promed-scraper.tar.gz &&\
 /bin/echo "Images uploaded"
 
-/bin/echo "Notify the BSVE to redeploy"
-aws sns publish --topic-arn arn:aws:sns:us-east-1:789867670404:EHA-Git-Lambda --message '{"app":"promed-scraper"}' --profile bsve-user
+if [ "$NOTIFY_BSVE" = true ]; then
+  /bin/echo "Notify the BSVE to redeploy"
+  aws sns publish --topic-arn arn:aws:sns:us-east-1:789867670404:EHA-Git-Lambda --message '{"app":"promed-scraper"}' --profile bsve-user
+fi
 
 #Useful alias/function
 export ssh_command="/usr/bin/ssh -i /keys/infrastructure.pem  ubuntu@spa.eha.io "
