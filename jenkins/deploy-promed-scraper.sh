@@ -2,6 +2,9 @@
 #Note: This script is intended for jenkins.
 #Please run this from the top level of the infrastructure repo
 
+#Remove any old version of image
+rm /tmp/promed-scraper.tar*
+
 #Dump the freshly built images into a tarball
 /usr/bin/docker save promed-scraper > /tmp/promed-scraper.tar &&\
 /bin/echo "Docker images exported" &&\
