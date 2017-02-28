@@ -29,6 +29,11 @@ RUN cd /era-webapp && \
     rm -fr /root/.meteor && \
     apt-get clean all
 
+#Create and use meteor user
+RUN groupadd meteor && adduser --ingroup meteor --disabled-password --gecos "" --home /home/meteor meteor
+RUN chown -R meteor:meteor /nia-monitor
+USER meteor
+
 VOLUME /shared
 EXPOSE 80
 CMD supervisord --nodaemon --config /etc/supervisor/supervisord.conf
