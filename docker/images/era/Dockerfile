@@ -16,7 +16,6 @@ COPY era.sh /era.sh
 
 #make app dirs
 RUN mkdir /shared 
-COPY era/sample-settings.json /shared/settings-production.json
 COPY era /era-webapp
 
 #Build the meteor app
