@@ -20,7 +20,7 @@ COPY era /era-webapp
 
 #Create and use meteor user
 RUN groupadd meteor && adduser --ingroup meteor --disabled-password --gecos "" --home /home/meteor meteor
-RUN chown -R meteor:meteor /nia-monitor
+RUN chown -R meteor:meteor /era-webapp
 USER meteor
 
 #Build the meteor app
