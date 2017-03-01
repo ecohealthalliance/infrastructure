@@ -25,13 +25,16 @@ USER meteor
 
 #Build the meteor app
 RUN cd /era-webapp && \
-    (meteor build ./build --directory || exit 1) && \
-    cd /era-webapp/build/bundle/programs/server && \
-    meteor npm init -f && \
-    meteor npm install --save googleapis && \
+    (meteor build ./build --directory || exit 1)
+RUN cd /era-webapp/build/bundle/programs/server && \
+    meteor npm init -f
+RUN cd /era-webapp/build/bundle/programs/server && \
+    meteor npm install --save googleapis
+RUN cd /era-webapp/build/bundle/programs/server && \
     meteor npm install && \
     rm -fr /era-webapp/packages && \
-    rm -fr /root/.meteor && \
+    rm -fr /root/.meteor
+RUN cd /era-webapp/build/bundle/programs/server && \
     apt-get clean all
 
 VOLUME /shared
