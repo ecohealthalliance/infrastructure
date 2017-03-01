@@ -23,6 +23,8 @@ RUN groupadd meteor && adduser --ingroup meteor --disabled-password --gecos "" -
 RUN chown -R meteor:meteor /era-webapp
 USER meteor
 
+ENV METEOR_ALLOW_SUPERUSER=true
+
 #Build the meteor app
 RUN cd /era-webapp && \
     (meteor build ./build --directory || exit 1) && \
