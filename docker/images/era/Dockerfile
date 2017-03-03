@@ -29,6 +29,8 @@ USER meteor
 RUN cd /era-webapp && \
     (meteor build ./build --directory || exit 1)
 RUN cd /era-webapp/build/bundle/programs/server && \
+    meteor npm install --save googleapis
+RUN cd /era-webapp/build/bundle/programs/server && \
     meteor npm install && \
     rm -fr /era-webapp/packages
 
