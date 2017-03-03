@@ -34,5 +34,6 @@ RUN cd /era-webapp/build/bundle/programs/server && \
 
 VOLUME /shared
 EXPOSE 80
+USER root
 CMD supervisord --nodaemon --config /etc/supervisor/supervisord.conf
 
