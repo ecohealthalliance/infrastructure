@@ -16,8 +16,9 @@ COPY era.sh /era.sh
 
 #make app dirs
 RUN mkdir /shared 
-RUN mkdir /var/log/supervisor
 COPY era /era-webapp
+
+RUN chmod 777 /var/log/supervisor
 
 #Create and use meteor user
 RUN groupadd meteor && adduser --ingroup meteor --disabled-password --gecos "" --home /home/meteor meteor
