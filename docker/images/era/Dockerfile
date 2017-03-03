@@ -34,5 +34,5 @@ RUN cd /era-webapp/build/bundle/programs/server && \
 
 VOLUME /shared
 EXPOSE 80
-CMD service supervisor start
+CMD supervisord --nodaemon --config /etc/supervisor/supervisord.conf
 
