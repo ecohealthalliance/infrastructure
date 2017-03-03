@@ -19,17 +19,13 @@ RUN mkdir /shared
 COPY era /era-webapp
 
 #Create and use meteor user
-#RUN groupadd meteor && adduser --ingroup meteor --disabled-password --gecos "" --home /home/meteor meteor
-#RUN chown -R meteor:meteor /era-webapp
-#USER meteor
+RUN groupadd meteor && adduser --ingroup meteor --disabled-password --gecos "" --home /home/meteor meteor
+RUN chown -R meteor:meteor /era-webapp
+USER meteor
 
 #Build the meteor app
 RUN cd /era-webapp && \
     (meteor build ./build --directory || exit 1)
-RUN cd /era-webapp/build/bundle/programs/server && \
-    meteor npm init -f
-RUN cd /era-webapp/build/bundle/programs/server && \
-    meteor npm install --save googleapis
 RUN cd /era-webapp/build/bundle/programs/server && \
     meteor npm install && \
     rm -fr /era-webapp/packages && \
