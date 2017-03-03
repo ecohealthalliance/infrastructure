@@ -29,8 +29,6 @@ RUN cd /era-webapp && \
 RUN cd /era-webapp/build/bundle/programs/server && \
     meteor npm install && \
     rm -fr /era-webapp/packages
-RUN cd /era-webapp/build/bundle/programs/server && \
-    apt-get clean all
 
 VOLUME /shared
 EXPOSE 80
