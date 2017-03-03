@@ -16,6 +16,7 @@ COPY era.sh /era.sh
 
 #make app dirs
 RUN mkdir /shared 
+RUN mkdir /var/log/supervisor
 COPY era /era-webapp
 
 #Create and use meteor user
