@@ -28,8 +28,7 @@ RUN cd /era-webapp && \
     (meteor build ./build --directory || exit 1)
 RUN cd /era-webapp/build/bundle/programs/server && \
     meteor npm install && \
-    rm -fr /era-webapp/packages && \
-    rm -fr /root/.meteor
+    rm -fr /era-webapp/packages
 RUN cd /era-webapp/build/bundle/programs/server && \
     apt-get clean all
 
