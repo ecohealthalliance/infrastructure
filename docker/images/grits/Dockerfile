@@ -225,7 +225,7 @@ ENV DOMAIN=eha.io
 USER grits
 
 #Clone diagnostic dashboard repo
-RUN git clone https://github.com/ecohealthalliance/diagnostic-dashboard.git $GRITS_HOME/diagnostic-dashboard && cd $GRITS_HOME/diagnostic-dashboard && git reset --hard ffca276224434866f3de21bb3caa2ad64c387d9c
+RUN git clone https://github.com/ecohealthalliance/diagnostic-dashboard.git $GRITS_HOME/diagnostic-dashboard && cd $GRITS_HOME/diagnostic-dashboard #&& git reset --hard ffca276224434866f3de21bb3caa2ad64c387d9c
 
 
 #Bundle diagnostic-dashboard and install dependencies
