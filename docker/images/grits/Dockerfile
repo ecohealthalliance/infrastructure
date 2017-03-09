@@ -77,7 +77,6 @@ RUN apt-get install -y \
         python-pip \
         python-dev \
         cron \
-        postfix \
         apache2 \
         nodejs \
         g++ \
@@ -130,9 +129,6 @@ RUN cd $GRITS_HOME &&\
 #Cron
 RUN mkdir $GRITS_HOME/cron $GRITS_HOME/cron/logs &&\
     chown -R grits:grits $GRITS_HOME/cron
-
-#Postfix
-COPY postfix/postfix.conf /etc/supervisor/conf.d/postfix.conf
 
 #Apache
 RUN a2enmod proxy &&\
@@ -239,13 +235,6 @@ RUN cd $GRITS_HOME/diagnostic-dashboard &&\
 USER root
 COPY diagnostic-dashboard/dashboardd.conf /etc/supervisor/conf.d/dashboardd.conf
 COPY diagnostic-dashboard/dashboard.sh /dashboard.sh
-COPY diagnostic-dashboard/postfix_main.cf /etc/postfix/main.cf
-COPY diagnostic-dashboard/postfix_master.cf /etc/postfix/master.cf
-COPY diagnostic-dashboard/postfix_transport /etc/postfix/transport
-COPY diagnostic-dashboard/postfix_alias /etc/postfix/virtual_alias
-COPY diagnostic-dashboard/postfix_access /etc/postfix/access
-COPY diagnostic-dashboard/postfix_gritsmail.sh /etc/postfix/gritsmail.sh
-COPY diagnostic-dashboard/parse_email.py /etc/postfix/parse_email.py
 
 #Generate config file
 RUN cd $GRITS_HOME/diagnostic-dashboard &&\
@@ -254,12 +243,6 @@ RUN cd $GRITS_HOME/diagnostic-dashboard &&\
     echo "export MONGO_URL=$MONGO_URL/$METEOR_DB_NAME" >> config &&\
     echo "export ROOT_URL=$ROOT_URL" >> config &&\
     echo "export MAIL_URL=$MAIL_URL" >> config
-
-#Setup postfix
-RUN cat /etc/hostname > /etc/mailname &&\
-    postmap /etc/postfix/transport &&\
-    postmap /etc/postfix/virtual_alias &&\
-    postmap /etc/postfix/access
 
 ######################################################################################################################
 #Bundle classifier data
