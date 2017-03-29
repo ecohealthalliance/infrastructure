@@ -58,11 +58,6 @@ RUN apt-get update && apt-get -y install lsb-release wget &&\
     echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe" >> /etc/apt/sources.list &&\
     apt-get update
 
-#Enable node related PPA
-RUN apt-get install -y software-properties-common &&\
-    add-apt-repository ppa:chris-lea/node.js &&\
-    apt-get update
-
 ### Dependencies ###############################################################################################
 #Sensitive settings will go here
 VOLUME /shared
@@ -79,6 +74,8 @@ RUN apt-get install -y \
         cron \
         apache2 \
         nodejs \
+        npm \
+        nodejs-legacy \
         g++ \
         make \
         gfortran \
