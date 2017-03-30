@@ -253,5 +253,5 @@ COPY scripts /scripts
 VOLUME /etc/letsencrypt
 VOLUME /home/grits/diagnostic-dashboard
 COPY run.sh /run.sh
-RUN  meteor npm install babel-runtime bcrypt && rm -fr /root/.*.part
+RUN  meteor npm install babel-runtime bcrypt
 CMD bash run.sh
