@@ -73,9 +73,6 @@ RUN apt-get install -y \
         python-dev \
         cron \
         apache2 \
-        nodejs \
-        npm \
-        nodejs-legacy \
         g++ \
         make \
         gfortran \
@@ -226,7 +223,7 @@ RUN cd $GRITS_HOME/diagnostic-dashboard &&\
     git rev-parse HEAD > revision.txt &&\
     meteor bundle --directory bundle &&\
     cd bundle/programs/server &&\
-    npm install
+    meteor npm install
 
 #Copy configs
 USER root
