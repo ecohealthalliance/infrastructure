@@ -254,4 +254,5 @@ VOLUME /etc/letsencrypt
 VOLUME /home/grits/diagnostic-dashboard
 COPY run.sh /run.sh
 RUN  meteor npm install babel-runtime bcrypt
+RUN rm -fr /root/.*.part
 CMD bash run.sh
