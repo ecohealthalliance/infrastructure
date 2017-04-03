@@ -224,7 +224,7 @@ RUN cd $GRITS_HOME/diagnostic-dashboard &&\
     meteor build --directory bundle &&\
     cd bundle/programs/server &&\
     meteor npm install &&\
-    cd npm && meteor npm install --save babel-runtime
+    meteor npm install --save babel-runtime
 
 #Copy configs
 USER root
