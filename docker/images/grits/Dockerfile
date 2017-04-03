@@ -219,12 +219,12 @@ RUN git clone https://github.com/ecohealthalliance/diagnostic-dashboard.git $GRI
 
 
 #Bundle diagnostic-dashboard and install dependencies
-RUN cd /home/grits/diagnostic-dashboard/bundle/programs/server && meteor npm install babel-runtime
 RUN cd $GRITS_HOME/diagnostic-dashboard &&\
     git rev-parse HEAD > revision.txt &&\
     meteor bundle --directory bundle &&\
     cd bundle/programs/server &&\
-    meteor npm install
+    meteor npm install &&\
+    meteor npm install --save babel-runtime
 
 #Copy configs
 USER root
