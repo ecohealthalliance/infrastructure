@@ -8,6 +8,6 @@ kupritz.tater.io:
     - MONGO_URL=mongodb://10.0.0.92:27017/eha
     - ROOT_URL=https://kupritz.tater.io
     - PORT=3000
-  volumes_from:
-    - shared-data:ro
+#  volumes_from:
+#    - shared-data:ro
 
