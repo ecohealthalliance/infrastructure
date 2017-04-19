@@ -1,7 +1,0 @@
-#!/bin/bash
-(
-    source $GRITS_HOME/grits_config
-    cd "$GRITS_HOME/grits-api"
-    "$GRITS_HOME/grits_env/bin/python" diagnose_girder_HM_articles.py
-
-) > "$GRITS_HOME/cron/logs/diagnose_girder_HM_articles_log" 2> "$GRITS_HOME/cron/logs/diagnose_girder_HM_articles_err"

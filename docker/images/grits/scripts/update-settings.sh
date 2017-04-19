@@ -39,8 +39,6 @@ echo "api_key = '$GRITS_API_KEY'" >> config.py &&\
 echo "# The grits histogram app communicates with the bsve api by proxying through the grits api." >> config.py &&\
 echo "# The BSVE api key, username, etc. here are used for authentication." >> config.py &&\
 echo "bsve_endpoint = '$BSVE_ENDPOINT'" >> config.py &&\
-echo "bsve_user_name = '$BSVE_USER_NAME'" >> config.py &&\
-echo "bsve_api_key = '$BSVE_API_KEY'" >> config.py &&\
 echo "bsve_secret_key = '$BSVE_SECRET_KEY'" >> config.py &&\
 echo "grits_curator_email = '$GRITS_CURATOR_EMAIL'" >> config.py &&\
 echo "grits_curator_password = '$GRITS_CURATOR_PASSWORD'" >> config.py
