@@ -17,6 +17,14 @@ ENV NLTK_DATA="$GRITS_HOME/nltk_data"
 ENV ANNOTATOR_DB_PATH="/shared/.annotator.sqlitedb"
 ENV BASIC_AUTH="CHANGEME"
 ENV GEONAME_LOOKUP_URL="http://geoname-lookup.eha.io/"
+#Override these to create celery workers
+ENV AUTOSTART_APACHE=true
+ENV AUTOSTART_DASHBOARD=true
+ENV PRIORITY_WORKERS=1
+ENV DIAGNOSE_WORKERS=1
+ENV PROCESS_WORKERS=10
+ENV AUTOSTART_PROCESS_WORKERS=true
+ENV AUTOSTART_PRIORITY_WORKERS=true
 
 #Environment variables do not get exported to all subshells.
 #Have to take this brute force approach
@@ -34,13 +42,10 @@ RUN touch /source-vars.sh &&\
     echo "export AWS_ACCESS_KEY_ID=CHANGEME" >> /source-vars.sh &&\
     echo "export AWS_SECRET_ACCESS_KEY=CHANGEME" >> /source-vars.sh &&\
     echo "export AWS_DEFAULT_REGION=us-east-1" >> /source-vars.sh &&\
-    echo "export BROKER_URL=redis://CHANGEME:6379/0" >> /source-vars.sh &&\
     echo "export BING_TRANSLATE_ID=CHANGEME" >> /source-vars.sh &&\
     echo "export BING_TRANSLATE_SECRET=CHANGEME" >> /source-vars.sh &&\
     echo "export GRITS_API_KEY=CHANGEME" >> /source-vars.sh &&\
     echo "export BSVE_ENDPOINT=http://beta-search.bsvecosystem.net" >> /source-vars.sh &&\
-    echo "export BSVE_USER_NAME=CHANGEME" >> /source-vars.sh &&\
-    echo "export BSVE_API_KEY=CHANGEME" >> /source-vars.sh &&\
     echo "export BSVE_SECRET_KEY=CHANGEME" >> /source-vars.sh &&\
     echo "export BSVE_ACCESS_KEY=loremipsumhello714902" >> /source-vars.sh &&\
     echo "export GRITS_CURATOR_EMAIL=CHANGEME" >> /source-vars.sh &&\
@@ -65,7 +70,6 @@ VOLUME /shared
 #Install deb packages
 RUN apt-get install -y \
         vim \
-        supervisor \
         curl \
         build-essential \
         git \
@@ -94,6 +98,7 @@ RUN apt-get install -y \
 #Install pip packages
 RUN pip install \
         awscli \
+        supervisor \
         virtualenv
 
 #Create grits user and group
@@ -108,7 +113,6 @@ RUN cd $GRITS_HOME &&\
     echo "export GIRDER_DATA_ACCESS_KEY=$GIRDER_DATA_ACCESS_KEY" >> grits_config &&\
     echo "export GIRDER_DATA_SECRET_KEY=GIRDER_DATA_SECRET_KEY" >> grits_config &&\
     echo "export MONGO_URL=$MONGO_URL" >> grits_config &&\
-    echo "export CELERY_BROKER=$BROKER_URL" >> grits_config &&\
     echo "export APACHE_URL=$ROOT_URL" >> grits_config &&\
     echo "export GIRDER_MOUNT_PATH=$GIRDER_MOUNT_PATH" >> grits_config &&\
     echo "export GIRDER_ADMIN_PASSWORD=$GIRDER_ADMIN_PASSWORD" >> grits_config &&\
@@ -146,7 +150,6 @@ RUN cd $GRITS_HOME/grits-api &&\
     chown grits:grits config.py &&\
     echo "aws_access_key = '$AWS_ACCESS_KEY_ID'" >> config.py &&\
     echo "aws_secret_key = '$AWS_SECRET_ACCESS_KEY'" >> config.py &&\
-    echo "BROKER_URL = '$BROKER_URL'" >> config.py &&\
     echo "mongo_url = '$MONGO_URL'" >> config.py &&\
     echo "bing_translate_id = '$BING_TRANSLATE_ID'" >> config.py &&\
     echo "bing_translate_secret = '$BING_TRANSLATE_SECRET'" >> config.py &&\
@@ -154,8 +157,6 @@ RUN cd $GRITS_HOME/grits-api &&\
     echo "# The grits histogram app communicates with the bsve api by proxying through the grits api." >> config.py &&\
     echo "# The BSVE api key, username, etc. here are used for authentication." >> config.py &&\
     echo "bsve_endpoint = '$BSVE_ENDPOINT'" >> config.py &&\
-    echo "bsve_user_name = '$BSVE_USER_NAME'" >> config.py &&\
-    echo "bsve_api_key = '$BSVE_API_KEY'" >> config.py &&\
     echo "bsve_secret_key = '$BSVE_SECRET_KEY'" >> config.py &&\
     echo "grits_curator_email = '$GRITS_CURATOR_EMAIL'" >> config.py &&\
     echo "grits_curator_password = '$GRITS_CURATOR_PASSWORD'" >> config.py
@@ -169,17 +170,10 @@ RUN cd $GRITS_HOME &&\
     cd grits-api &&\
     pip install -r requirements.txt
 
-#Download nltk data
-RUN cd $GRITS_HOME &&\
-    source grits_env/bin/activate &&\
-    ITEMS="maxent_ne_chunker maxent_treebank_pos_tagger words punkt"; \
-    for item in $ITEMS;do \
-      grits_env/bin/python -c "import nltk; nltk.download('$item')" && echo done > ".nltk_${item}_downloaded" ; \
-    done
-
 #Clone/install annie
 RUN git clone https://github.com/ecohealthalliance/annie.git $GRITS_HOME/annie
-RUN cd $GRITS_HOME/annie && $GRITS_HOME/grits_env/bin/python setup.py install
+RUN cd $GRITS_HOME/annie && $GRITS_HOME/grits_env/bin/python setup.py install &&\
+    $GRITS_HOME/grits_env/bin/pip install -r requirements.txt
 
 #Config files
 COPY grits-api/celeryd.conf /etc/supervisor/conf.d/celeryd.conf
@@ -190,7 +184,6 @@ COPY grits-api/gritsapid.conf /etc/supervisor/conf.d/gritsapid.conf
 COPY grits-api/gritsapi.sh /gritsapi.sh
 COPY grits-api/flowerd.conf /etc/supervisor/conf.d/flowerd.conf
 COPY grits-api/flower.sh /flower.sh
-COPY grits-api/diagnose_girder_HM_articles $GRITS_HOME/cron/diagnose_girder_HM_articles
 
 USER root
 
@@ -215,8 +208,7 @@ ENV DOMAIN=eha.io
 USER grits
 
 #Clone diagnostic dashboard repo
-RUN git clone https://github.com/ecohealthalliance/diagnostic-dashboard.git $GRITS_HOME/diagnostic-dashboard && cd $GRITS_HOME/diagnostic-dashboard #&& git reset --hard ffca276224434866f3de21bb3caa2ad64c387d9c
-
+RUN git clone https://github.com/ecohealthalliance/diagnostic-dashboard.git $GRITS_HOME/diagnostic-dashboard && cd $GRITS_HOME/diagnostic-dashboard
 
 #Bundle diagnostic-dashboard and install dependencies
 RUN cd $GRITS_HOME/diagnostic-dashboard &&\
@@ -250,6 +242,10 @@ RUN mkdir $GRITS_HOME/classifiers/ &&\
 
 COPY logging/logging.sh /logging.sh
 COPY logging/supervisor-logging.conf /etc/supervisor/conf.d/supervisor-logging.conf
+
+ADD supervisord.conf /etc/supervisor/supervisord.conf
+RUN mkdir -p /var/log/supervisor/
+
 COPY scripts /scripts
 VOLUME /etc/letsencrypt
 VOLUME /home/grits/diagnostic-dashboard
