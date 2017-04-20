@@ -5,7 +5,7 @@ redis-tunnel:
     - ~/.ssh:/ssh
   command: "ssh -Ng -L 6379:localhost:6379 -i /ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@grits.eha.io"
   ports:
-    - "6379:6379"
+    - "6379"
   restart: always
 
 grits:
@@ -14,11 +14,10 @@ grits:
   links:
     - redis-tunnel
   restart: always
-  command: sleep 100000
   environment:
     - 'BROKER_URL=redis://redis-tunnel:6379/0'
     - 'AUTOSTART_APACHE=false'
     - 'AUTOSTART_DASHBOARD=false'
-    - 'PRIORITY_WORKERS=1'
-    - 'DIAGNOSE_WORKERS=1'
-    - 'PROCESS_WORKERS=10'
+    - 'AUTOSTART_PROCESS_WORKERS=false'
+    - 'AUTOSTART_PRIORITY_WORKERS=false'
+    - 'DIAGNOSE_WORKERS=2'

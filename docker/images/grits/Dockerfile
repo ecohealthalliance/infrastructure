@@ -23,6 +23,8 @@ ENV AUTOSTART_DASHBOARD=true
 ENV PRIORITY_WORKERS=1
 ENV DIAGNOSE_WORKERS=1
 ENV PROCESS_WORKERS=10
+ENV AUTOSTART_PROCESS_WORKERS=true
+ENV AUTOSTART_PRIORITY_WORKERS=true
 
 #Environment variables do not get exported to all subshells.
 #Have to take this brute force approach
@@ -40,7 +42,6 @@ RUN touch /source-vars.sh &&\
     echo "export AWS_ACCESS_KEY_ID=CHANGEME" >> /source-vars.sh &&\
     echo "export AWS_SECRET_ACCESS_KEY=CHANGEME" >> /source-vars.sh &&\
     echo "export AWS_DEFAULT_REGION=us-east-1" >> /source-vars.sh &&\
-    echo "export BROKER_URL=redis://CHANGEME:6379/0" >> /source-vars.sh &&\
     echo "export BING_TRANSLATE_ID=CHANGEME" >> /source-vars.sh &&\
     echo "export BING_TRANSLATE_SECRET=CHANGEME" >> /source-vars.sh &&\
     echo "export GRITS_API_KEY=CHANGEME" >> /source-vars.sh &&\
@@ -112,7 +113,6 @@ RUN cd $GRITS_HOME &&\
     echo "export GIRDER_DATA_ACCESS_KEY=$GIRDER_DATA_ACCESS_KEY" >> grits_config &&\
     echo "export GIRDER_DATA_SECRET_KEY=GIRDER_DATA_SECRET_KEY" >> grits_config &&\
     echo "export MONGO_URL=$MONGO_URL" >> grits_config &&\
-    echo "export CELERY_BROKER=$BROKER_URL" >> grits_config &&\
     echo "export APACHE_URL=$ROOT_URL" >> grits_config &&\
     echo "export GIRDER_MOUNT_PATH=$GIRDER_MOUNT_PATH" >> grits_config &&\
     echo "export GIRDER_ADMIN_PASSWORD=$GIRDER_ADMIN_PASSWORD" >> grits_config &&\
@@ -150,7 +150,6 @@ RUN cd $GRITS_HOME/grits-api &&\
     chown grits:grits config.py &&\
     echo "aws_access_key = '$AWS_ACCESS_KEY_ID'" >> config.py &&\
     echo "aws_secret_key = '$AWS_SECRET_ACCESS_KEY'" >> config.py &&\
-    echo "BROKER_URL = '$BROKER_URL'" >> config.py &&\
     echo "mongo_url = '$MONGO_URL'" >> config.py &&\
     echo "bing_translate_id = '$BING_TRANSLATE_ID'" >> config.py &&\
     echo "bing_translate_secret = '$BING_TRANSLATE_SECRET'" >> config.py &&\
@@ -211,7 +210,6 @@ USER grits
 #Clone diagnostic dashboard repo
 RUN git clone https://github.com/ecohealthalliance/diagnostic-dashboard.git $GRITS_HOME/diagnostic-dashboard && cd $GRITS_HOME/diagnostic-dashboard
 
-
 #Bundle diagnostic-dashboard and install dependencies
 RUN cd $GRITS_HOME/diagnostic-dashboard &&\
     git rev-parse HEAD > revision.txt &&\
@@ -246,7 +244,7 @@ COPY logging/logging.sh /logging.sh
 COPY logging/supervisor-logging.conf /etc/supervisor/conf.d/supervisor-logging.conf
 
 ADD supervisord.conf /etc/supervisor/supervisord.conf
-CMD mkdir -p /var/log/supervisor/
+RUN mkdir -p /var/log/supervisor/
 
 COPY scripts /scripts
 VOLUME /etc/letsencrypt

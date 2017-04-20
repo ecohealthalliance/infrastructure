@@ -11,7 +11,6 @@ echo "export CLASSIFIER_DATA_SECRET_KEY=$CLASSIFIER_DATA_SECRET_KEY" >> grits_co
 echo "export GIRDER_DATA_ACCESS_KEY=$GIRDER_DATA_ACCESS_KEY" >> grits_config &&\
 echo "export GIRDER_DATA_SECRET_KEY=GIRDER_DATA_SECRET_KEY" >> grits_config &&\
 echo "export MONGO_URL=$MONGO_URL" >> grits_config &&\
-echo "export CELERY_BROKER=$BROKER_URL" >> grits_config &&\
 echo "export APACHE_URL=$ROOT_URL" >> grits_config &&\
 echo "export GIRDER_MOUNT_PATH=$GIRDER_MOUNT_PATH" >> grits_config &&\
 echo "export GIRDER_ADMIN_PASSWORD=$GIRDER_ADMIN_PASSWORD" >> grits_config &&\
@@ -31,7 +30,6 @@ touch config.py &&\
 chown grits:grits config.py &&\
 echo "aws_access_key = '$AWS_ACCESS_KEY_ID'" >> config.py &&\
 echo "aws_secret_key = '$AWS_SECRET_ACCESS_KEY'" >> config.py &&\
-echo "BROKER_URL = '$BROKER_URL'" >> config.py &&\
 echo "mongo_url = '$MONGO_URL'" >> config.py &&\
 echo "bing_translate_id = '$BING_TRANSLATE_ID'" >> config.py &&\
 echo "bing_translate_secret = '$BING_TRANSLATE_SECRET'" >> config.py &&\
