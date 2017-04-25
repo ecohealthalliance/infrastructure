@@ -25,6 +25,7 @@ ENV DIAGNOSE_WORKERS=1
 ENV PROCESS_WORKERS=10
 ENV AUTOSTART_PROCESS_WORKERS=true
 ENV AUTOSTART_PRIORITY_WORKERS=true
+ENV BROKER_URL=redis://CHANGEME:6379/0
 
 #Environment variables do not get exported to all subshells.
 #Have to take this brute force approach
@@ -49,7 +50,8 @@ RUN touch /source-vars.sh &&\
     echo "export BSVE_SECRET_KEY=CHANGEME" >> /source-vars.sh &&\
     echo "export BSVE_ACCESS_KEY=loremipsumhello714902" >> /source-vars.sh &&\
     echo "export GRITS_CURATOR_EMAIL=CHANGEME" >> /source-vars.sh &&\
-    echo "export GRITS_CURATOR_PASSWORD=CHANGEME" >> /source-vars.sh
+    echo "export GRITS_CURATOR_PASSWORD=CHANGEME" >> /source-vars.sh &&\
+    echo "export BROKER_URL=$BROKER_URL"
 
 ### Need this as a pre-setup ###################################################################################
 # Replace shell with bash so we can source files
