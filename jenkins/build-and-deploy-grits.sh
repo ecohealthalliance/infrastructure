@@ -5,6 +5,9 @@ export remote_command="/usr/bin/ssh -i /var/lib/jenkins/.ssh/id_rsa  ubuntu@grit
 #Make sure repo is up to date
 $remote_command "cd /opt/infrastructure && git pull"
 
+#Make space
+$remote_command "echo 'y'|sudo docker system prune"
+
 #Build the new image
 $remote_command "sudo docker build --no-cache -t grits /opt/infrastructure/docker/images/grits"
 
