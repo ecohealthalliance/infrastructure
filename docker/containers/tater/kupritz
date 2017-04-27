@@ -5,7 +5,7 @@ kupritz.tater.io:
     - "8009:3000"
   restart: always
   environment:
-    - MONGO_URL=mongodb://10.0.0.92:27017/eha
+    - MONGO_URL=mongodb://10.0.0.92:27017/kupritz
     - ROOT_URL=https://kupritz.tater.io
     - PORT=3000
 #  volumes_from:
