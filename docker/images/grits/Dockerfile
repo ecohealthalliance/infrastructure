@@ -32,10 +32,10 @@ ENV BROKER_URL=redis://CHANGEME:6379/0
 RUN touch /source-vars.sh &&\
     chmod +x /source-vars.sh &&\
     echo "export GRITS_HOME=$GRITS_HOME" >> /source-vars.sh &&\
-    echo "export MONGO_URL=$MONGO_URL" >> /source-vars.sh &&\
+    echo "#export MONGO_URL=$MONGO_URL" >> /source-vars.sh &&\
     echo "export METEOR_DB_NAME=$METEOR_DB_NAME" >> /source-vars.sh &&\
     echo "export PORT=$PORT" >> /source-vars.sh &&\
-    echo "export ROOT_URL=$ROOT_URL" >> /source-vars.sh &&\
+    echo "#export ROOT_URL=$ROOT_URL" >> /source-vars.sh &&\
     echo "export MAIL_URL=$MAIL_URL" >> /source-vars.sh &&\
     echo "export GRID_URL=$GRID_URL" >> /source-vars.sh &&\
     echo "export NLTK_DATA=$NLTK_DATA" >> /source-vars.sh &&\
@@ -51,7 +51,7 @@ RUN touch /source-vars.sh &&\
     echo "export BSVE_ACCESS_KEY=loremipsumhello714902" >> /source-vars.sh &&\
     echo "export GRITS_CURATOR_EMAIL=CHANGEME" >> /source-vars.sh &&\
     echo "export GRITS_CURATOR_PASSWORD=CHANGEME" >> /source-vars.sh &&\
-    echo "export BROKER_URL=$BROKER_URL"
+    echo "#export BROKER_URL=$BROKER_URL"
 
 ### Need this as a pre-setup ###################################################################################
 # Replace shell with bash so we can source files
