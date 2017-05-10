@@ -14,17 +14,13 @@ source /grits-net-consume-env/bin/activate
 # echo "install"
 pip install -r requirements.txt
 
-echo "*****Update ftp credentials*****"
-sed -i 's/url-innovata.com/suwweb03.innovata-llc.com/' grits_ftp_config.py
-sed -i 's/username/ECOHEALTH/' grits_ftp_config.py
-sed -i 's/password/HD38jFXc/' grits_ftp_config.py
-
-echo "*****Consume/import flight data*****"
+echo "*****Download flight data*****"
 python grits_flight_pull.py -m flirt-reporting.eha.io -d grits-net-meteor
 # if no file was downloaded then exit the script without running updates
 if ! ls data/*.csv 1> /dev/null 2>&1; then
   exit 0
 fi
+echo "*****Consume/import flight data*****"
 python grits_consume.py --type DiioAirport -m flirt-reporting.eha.io -d grits-net-meteor tests/data/MiExpressAllAirportCodes.tsv
 python grits_consume.py --type FlightGlobal -m flirt-reporting.eha.io -d grits-net-meteor data/EcoHealth_*.csv  &&\
 rm -fr data
