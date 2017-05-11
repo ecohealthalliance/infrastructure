@@ -167,7 +167,7 @@ RUN cd $GRITS_HOME/grits-api &&\
 RUN cd $GRITS_HOME &&\
     virtualenv grits_env &&\
     source grits_env/bin/activate &&\
-    pip install setuptools &&\
+    pip install setuptools==34.4.1 &&\
     pip install numpy nose &&\
     cd grits-api &&\
     pip install -r requirements.txt
