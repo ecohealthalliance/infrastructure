@@ -174,8 +174,9 @@ RUN cd $GRITS_HOME &&\
 
 #Clone/install EpiTator
 RUN git clone https://github.com/ecohealthalliance/EpiTator.git $GRITS_HOME/EpiTator
-RUN cd $GRITS_HOME/EpiTator && $GRITS_HOME/grits_env/bin/python setup.py install &&\
-    $GRITS_HOME/grits_env/bin/pip install -r requirements.txt
+RUN cd $GRITS_HOME/EpiTator &&\
+    $GRITS_HOME/grits_env/bin/pip install -r requirements.txt &&\
+    $GRITS_HOME/grits_env/bin/python setup.py install
 
 #Config files
 COPY grits-api/celeryd.conf /etc/supervisor/conf.d/celeryd.conf
