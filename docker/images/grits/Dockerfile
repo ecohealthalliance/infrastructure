@@ -172,9 +172,9 @@ RUN cd $GRITS_HOME &&\
     cd grits-api &&\
     pip install -r requirements.txt
 
-#Clone/install annie
-RUN git clone https://github.com/ecohealthalliance/annie.git $GRITS_HOME/annie
-RUN cd $GRITS_HOME/annie && $GRITS_HOME/grits_env/bin/python setup.py install &&\
+#Clone/install EpiTator
+RUN git clone https://github.com/ecohealthalliance/EpiTator.git $GRITS_HOME/EpiTator
+RUN cd $GRITS_HOME/EpiTator && $GRITS_HOME/grits_env/bin/python setup.py install &&\
     $GRITS_HOME/grits_env/bin/pip install -r requirements.txt
 
 #Config files
