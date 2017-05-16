@@ -7,6 +7,6 @@ export ssh_command="/usr/bin/ssh -i /var/lib/jenkins/.ssh/id_rsa  ubuntu@era.eha
 function scp_file { /usr/bin/scp -i /var/lib/jenkins/.ssh/id_rsa $1 ubuntu@era.eha.io:/tmp/; }
 
 #Reprovision flirt container
-scp_file /opt/infrastructure/docker/containers/era.yml
+scp_file /opt/infrastructure/docker/containers/era.yml &&\
 $ssh_command "sudo docker-compose -f /tmp/era.yml up -d"
 
