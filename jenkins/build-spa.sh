@@ -1,7 +1,7 @@
 #!/bin/bash
 #This is a jenkins script
 
-cd /opt/infrastructure && git pull
+cd /opt/infrastructure && git pull &&\
 docker build --no-cache -t spa docker/images/spa
 
 # Start netcat process to serve vault password to build script to docker build process. 

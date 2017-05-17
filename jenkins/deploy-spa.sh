@@ -22,7 +22,7 @@ export ssh_command="/usr/bin/ssh -i /var/lib/jenkins/.ssh/id_rsa  ubuntu@spa.eha
 function scp_file { /usr/bin/scp -i /var/lib/jenkins/.ssh/id_rsa $1 ubuntu@spa.eha.io:/tmp/; }
 
 #Import images on demo box
-$ssh_command rm -fr /tmp/spa.tar*
+$ssh_command rm -fr /tmp/spa.tar* &&\
 scp_file /tmp/spa.tar.gz &&\
 $ssh_command /bin/gzip -d /tmp/spa.tar.gz &&\
 $ssh_command "/usr/bin/sudo /usr/bin/docker load < /tmp/spa.tar" &&\

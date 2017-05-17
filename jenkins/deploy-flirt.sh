@@ -3,9 +3,9 @@
 #Please run this from the top level of the infrastructure repo
 
 #Dump the freshly built image into a tarball
-/usr/bin/docker save flirt > /tmp/flirt.tar
-/bin/echo "Docker image exported"
-/bin/gzip -1 /tmp/flirt.tar 
+/usr/bin/docker save flirt > /tmp/flirt.tar &&\
+/bin/echo "Docker image exported" &&\
+/bin/gzip -1 /tmp/flirt.tar  &&\
 /bin/echo "Exported image now compressed"
 
 #Useful alias/function
@@ -13,17 +13,17 @@ export ssh_command="/usr/bin/ssh -i /var/lib/jenkins/.ssh/id_rsa  ubuntu@52.23.6
 function scp_file { /usr/bin/scp -i /var/lib/jenkins/.ssh/id_rsa $1 ubuntu@52.23.65.236:/tmp/; }
 
 #Import image on demo box
-scp_file /tmp/flirt.tar.gz
-$ssh_command /bin/gzip -d /tmp/flirt.tar.gz
-$ssh_command "/usr/bin/sudo /usr/bin/docker load < /tmp/flirt.tar"
+scp_file /tmp/flirt.tar.gz &&\
+$ssh_command /bin/gzip -d /tmp/flirt.tar.gz &&\
+$ssh_command "/usr/bin/sudo /usr/bin/docker load < /tmp/flirt.tar" &&\
 /bin/echo "Image now imported on demo box"
 
 #Clean up old data
-/bin/rm /tmp/flirt.tar.gz
+/bin/rm /tmp/flirt.tar.gz &&\
 $ssh_command /bin/rm /tmp/flirt.tar
 
 #Reprovision flirt container
-scp_file /opt/infrastructure/docker/containers/flirt.yml
+scp_file /opt/infrastructure/docker/containers/flirt.yml &&\
 $ssh_command "sudo docker-compose -f /tmp/flirt.yml up -d"
 
 #Upload new docker image to S3

@@ -3,13 +3,13 @@
 export remote_command="/usr/bin/ssh -i /var/lib/jenkins/.ssh/id_rsa ubuntu@birt.eha.io "
 
 #Make sure repo is up to date
-$remote_command "cd /opt/infrastructure && git pull"
+$remote_command "cd /opt/infrastructure && git pull" &&\
 
 #Build the new image
-$remote_command "sudo docker build --no-cache -t birt /opt/infrastructure/docker/images/birt"
+$remote_command "sudo docker build --no-cache -t birt /opt/infrastructure/docker/images/birt" &&\
 
 #Instantiate the new image
-$remote_command "sudo docker-compose -f /opt/infrastructure/docker/containers/birt.yml up -d birt"
+$remote_command "sudo docker-compose -f /opt/infrastructure/docker/containers/birt.yml up -d birt" &&\
 
 #Upload new docker image to S3
 $remote_command "
