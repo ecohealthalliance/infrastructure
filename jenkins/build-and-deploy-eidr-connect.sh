@@ -7,8 +7,8 @@ export remote_command="ssh -ti /var/lib/jenkins/.ssh/id_rsa ubuntu@eidr-connect.
 $remote_command "cd /opt/eidr-connect && git checkout release; git pull; git rev-parse HEAD > revision.txt" &&\
 
 #Free up resources before the build
-$remote_command "docker kill eidr-connect.eha.io" &&\
-$remote_command "docker rm eidr-connect.eha.io" &&\
+$remote_command "sudo docker kill eidr-connect.eha.io" &&\
+$remote_command "sudo docker rm eidr-connect.eha.io" &&\
 
 #Build the new image
 $remote_command "sudo docker build --no-cache -t eidr-connect /opt/eidr-connect" &&\
