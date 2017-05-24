@@ -38,5 +38,3 @@ java -jar /flirt-legs.jar --mongohost="172.30.2.95" mongoport="27017"
 echo "*****Update flight counts*****"
 python grits_update_counts.py -m 172.30.2.95 -d grits-net-meteor 
 
-echo "*****Start the app*****"
-service supervisor start
