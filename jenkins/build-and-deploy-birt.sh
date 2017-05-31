@@ -19,3 +19,6 @@ $remote_command "
   sudo aws s3 cp /tmp/birt.tar.gz s3://bsve-integration/birt.tar.gz
   sudo rm /tmp/birt.tar.gz
 "
+
+#Notify BSVE of new birt image
+aws sns publish --topic-arn arn:aws:sns:us-east-1:789867670404:EHA-Git-Lambda --message '{"app":"birt"}' --profile bsve-user
