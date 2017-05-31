@@ -34,3 +34,6 @@ $ssh_command "
   sudo aws s3 cp /tmp/flirt.tar.gz s3://bsve-integration/flirt.tar.gz
   sudo rm /tmp/flirt.tar.gz
 "
+
+#Notify BSVE of new flirt image
+aws sns publish --topic-arn arn:aws:sns:us-east-1:789867670404:EHA-Git-Lambda --message '{"app":"flirt"}' --profile bsve-user
