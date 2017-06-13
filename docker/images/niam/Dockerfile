@@ -4,7 +4,7 @@ FROM ubuntu:16.04
 #Chaining these commands to keep the image smaller
 RUN apt-get clean all && \
     apt-get update && \
-    apt-get install -y supervisor curl build-essential vim git && \
+    apt-get install -y supervisor curl build-essential vim git locales && \
     apt-get clean all
 
 #Install Meteor
