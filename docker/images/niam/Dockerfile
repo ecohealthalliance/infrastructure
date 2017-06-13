@@ -11,7 +11,7 @@ RUN apt-get clean all && \
 RUN curl https://install.meteor.com/ | sh
 
 #Copy necessary repos
-COPY nia-monitor /nia-monitor
+RUN git clone https://github.com/ecohealthalliance/nia-monitor.git /nia-monitor
 
 #Build the meteor app
 RUN cd /nia-monitor && meteor npm install
