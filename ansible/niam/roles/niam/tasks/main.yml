@@ -10,7 +10,7 @@
   docker_image:
     path: "{{docker_niam_path}}"
     name: niam
-    api_version: 1.21
+    #api_version: 1.21
     force: true
 - name: Tar and zip niam image
   shell: "docker save niam | gzip > /tmp/niam.tar.gz"
@@ -26,7 +26,7 @@
 - name: Start niam container
   docker_container:
     name: niam-c
-    api_version: 1.21
+    #api_version: 1.21
     image: niam
     state: started
     restart: true

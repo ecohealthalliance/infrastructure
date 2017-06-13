@@ -2,7 +2,7 @@
 
 cd /opt/infrastructure/ansible/niam/ &&\
 ansible-galaxy install -r requirements.yml &&\
-ansible-playbook -vvv site.yml --become-user=ubuntu --vault-password-file /keys/grits_vault_password --private-key /var/lib/jenkins/.ssh/id_rsa --tags niam &&\
+ansible-playbook site.yml --become-user=ubuntu --vault-password-file /keys/grits_vault_password --private-key /var/lib/jenkins/.ssh/id_rsa --tags niam &&\
 
 #Upload new docker image to S3
 sudo docker save niam > /tmp/niam.tar &&\
