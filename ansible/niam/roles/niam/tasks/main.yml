@@ -7,7 +7,7 @@
     dest: "{{docker_niam_path}}/nia-monitor"
     version: "master"
 - name: Build niam image
-  shell "sudo docker build --no-cache -t niam {{docker_niam_path}}"
+  shell: "sudo docker build --no-cache -t niam {{docker_niam_path}}"
   #docker_image:
   #  path: "{{docker_niam_path}}"
   #  name: niam
