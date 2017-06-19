@@ -9,6 +9,7 @@ grits:
   restart: always
   volumes:
     - /etc/letsencrypt:/etc/letsencrypt
+    - /shared:/shared
 
 redis:
   image: redis
