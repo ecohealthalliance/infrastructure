@@ -4,6 +4,8 @@
 export remote_command="ssh -ti /var/lib/jenkins/.ssh/id_rsa ubuntu@eidr-connect-bsve.eha.io"
 
 $remote_command "cd /opt/eidr-connect; git checkout master; git pull" &&\
+$remote_command "sudo docker rm -f eidr-connect-bsve.eha.io"
+$remote_command "echo 'y' | sudo docker system prune"
 $remote_command "sudo docker build --no-cache -t eidr-connect /opt/eidr-connect" &&\
 $remote_command "rm /tmp/eidr-connect.tar*" &&\
 $remote_command "sudo docker save eidr-connect > /tmp/eidr-connect.tar" &&\
