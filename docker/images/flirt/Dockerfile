@@ -51,9 +51,6 @@ RUN git clone --depth 1 https://github.com/ecohealthalliance/grits-net-consume.g
 
 ENV METEOR_ALLOW_SUPERUSER=true
 
-# Move config.py to flirt-simulation-service
-RUN cp /shared/config.py /flirt-simulation-service/simulator/config.py
-
 #Build the meteor app
 #Chaining these commands to keep the image smaller
 RUN cd /flirt-webapp/app && \
