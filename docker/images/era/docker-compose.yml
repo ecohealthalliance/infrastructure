@@ -2,7 +2,7 @@ era:
   container_name: era
   image: era
   environment:
-    - FLIRT_MONGO_URL=mongodb://flirt-reporting.eha.io:27017/grits-net-meteor
+    - FLIRT_MONGO_URL=mongodb://flirt-reporting.eha.io:27017/flirt
     - BIRT_MONGO_URL=mongodb://birt.eha.io:27017/birt
     - ROOT_URL=http://era.eha.io
     - PORT=80 

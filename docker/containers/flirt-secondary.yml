@@ -2,10 +2,10 @@ flirt:
   container_name: flirt
   image: flirt
   environment:
-    - MONGO_URL=mongodb://flirt-reporting.eha.io/grits-net-meteor
+    - MONGO_URL=mongodb://flirt-reporting.eha.io/flirt
     - MONGO_URI=mongodb://flirt-reporting.eha.io
     - MONGO_HOST=flirt-reporting.eha.io
-    - MONGO_DB=grits-net-meteor
+    - MONGO_DB=flirt
     - MONGO_PORT=27017
     - SIMULATION_PORT=45000
     - ROOT_URL=http://52.23.65.236
