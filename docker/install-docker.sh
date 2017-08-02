@@ -3,7 +3,7 @@
 
 #Install necessary packages
 sudo apt-get update
-sudo apt-get install linux-image-extra-$(uname -r) linux-image-extra-virtual apt-transport-https ca-certificates curl software-properties-common
+sudo apt-get -y install linux-image-extra-$(uname -r) linux-image-extra-virtual apt-transport-https ca-certificates curl software-properties-common
 
 #Install docker repo key
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -13,6 +13,6 @@ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubun
 sudo apt-get update
 
 #Install docker engine community edition
-sudo apt-get install docker-ce
+sudo apt-get -y install docker-ce
 
 
