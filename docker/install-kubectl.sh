@@ -10,4 +10,6 @@ chmod +x ./kubectl
 #Move binary to PATH
 sudo mv ./kubectl /usr/local/bin/kubectl
 
+#Enable bash autocompletion
+echo "source <(kubectl completion bash)" >> ~/.bashrc
 
