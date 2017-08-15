@@ -16,7 +16,8 @@ COPY era.sh /era.sh
 
 #make app dirs
 RUN mkdir /shared 
-COPY era /era-webapp
+COPY era /
+RUN mv /era /era-webapp
 
 RUN chmod 777 /var/log/supervisor
 
