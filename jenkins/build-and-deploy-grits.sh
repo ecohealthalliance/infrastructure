@@ -22,7 +22,7 @@ rm /tmp/grits.tar.gz
 $remote_command "echo 'y'|sudo docker system prune" &&\
 $remote_command "aws s3 cp s3://eha-docker-repo/grits.tar.gz /tmp/grits.tar.gz" &&\
 $remote_command "gzip -d /tmp/grits.tar.gz && echo 'Image decompressed'" &&\
-$remote_command "sudo docker load < /tmp/grits/tar && echo 'Image loaded'" &&\
+$remote_command "sudo docker load < /tmp/grits.tar && echo 'Image loaded'" &&\
 $remote_command "rm /tmp/grits.tar*" &&\
 
 #Instantiate the new image
