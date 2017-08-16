@@ -39,5 +39,5 @@ $ssh_command "sudo /bin/mkdir -p /shared/.aws" &&\
 $ssh_command "sudo /bin/mv /tmp/credentials /shared/.aws"
 
 #Reprovision containers
-scp_file docker/containers/spa.yml &&\
+scp_file /opt/infrastructure/docker/containers/spa.yml &&\
 $ssh_command "sudo docker-compose -f /tmp/spa.yml up -d"
