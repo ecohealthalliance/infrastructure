@@ -10,8 +10,9 @@ rm -fr /tmp/spa.tar*
 /bin/gzip -1 /tmp/spa.tar &&\
 /bin/echo "Exported images now compressed"
 
-#Store the image in an s3 bucket for the BSVE deployment scripts
+#Store the image in a s3 buckets for the deployment scripts
 aws s3 cp /tmp/spa.tar.gz s3://bsve-integration/spa.tar.gz &&\
+aws s3 cp /tmp/spa.tar.gz s3://eha-docker-repo/spa.tar.gz &&\
 /bin/echo "Images uploaded"
 
 /bin/echo "Notify BSVE to redeploy"
