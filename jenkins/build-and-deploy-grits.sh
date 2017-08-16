@@ -3,18 +3,30 @@
 export remote_command="/usr/bin/ssh -i /var/lib/jenkins/.ssh/id_rsa  ubuntu@grits.eha.io "
 
 #Make sure repo is up to date
-$remote_command "cd /opt/infrastructure && git pull" &&\
-
-#Remove running container to free up resources
-$remote_command "sudo docker kill grits && sudo docker rm grits"
-
-#Make space
-$remote_command "echo 'y'|sudo docker system prune" &&\
+cd /opt/infrastructure && git pull &&\
 
 #Build the new image
-$remote_command "sudo docker build --no-cache -t grits /opt/infrastructure/docker/images/grits" &&\
+docker build --no-cache -t grits /opt/infrastructure/docker/images/grits &&\
+
+#Upload new docker image to S3
+rm /tmp/grits.tar*
+docker save grits > /tmp/grits.tar &&\
+gzip -1 /tmp/grits.tar &&\
+aws s3 cp /tmp/grits.tar.gz s3://bsve-integration/grits.tar.gz &&\
+aws s3 cp /tmp/grits.tar.gz s3://eha-docker-repo/grits.tar.gz &&\
+echo "Images uploaded to s3 buckets" &&\
+rm /tmp/grits.tar.gz
+
+
+#Load image onto grits server
+$remote_command "echo 'y'|sudo docker system prune" &&\
+$remote_command "aws s3 cp s3://eha-docker-repo/grits.tar.gz /tmp/grits.tar.gz" &&\
+$remote_command "gzip -d /tmp/grits.tar.gz && echo 'Image decompressed'" &&\
+$remote_command "sudo docker load < /tmp/grits/tar && echo 'Image loaded'" &&\
+$remote_command "rm /tmp/grits.tar*" &&\
 
 #Instantiate the new image
+$remote_command "cd /opt/infrastructure && git pull" &&\
 $remote_command "sudo docker-compose -f /opt/infrastructure/docker/containers/grits.yml up -d grits" &&\
 
 #Make sure grits has classifiers and disease lables
@@ -25,15 +37,6 @@ $remote_command "sudo docker exec grits bash -c 'source /source-vars.sh && /scri
 $remote_command "sudo docker kill grits && sudo docker start grits" &&\
 sleep 10 &&\
 $remote_command "sudo docker exec grits supervisorctl start all" &&\
-
-#Upload new docker image to S3
-$remote_command "
-  sudo rm /tmp/grits.tar.gz
-  sudo docker save grits > /tmp/grits.tar &&\
-  sudo gzip -1 /tmp/grits.tar &&\
-  sudo aws s3 cp /tmp/grits.tar.gz s3://bsve-integration/grits.tar.gz
-  sudo rm /tmp/grits.tar.gz
-" &&\
 
 
 if [ "$NOTIFY_BSVE" = true ]; then
