@@ -19,6 +19,7 @@ if [ "$NOTIFY_BSVE" = true ]; then
 fi
 
 #Load image onto server
+$remote_command "echo 'y' | sudo docker system prune" &&\
 $remote_command "aws s3 cp s3://bsve-integration/eidr-connect.tar.gz /tmp/eidr-connect.tar.gz" &&\
 $remote_command "gzip -d /tmp/eidr-connect.tar.gz" &&\
 $remote_command "sudo docker load < /tmp/eidr-connect.tar" &&\
