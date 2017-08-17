@@ -5,7 +5,7 @@ export remote_command="ssh -ti /var/lib/jenkins/.ssh/id_rsa ubuntu@eidr-connect-
 
 cd /opt/eidr-connect; git checkout master; git pull &&\
 docker build --no-cache -t eidr-connect /opt/eidr-connect &&\
-rm /tmp/eidr-connect.tar*"
+rm /tmp/eidr-connect.tar*
 docker save eidr-connect > /tmp/eidr-connect.tar &&\
 gzip -1 /tmp/eidr-connect.tar &&\
 
