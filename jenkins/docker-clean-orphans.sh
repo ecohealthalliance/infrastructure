@@ -10,15 +10,14 @@ cleanup(){
   ssh -i /var/lib/jenkins/.ssh/id_rsa ubuntu@$1 $sudo_remove_orphans
 }
 
+
 docker_servers=(
-  dev-survey.eha.io
-  survey.eha.io
   eidr-connect.eha.io
+  eidr-connect-bsve.eha.io
   grits.eha.io
-  grits-dev.eha.io
-  birt.eha.io
   era.eha.io
   spa.eha.io
+  niam.eha.io
                )
 
 #Cleanup jenkins itself

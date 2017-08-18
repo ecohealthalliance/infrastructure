@@ -20,7 +20,7 @@ aws s3 cp /tmp/eidr-connect.tar.gz s3://eha-docker-repo/eidr-connect.tar.gz &&\
 rm /tmp/eidr-connect.tar* &&\
 
 #Load image onto server
-$remote_command "rm /tmp/eidr-connect.tar*" &&\
+$remote_command "rm /tmp/eidr-connect.tar*"
 $remote_command "aws s3 cp s3://eha-docker-repo/eidr-connect.tar.gz /tmp/eidr-connect.tar.gz" &&\
 $remote_command "gzip -d /tmp/eidr-connect.tar.gz" &&\
 $remote_command "echo 'y' | sudo docker system prune" &&\
