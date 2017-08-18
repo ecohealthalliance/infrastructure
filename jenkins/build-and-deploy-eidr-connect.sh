@@ -13,6 +13,7 @@ git rev-parse HEAD > revision.txt &&\
 docker build --no-cache -t eidr-connect /opt/eidr-connect &&\
 
 #Upload image to s3 bucket
+rm /tmp/eidr-connect.tar*
 docker save eidr-connect > /tmp/eidr-connect.tar &&\
 gzip -1 /tmp/eidr-connect.tar &&\
 aws s3 cp /tmp/eidr-connect.tar.gz s3://eha-docker-repo/eidr-connect.tar.gz &&\
