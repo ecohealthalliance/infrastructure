@@ -90,9 +90,6 @@ RUN apt-get install -y \
         libxml2-dev \
         libxslt1-dev \
         libjpeg-dev \
-        default-jre \
-        default-jdk \
-        tomcat7 \
         python-software-properties \
     && \
     apt-get clean all
@@ -192,19 +189,6 @@ USER root
 
 #Install meteor
 RUN curl https://install.meteor.com | /bin/sh
-
-### JVM-NLP ######################################################################################################
-#Copy in config files
-COPY jvm-nlp/tomcat7 /etc/default/tomcat7
-COPY jvm-nlp/tomcatd.conf /etc/supervisor/conf.d/tomcatd.conf
-
-#Clone repo and run sbt package
-RUN git clone --depth 1 https://github.com/ecohealthalliance/jvm-nlp.git $GRITS_HOME/jvm-nlp
-RUN cd $GRITS_HOME/jvm-nlp/ && ./sbt package && echo done > .sbt_package_done
-
-#Deploy scala webapp
-RUN rm -rf /var/lib/tomcat7/webapps/ROOT* &&\
-    cp $GRITS_HOME/jvm-nlp/target/scala-2.11/*.war /var/lib/tomcat7/webapps/ROOT.war
 
 ### Diagnostic-Dashboard ##########################################################################################
 ENV DOMAIN=eha.io
