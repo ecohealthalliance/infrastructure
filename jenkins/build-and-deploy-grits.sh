@@ -34,7 +34,7 @@ $remote_command "sudo rm -rf /mnt/elasticsearch ; true" &&\
 $remote_command "sudo tar -xvzf /tmp/elasticsearch-data.tar.gz -C /" &&\
 $remote_command "gzip -d /tmp/geonames-api.tar.gz" &&\
 $remote_command "sudo docker load < /tmp/geonames-api.tar" &&\
-$remote_command "rm *.tar* /tmp/*.tar*" &&\
+$remote_command "rm /tmp/*.tar* ; true" &&\
 
 #Instantiate the new image
 $remote_command "cd /opt/infrastructure && git pull" &&\
