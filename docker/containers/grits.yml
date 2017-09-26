@@ -7,9 +7,32 @@ grits:
     - "80:80"
     - "443:443"
   restart: always
+  environment:
+    - "GEONAME_LOOKUP_URL=http://${ip_address}:81/"
+    - "MONGO_URL=mongodb://${ip_address}:27017"
+    - "BROKER_URL=redis://${ip_address}:6379/0"
+    - "ROOT_URL=http://${ip_address}"
   volumes:
     - /etc/letsencrypt:/etc/letsencrypt
     - /shared:/shared
+
+geonames-api:
+  container_name: geonames-api
+  image: geonames-api
+  environment:
+    - "ELASTICSEARCH_HOST=${ip_address}:9200"
+  ports:
+    - "81:80"
+  restart: always
+
+elasticsearch:
+  container_name: elasticsearch
+  image: "elasticsearch:2.4.1"
+  restart: always
+  ports:
+    - "9200:9200"
+  volumes:
+    - "${elasticsearch_data_path}:/usr/share/elasticsearch/data"
 
 redis:
   image: redis
@@ -27,4 +50,3 @@ mongodb:
   volumes:
     - /mnt/mongo:/var/lib
     - /var/log:/var/log
-

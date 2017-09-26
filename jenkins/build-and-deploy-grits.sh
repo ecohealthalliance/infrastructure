@@ -25,9 +25,21 @@ $remote_command "gzip -d /tmp/grits.tar.gz && echo 'Image decompressed'" &&\
 $remote_command "sudo docker load < /tmp/grits.tar && echo 'Image loaded'" &&\
 $remote_command "rm /tmp/grits.tar*" &&\
 
+#Load geonames api image and data
+$remote_command "aws s3 cp s3://bsve-integration/elasticsearch-data.tar.gz /tmp/elasticsearch-data.tar.gz" &&\
+$remote_command "aws s3 cp s3://bsve-integration/geonames-api.tar.gz /tmp/geonames-api.tar.gz" &&\
+$remote_command "tar -xvzf /tmp/elasticsearch-data.tar.gz -C /" &&\
+$remote_command "gzip -d /tmp/geonames-api.tar.gz" &&\
+$remote_command "docker load < /tmp/geonames-api.tar" &&\
+$remote_command "rm *.tar* /tmp/*.tar*" &&\
+
 #Instantiate the new image
 $remote_command "cd /opt/infrastructure && git pull" &&\
-$remote_command "sudo docker-compose -f /opt/infrastructure/docker/containers/grits.yml up -d grits" &&\
+$remote_command "(
+  elasticsearch_data_path=/mnt/elasticsearch/data \
+  ip_address=$(ip -4 route get 8.8.8.8 | awk '{print $7}') \
+  sudo docker-compose -f /opt/infrastructure/docker/containers/grits.yml up -d grits
+)" &&\
 
 #Make sure grits has classifiers and disease lables
 $remote_command "sudo docker cp /home/ubuntu/source-vars.sh.backup grits:/source-vars.sh" &&\
