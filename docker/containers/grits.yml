@@ -15,6 +15,8 @@ grits:
   volumes:
     - /etc/letsencrypt:/etc/letsencrypt
     - /shared:/shared
+  log_opt:
+    max-size: 50m
 
 geonames-api:
   container_name: geonames-api
@@ -24,6 +26,8 @@ geonames-api:
   ports:
     - "81:80"
   restart: always
+  log_opt:
+    max-size: 50m
 
 elasticsearch:
   container_name: elasticsearch
@@ -33,6 +37,8 @@ elasticsearch:
     - "9200:9200"
   volumes:
     - "${elasticsearch_data_path}:/usr/share/elasticsearch/data"
+  log_opt:
+    max-size: 50m
 
 redis:
   image: redis
@@ -40,6 +46,8 @@ redis:
   ports:
     - "6379:6379"
   restart: always
+  log_opt:
+    max-size: 50m
 
 mongodb:
   container_name: mongodb
@@ -50,3 +58,5 @@ mongodb:
   volumes:
     - /mnt/mongo:/var/lib
     - /var/log:/var/log
+  log_opt:
+    max-size: 50m
