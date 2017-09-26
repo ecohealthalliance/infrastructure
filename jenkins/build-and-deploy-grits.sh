@@ -28,6 +28,9 @@ $remote_command "rm /tmp/grits.tar*" &&\
 #Load geonames api image and data
 $remote_command "aws s3 cp s3://bsve-integration/elasticsearch-data.tar.gz /tmp/elasticsearch-data.tar.gz" &&\
 $remote_command "aws s3 cp s3://bsve-integration/geonames-api.tar.gz /tmp/geonames-api.tar.gz" &&\
+#Remove old elasticsearch data and ignore errors if it doesn't exist.
+$remote_command "sudo docker stop elasticsearch ; true" &&\
+$remote_command "sudo rm -rf /mnt/elasticsearch ; true" &&\
 $remote_command "tar -xvzf /tmp/elasticsearch-data.tar.gz -C /" &&\
 $remote_command "gzip -d /tmp/geonames-api.tar.gz" &&\
 $remote_command "docker load < /tmp/geonames-api.tar" &&\
