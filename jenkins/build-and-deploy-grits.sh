@@ -1,7 +1,5 @@
 #!/bin/bash
 
-export remote_command="/usr/bin/ssh -i /var/lib/jenkins/.ssh/id_rsa  ubuntu@grits.eha.io "
-
 #Make sure repo is up to date
 cd /opt/infrastructure && git pull &&\
 
@@ -17,42 +15,47 @@ aws s3 cp /tmp/grits.tar.gz s3://eha-docker-repo/grits.tar.gz &&\
 echo "Images uploaded to s3 buckets" &&\
 rm /tmp/grits.tar.gz
 
-
+/usr/bin/ssh -i /var/lib/jenkins/.ssh/id_rsa  ubuntu@grits.eha.io <<EOF
 #Load image onto grits server
-$remote_command "echo 'y'|sudo docker system prune" &&\
-$remote_command "aws s3 cp s3://eha-docker-repo/grits.tar.gz /tmp/grits.tar.gz" &&\
-$remote_command "gzip -d /tmp/grits.tar.gz && echo 'Image decompressed'" &&\
-$remote_command "sudo docker load < /tmp/grits.tar && echo 'Image loaded'" &&\
-$remote_command "rm /tmp/grits.tar*" &&\
+sudo docker system prune -f &&\
+aws s3 cp s3://eha-docker-repo/grits.tar.gz /tmp/grits.tar.gz &&\
+gzip -d /tmp/grits.tar.gz && echo 'Image decompressed' &&\
+sudo docker load < /tmp/grits.tar && echo 'Image loaded' &&\
+rm /tmp/grits.tar* &&\
 
 #Load geonames api image and data
-$remote_command "aws s3 cp s3://bsve-integration/elasticsearch-data.tar.gz /tmp/elasticsearch-data.tar.gz" &&\
-$remote_command "aws s3 cp s3://bsve-integration/geonames-api.tar.gz /tmp/geonames-api.tar.gz" &&\
+aws s3 cp s3://bsve-integration/elasticsearch-data.tar.gz /tmp/elasticsearch-data.tar.gz &&\
+aws s3 cp s3://bsve-integration/geonames-api.tar.gz /tmp/geonames-api.tar.gz &&\
 #Remove old elasticsearch data and ignore errors if it doesn't exist.
-$remote_command "sudo docker stop elasticsearch ; true" &&\
-$remote_command "sudo rm -rf /mnt/elasticsearch ; true" &&\
-$remote_command "sudo tar -xvzf /tmp/elasticsearch-data.tar.gz -C /" &&\
-$remote_command "gzip -d /tmp/geonames-api.tar.gz" &&\
-$remote_command "sudo docker load < /tmp/geonames-api.tar" &&\
-$remote_command "rm /tmp/*.tar* ; true" &&\
+sudo docker stop elasticsearch ; true &&\
+sudo rm -rf /mnt/elasticsearch ; true &&\
+sudo tar -xvzf /tmp/elasticsearch-data.tar.gz -C / &&\
+gzip -d /tmp/geonames-api.tar.gz &&\
+sudo docker load < /tmp/geonames-api.tar &&\
+rm /tmp/*.tar* ; true &&\
 
 #Instantiate the new image
-$remote_command "cd /opt/infrastructure && git pull" &&\
-$remote_command "(
-  elasticsearch_data_path=/mnt/elasticsearch/data \
-  ip_address=$(ip -4 route get 8.8.8.8 | awk '{print $7}') \
-  sudo docker-compose -f /opt/infrastructure/docker/containers/grits.yml up -d grits
-)" &&\
+cd /opt/infrastructure && git pull &&\
+EOF &&\
+
+#Send super user commands to the server
+/usr/bin/ssh -i /var/lib/jenkins/.ssh/id_rsa ubuntu@grits.eha.io <<EOF
+sudo su
+(
+elasticsearch_data_path=/mnt/elasticsearch/data  \
+ip_address=\$(ip -4 route get 8.8.8.8 | awk '{print \$7}')  \
+docker-compose -f /opt/infrastructure/docker/containers/grits.yml up -d
+) &&\
 
 #Make sure grits has classifiers and disease lables
-$remote_command "sudo docker cp /home/ubuntu/source-vars.sh.backup grits:/source-vars.sh" &&\
-$remote_command "sudo docker exec grits bash -c 'source /source-vars.sh && /scripts/update-settings.sh && /scripts/disease-label-autocomplete.sh'" &&\
+docker cp /home/ubuntu/source-vars.sh.backup grits:/source-vars.sh &&\
+docker exec grits bash -c 'source /source-vars.sh && /scripts/update-settings.sh && /scripts/disease-label-autocomplete.sh' &&\
 
 #Restart grits
-$remote_command "sudo docker kill grits && sudo docker start grits" &&\
+docker kill grits && docker start grits &&\
 sleep 10 &&\
-$remote_command "sudo docker exec grits supervisorctl start all" &&\
-
+docker exec grits supervisorctl start all
+EOF &&\
 
 if [ "$NOTIFY_BSVE" = true ]; then
   /bin/echo "Notify BSVE to redeploy grits"
