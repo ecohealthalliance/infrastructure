@@ -15,6 +15,7 @@ aws s3 cp /tmp/grits.tar.gz s3://eha-docker-repo/grits.tar.gz &&\
 echo "Images uploaded to s3 buckets" &&\
 rm /tmp/grits.tar.gz
 
+(
 /usr/bin/ssh -i /var/lib/jenkins/.ssh/id_rsa  ubuntu@grits.eha.io <<EOF
 #Load image onto grits server
 sudo docker system prune -f &&\
@@ -35,10 +36,12 @@ sudo docker load < /tmp/geonames-api.tar &&\
 rm /tmp/*.tar* ; true &&\
 
 #Instantiate the new image
-cd /opt/infrastructure && git pull &&\
-EOF &&\
+cd /opt/infrastructure && git pull
+EOF
+) &&\
 
 #Send super user commands to the server
+(
 /usr/bin/ssh -i /var/lib/jenkins/.ssh/id_rsa ubuntu@grits.eha.io <<EOF
 sudo su
 (
@@ -55,7 +58,8 @@ docker exec grits bash -c 'source /source-vars.sh && /scripts/update-settings.sh
 docker kill grits && docker start grits &&\
 sleep 10 &&\
 docker exec grits supervisorctl start all
-EOF &&\
+EOF
+) &&\
 
 if [ "$NOTIFY_BSVE" = true ]; then
   /bin/echo "Notify BSVE to redeploy grits"
