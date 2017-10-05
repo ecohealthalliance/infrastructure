@@ -131,12 +131,10 @@ RUN mkdir $GRITS_HOME/cron $GRITS_HOME/cron/logs &&\
 RUN a2enmod proxy &&\
     a2enmod proxy_http &&\
     a2enmod rewrite &&\
-    a2enmod ssl &&\
     a2enmod proxy_wstunnel
 
 COPY apache/ports.conf /etc/apache2/ports.conf
 COPY apache/proxy.conf /etc/apache2/conf-enabled/proxy.conf
-COPY apache/ssl.conf /etc/apache2/mods-enabled/ssl.conf
 COPY apache/supervisor-apached.conf /etc/supervisor/conf.d/apached.conf
 
 ### Grits-API ###################################################################################################
