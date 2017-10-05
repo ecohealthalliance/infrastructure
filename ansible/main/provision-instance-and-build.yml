@@ -1,0 +1,92 @@
+- hosts: localhost
+  sudo: yes
+  vars:
+    instance_size: "c4.large"
+    aws_security_group: grits
+    instance_tag: "{{image_name}}-build-instance"
+  tasks:
+    - name: Check whether pip is installed
+      shell: command -v pip
+      register: is_pip_installed
+      ignore_errors: yes
+      tags:
+        - always
+    - name: Install Python PIP
+      apt: pkg=python-pip state=latest
+      tags:
+        - always
+      when: is_pip_installed.rc == 1
+    - name: Install boto via PIP
+      pip: name=boto state=latest
+      tags:
+        - always
+    - name: Install AWS CLI
+      pip: name=awscli state=latest
+      tags:
+        - always
+    - name: Provision an AWS instance
+      ec2:
+        aws_access_key: "{{ ec2_access_key }}"
+        aws_secret_key: "{{ ec2_secret_key }}"
+        group: "{{ aws_security_group }}"
+        region: "us-east-1"
+        key_name: "infrastructure"
+        instance_type: "{{ instance_size }}"
+        # Ubuntu 16.04 AWS stock image
+        image: "ami-cd0f5cb6"
+        wait: true
+        # The count prevents more than 1 instances from running at once.
+        exact_count: 1
+        count_tag:
+          Name: "{{ instance_tag }}"
+        instance_tags:
+          Name: "{{ instance_tag }}"
+        volumes:
+         - device_name: /dev/sda1
+           device_type: gp2
+           volume_size: 220
+           delete_on_termination: true
+        vpc_subnet_id: subnet-50b75809
+      register: ec2
+      tags:
+        - always
+    - name: Add all instance public IPs to host group
+      add_host:
+        hostname: "{{ item.public_ip }}"
+        ansible_ssh_user: "ubuntu"
+        ansible_python_interpreter: "/usr/bin/python3"
+        groups: ec2hosts
+      with_items: "{{ec2.tagged_instances}}"
+      tags:
+        - always
+    - name: Wait for the instances to boot by checking the ssh ports
+      wait_for: host="{{item.public_ip}}" port=22 delay=5 timeout=320 state=started
+      with_items: "{{ec2.tagged_instances}}"
+      tags:
+        - always
+  vars_files:
+    - my_secure.yml
+
+- hosts: ec2hosts
+  remote_user: ubuntu
+  become: true
+  become_user: root
+  pre_tasks:
+    - name: Cancel prior shutdown commands
+      shell: "shutdown -c || true"
+    - name: Shut down the instance in one hour (to cancel use shutdown -c)
+      shell: "shutdown -h +55 &"
+  roles:
+    - name: kamaln7.swapfile
+      swapfile_size: 16GB
+      swapfile_location: "/swapfile"
+      tags: swap
+    - name: angstwad.docker_ubuntu
+      tags: docker
+    - name: init
+      tags: init
+    - name: build-image
+      force_image: no
+      tags: build-image
+  vars_files:
+    - my_secure.yml

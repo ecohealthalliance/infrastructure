@@ -1,0 +1,20 @@
+- name: Download image
+  aws_s3:
+    bucket: bsve-integration
+    object: eidr-connect-test.tar.gz
+    dest: /tmp/eidr-connect.tar.gz
+    mode: get
+    overwrite: "{{overwrite}}"
+  register: image
+- command: "gzip -dfk /tmp/eidr-connect.tar.gz"
+  when: image.changed
+- name: Load image into docker
+  shell: "docker load < /tmp/eidr-connect.tar"
+  when: image.changed
+- name: Copy compose directory
+  synchronize: src="compose/" dest="/eidr-connect-compose"
+- name: Start services
+  docker_service:
+    project_src: /eidr-connect-compose
+  environment:
+    ip_address: "{{ ansible_default_ipv4.address }}"

@@ -1,0 +1,54 @@
+- name: Download grits image
+  aws_s3:
+    bucket: bsve-integration
+    object: grits-test.tar.gz
+    dest: /tmp/grits.tar.gz
+    mode: get
+    overwrite: "{{overwrite}}"
+  register: gritsimage
+# TODO: For efficiency switch to commands and check timestamps
+# - name: Download grits image
+#   command: aws s3 cp s3://bsve-integration/grits-test.tar.gz /tmp/grits.tar.gz
+#   args:
+#     creates: /tmp/grits.tar.gz
+#   register: gritsimage
+- command: "gzip -dfk /tmp/grits.tar.gz"
+  when: gritsimage.changed
+- name: Load grit image into docker
+  shell: "docker load < /tmp/grits.tar"
+  when: gritsimage.changed
+- name: Download elasticsearch data
+  aws_s3:
+    bucket: bsve-integration
+    object: elasticsearch-data.tar.gz
+    dest: /tmp/elasticsearch-data.tar.gz
+    mode: get
+    overwrite: "{{overwrite}}"
+  register: elasticsearchdata
+- name: Download geonames api image
+  aws_s3:
+    bucket: bsve-integration
+    object: geonames-api.tar.gz
+    dest: /tmp/geonames-api.tar.gz
+    mode: get
+    overwrite: "{{overwrite}}"
+  register: geonamesapiimage
+- command: "gzip -dfk /tmp/geonames-api.tar.gz"
+  when: geonamesapiimage.changed
+- command: "docker stop elasticsearch"
+  ignore_errors: yes
+- file: path="/mnt/elasticsearch" state=absent
+  when: elasticsearchdata.changed
+- command: "tar -xvzf /tmp/elasticsearch-data.tar.gz -C /"
+  when: elasticsearchdata.changed
+- shell: "docker load < /tmp/geonames-api.tar"
+  when: geonamesapiimage.changed
+- name: Copy compose directory
+  synchronize: src="compose/" dest="/grits-compose"
+- name: Start grits services
+  recreate: always
+  docker_service:
+    project_src: /grits-compose
+  environment:
+    elasticsearch_data_path: /mnt/elasticsearch/data
+    ip_address: "{{ ansible_default_ipv4.address }}"

@@ -1,0 +1,63 @@
+version: '2'
+services:
+  grits:
+    image: grits
+    container_name: grits
+    ports:
+      - "3001:3001"
+      - "2025:25"
+      - "2080:80"
+      - "20443:443"
+    restart: always
+    environment:
+      - "GEONAME_LOOKUP_URL=http://geonames-api/"
+      - "MONGO_URL=mongodb://mongodb:27017"
+      - "BROKER_URL=redis://redis:6379/0"
+      - "ROOT_URL=http://${ip_address}"
+    volumes:
+      - /shared:/shared
+    logging:
+      options:
+        max-size: 50m
+
+  geonames-api:
+    container_name: geonames-api
+    image: geonames-api
+    environment:
+      - "ELASTICSEARCH_HOST=http://elasticsearch:9200"
+    # ports:
+    #   - "3080:80"
+    restart: always
+    logging:
+      options:
+        max-size: 50m
+  
+  elasticsearch:
+    container_name: elasticsearch
+    image: "elasticsearch:2.4.1"
+    restart: always
+    volumes:
+      - "${elasticsearch_data_path}:/usr/share/elasticsearch/data"
+    logging:
+      options:
+        max-size: 50m
+  
+  redis:
+    image: redis
+    container_name: redis
+    restart: always
+    logging:
+      options:
+        max-size: 50m
+  
+  mongodb:
+    container_name: mongodb
+    image: mongo:3.4.9
+    restart: always
+  #  volumes:
+  #     - /mnt/mongo:/data/db
+  #     - /mnt/mongo:/var/lib
+  #     - /var/log:/var/log
+    logging:
+      options:
+        max-size: 50m

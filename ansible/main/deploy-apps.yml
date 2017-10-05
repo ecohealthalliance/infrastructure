@@ -1,0 +1,13 @@
+- hosts: targets
+  remote_user: ubuntu
+  become: true
+  become_user: root
+  vars:
+    overwrite: never
+  roles:
+    - name: deploy-grits
+      tags: deploy-grits
+    - name: deploy-eidr-connect
+      tags: deploy-eidr-connect
+    - name: deploy-promed-scraper
+      tags: deploy-promed-scraper

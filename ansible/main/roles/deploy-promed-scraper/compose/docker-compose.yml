@@ -1,0 +1,23 @@
+version: '2'
+services:
+  promed-scraper:
+    container_name: promed-scraper
+    image: promed-scraper
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017
+      - OTHER_ANSIBLE_PARAMS="--tags=promed,download-classifier,s3backup --skip-tags=preloadable"
+      - TERM=xterm
+    volumes:
+      - /shared:/shared
+    restart: always
+    logging:
+      options:
+        max-size: 50m
+
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    restart: always
+    logging:
+      options:
+        max-size: 50m

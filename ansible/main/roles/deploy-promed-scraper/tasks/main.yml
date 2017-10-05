@@ -1,0 +1,18 @@
+- name: Download image
+  aws_s3:
+    bucket: bsve-integration
+    object: promed-scraper-test.tar.gz
+    dest: /tmp/promed-scraper.tar.gz
+    mode: get
+    overwrite: different
+  register: image
+- command: "gzip -dfk /tmp/promed-scraper.tar.gz"
+  when: image.changed
+- name: Load image into docker
+  shell: "docker load < /tmp/promed-scraper.tar"
+  when: image.changed
+- name: Copy compose directory
+  synchronize: src="compose/" dest="/promed-scraper-compose"
+- name: Start services
+  docker_service:
+    project_src: /promed-scraper-compose

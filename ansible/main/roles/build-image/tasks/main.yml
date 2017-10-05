@@ -1,0 +1,28 @@
+- block:
+    - name: Start netcat process to serve secrets to docker builds
+      shell: "echo {{ vault_password | default(0) }} | nc -l 14242"
+      async: 100000
+      poll: 0
+    - name: Copy image directory
+      synchronize: src="../../docker/images/{{image_name}}/" dest="/{{image_name}}_docker"
+      when: image_name != 'eidr-connect'
+    - name: Copy image from github
+      git:
+        repo: "https://github.com/ecohealthalliance/{{image_name}}.git"
+        dest: "/{{image_name}}_docker"
+        recursive: no
+        force: yes
+      when: image_name == 'eidr-connect'
+    - name: Build image
+      docker_image:
+        path: "/{{image_name}}_docker"
+        name: "{{image_name}}"
+        force: "{{ force_image }}"
+    - name: Tar and zip image
+      shell: "docker save {{image_name}} | gzip > /tmp/{{image_name}}.tar.gz"
+    - name: Save image on s3
+      command: "aws s3 cp /tmp/{{image_name}}.tar.gz s3://bsve-integration/{{image_name}}-test.tar.gz"
+  always:
+    - name: Ensure netcat stops
+      shell: nc -v localhost 14242
+      ignore_errors: yes

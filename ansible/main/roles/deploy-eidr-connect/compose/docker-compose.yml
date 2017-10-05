@@ -1,0 +1,28 @@
+version: '2'
+services:
+  eidr-connect.eha.io:
+    image: eidr-connect
+    container_name: eidr-connect.eha.io
+    environment:
+      # Mongo is deployed by another compose file.
+      - MONGO_URL=mongodb://${ip_address}:27017/eidr-connect
+      - ROOT_URL=https://eidr-connect.eha.io
+      - PORT=3000
+      - SPA_MONGO_URL=mongodb://spa.eha.io:27017/promed
+    env_file:
+      - /shared/sensitive-environment-vars.env
+    ports:
+      - "3180:3000"
+    restart: always
+    volumes:
+      - /shared:/shared
+
+  ec-mongodb:
+    container_name: ec-mongodb
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    logging:
+      options:
+        max-size: 50m
