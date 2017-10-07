@@ -21,7 +21,7 @@
     - name: Tar and zip image
       shell: "docker save {{image_name}} | gzip > /tmp/{{image_name}}.tar.gz"
     - name: Save image on s3
-      command: "aws s3 cp /tmp/{{image_name}}.tar.gz s3://bsve-integration/{{image_name}}-test.tar.gz"
+      command: "aws s3 cp /tmp/{{image_name}}.tar.gz s3://bsve-integration/{{image_name}}.tar.gz"
   always:
     - name: Ensure netcat stops
       shell: nc -v localhost 14242

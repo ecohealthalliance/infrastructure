@@ -64,6 +64,14 @@
       with_items: "{{ec2.tagged_instances}}"
       tags:
         - always
+    - name: Copy private promed_mail_scraper repo from github into docker image directory
+      git:
+        repo: "git@github.com:ecohealthalliance/promed_mail_scraper.git"
+        dest: "../../docker/images/promed-scraper/promed_mail_scraper"
+        key_file: "~/.ssh/id_rsa"
+        recursive: no
+        force: yes
+      when: image_name == 'promed-scraper'
   vars_files:
     - my_secure.yml
 

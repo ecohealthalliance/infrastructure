@@ -1,14 +1,14 @@
 - name: Download grits image
   aws_s3:
     bucket: bsve-integration
-    object: grits-test.tar.gz
+    object: grits.tar.gz
     dest: /tmp/grits.tar.gz
     mode: get
     overwrite: "{{overwrite}}"
   register: gritsimage
 # TODO: For efficiency switch to commands and check timestamps
 # - name: Download grits image
-#   command: aws s3 cp s3://bsve-integration/grits-test.tar.gz /tmp/grits.tar.gz
+#   command: aws s3 cp s3://bsve-integration/grits.tar.gz /tmp/grits.tar.gz
 #   args:
 #     creates: /tmp/grits.tar.gz
 #   register: gritsimage
@@ -52,3 +52,10 @@
   environment:
     elasticsearch_data_path: /mnt/elasticsearch/data
     ip_address: "{{ ansible_default_ipv4.address }}"
+# Needed to set API key
+# TODO Move config to jenkins
+- command: docker cp /home/ubuntu/source-vars.sh.backup grits:/source-vars.sh
+- command: docker exec grits bash -c 'source /source-vars.sh && /scripts/update-settings.sh'
+- command: docker exec grits bash -c 'source /source-vars.sh && /scripts/disease-label-autocomplete.sh'
+- command: docker kill grits
+- command: docker start grits

@@ -4,7 +4,7 @@ services:
     container_name: promed-scraper
     image: promed-scraper
     environment:
-      - MONGO_URL=mongodb://mongodb:27017
+      - MONGO_URL=mongodb://pm-mongo:27017
       - OTHER_ANSIBLE_PARAMS="--tags=promed,download-classifier,s3backup --skip-tags=preloadable"
       - TERM=xterm
     volumes:
@@ -14,10 +14,16 @@ services:
       options:
         max-size: 50m
 
-  mongodb:
-    container_name: mongodb
+  pm-mongo:
+    container_name: pm-mongo
     image: mongo
     restart: always
+    ports:
+       - 27018:27017
     logging:
       options:
         max-size: 50m
+
+networks:
+  main-net:
+    name: main-net

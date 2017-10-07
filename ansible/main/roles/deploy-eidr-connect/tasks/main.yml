@@ -1,7 +1,7 @@
 - name: Download image
   aws_s3:
     bucket: bsve-integration
-    object: eidr-connect-test.tar.gz
+    object: eidr-connect.tar.gz
     dest: /tmp/eidr-connect.tar.gz
     mode: get
     overwrite: "{{overwrite}}"
@@ -18,3 +18,4 @@
     project_src: /eidr-connect-compose
   environment:
     ip_address: "{{ ansible_default_ipv4.address }}"
+    root_url: 'eidr-connect-bsve.eha.io'

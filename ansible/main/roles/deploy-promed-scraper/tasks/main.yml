@@ -1,18 +1,35 @@
 - name: Download image
   aws_s3:
     bucket: bsve-integration
-    object: promed-scraper-test.tar.gz
+    object: promed-scraper.tar.gz
     dest: /tmp/promed-scraper.tar.gz
     mode: get
-    overwrite: different
+    overwrite: "{{overwrite}}"
   register: image
-- command: "gzip -dfk /tmp/promed-scraper.tar.gz"
-  when: image.changed
+
 - name: Load image into docker
-  shell: "docker load < /tmp/promed-scraper.tar"
+  block:
+  - command: "gzip -dfk /tmp/promed-scraper.tar.gz"
+  - shell: "docker load < /tmp/promed-scraper.tar"
   when: image.changed
+
 - name: Copy compose directory
   synchronize: src="compose/" dest="/promed-scraper-compose"
 - name: Start services
   docker_service:
     project_src: /promed-scraper-compose
+
+- name: Count promed items. The database is only restored if there are no items or restore_database is defined.
+  command: docker exec promed-scraper bash -c 'mongo mongodb://pm-mongo:27017/promed --eval "db.posts.count()" --quiet'
+  register: promed_items
+
+- name: Restore database
+  block:
+  - name: Create database dump directory
+    file: path=/mongorestore_dump_dir state=directory
+  - name: Update promed data from s3
+    command: aws s3 sync s3://promed-database/dump /mongorestore_dump_dir
+  - command: docker cp /mongorestore_dump_dir promed-scraper:/mongorestore_dump_dir
+  - name: Import promed data from dump
+    command: docker exec promed-scraper bash -c 'mongorestore --host pm-mongo:27017 --drop /mongorestore_dump_dir/promed --db promed'
+  when: promed_items.stdout == "0"
