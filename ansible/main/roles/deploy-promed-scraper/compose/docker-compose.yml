@@ -16,6 +16,8 @@ services:
 
   pm-mongo:
     container_name: pm-mongo
+    # 1 GB
+    mem_limit: 1000000000
     image: mongo
     restart: always
     ports:
@@ -23,7 +25,3 @@ services:
     logging:
       options:
         max-size: 50m
-
-networks:
-  main-net:
-    name: main-net

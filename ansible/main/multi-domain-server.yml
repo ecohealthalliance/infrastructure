@@ -11,46 +11,41 @@
     # When adding a new domain name, create the DNS record before running this
     # script or it will fail.
     servers:
+      - servername: "grits.eha.io"
+        port: 2080
+      - servername: "eidr-connect.eha.io"
+        port: 3080
       - servername: "eidr-connect-bsve.eha.io"
         port: 3180
-      - servername: "grits.eha.io"
-        port: 20443
     webroot: "/var/www"
     acme_tiny_challenges_directory: "/var/www/.well-known/acme-challenge"
-    cert_name: "multidomain_cert"
+    cert_name: "multidomain_cert_2"
     ssl_directory: "/etc/letsencrypt/live/{{cert_name}}"
   pre_tasks:
-    - set_fact:
-        apache_vhosts_ssl_in:
-          servername: "{{ item.servername }}"
-          documentroot: "{{ webroot }}"
-          certificate_key_file: "{{ ssl_directory }}/privkey.pem"
-          certificate_file: "{{ ssl_directory }}/cert.pem"
-          certificate_chain_file: "{{ ssl_directory }}/chain.pem"
-          extra_parameters: |
-            RewriteEngine on
-            RewriteRule ^/internal.* [F]
-            RewriteCond %{HTTP:UPGRADE} ^WebSocket$ [NC]
-            RewriteCond %{HTTP:CONNECTION} ^Upgrade$ [NC]
-            RewriteRule ^/(?!\.well-known)(.*) ws://localhost:{{ item.port }}%{REQUEST_URI} [P]
-            RewriteCond %{HTTPS} off
-            RewriteRule (.*) https://%{SERVER_NAME}%{REQUEST_URI} [R,L]
-            ProxyPreserveHost On
-            ProxyPassMatch ^/(?!\.well-known)(.*) http://localhost:{{ item.port }}/$1
-            ProxyPassReverse ^/(?!\.well-known)(.*) http://localhost:{{ item.port }}/$1
-      with_items: "{{ servers }}"
-      register: create_configs
-      tags:
-        - always
-    - set_fact: apache_vhosts_ssl_in="{{ create_configs.results | map(attribute='ansible_facts.apache_vhosts_ssl_in') | list }}"
-      tags:
-        - always
-    - set_fact: letsencrypt_cert_domains_in="{{ servers | map(attribute='servername') | list }}"
-      tags:
-        - always
-    - debug: var=apache_vhosts_ssl_in
-    - debug: var=letsencrypt_cert_domains_in
-    - debug: var=letsencrypt_cert_domains_in
+    - block:
+      - name: Initialize apache config variables
+        set_fact:
+          apache_vhosts_ssl_in:
+            servername: "{{ item.servername }}"
+            documentroot: "{{ webroot }}"
+            certificate_key_file: "{{ ssl_directory }}/privkey.pem"
+            certificate_file: "{{ ssl_directory }}/cert.pem"
+            certificate_chain_file: "{{ ssl_directory }}/chain.pem"
+            extra_parameters: |
+              RewriteEngine on
+              RewriteRule ^/internal.* [F]
+              RewriteCond %{HTTP:UPGRADE} ^WebSocket$ [NC]
+              RewriteCond %{HTTP:CONNECTION} ^Upgrade$ [NC]
+              RewriteRule ^/(?!\.well-known)(.*) ws://localhost:{{ item.port }}%{REQUEST_URI} [P]
+              RewriteCond %{HTTPS} off
+              RewriteRule (.*) https://%{SERVER_NAME}%{REQUEST_URI} [R,L]
+              ProxyPreserveHost On
+              ProxyPassMatch ^/(?!\.well-known)(.*) http://localhost:{{ item.port }}/$1
+              ProxyPassReverse ^/(?!\.well-known)(.*) http://localhost:{{ item.port }}/$1
+        with_items: "{{ servers }}"
+        register: create_configs
+      - set_fact: apache_vhosts_ssl_in="{{ create_configs.results | map(attribute='ansible_facts.apache_vhosts_ssl_in') | list }}"
+      - set_fact: letsencrypt_cert_domains_in="{{ servers | map(attribute='servername') | list }}"
       tags:
         - always
   roles:

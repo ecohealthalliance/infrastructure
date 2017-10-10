@@ -8,6 +8,14 @@
     - name: deploy-grits
       tags: deploy-grits
     - name: deploy-eidr-connect
-      tags: deploy-eidr-connect
+      tags: deploy-eidr-connect-bsve
+      eidr_connect_db_name: "eidr-connect-bsve"
+      eidr_connect_domain_name: "eidr-connect-bsve.eha.io"
+      eidr_connect_port: 3180
     - name: deploy-promed-scraper
       tags: deploy-promed-scraper
+    - name: deploy-eidr-connect
+      tags: deploy-eidr-connect
+      eidr_connect_db_name: "eidr-connect"
+      eidr_connect_domain_name: "eidr-connect.eha.io"
+      eidr_connect_port: 3080

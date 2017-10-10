@@ -4,10 +4,7 @@ services:
     image: grits
     container_name: grits
     ports:
-      - "3001:3001"
-      - "2025:25"
       - "2080:80"
-      - "20443:443"
     restart: always
     environment:
       - "GEONAME_LOOKUP_URL=http://geonames-api/"

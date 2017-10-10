@@ -6,12 +6,6 @@
     mode: get
     overwrite: "{{overwrite}}"
   register: gritsimage
-# TODO: For efficiency switch to commands and check timestamps
-# - name: Download grits image
-#   command: aws s3 cp s3://bsve-integration/grits.tar.gz /tmp/grits.tar.gz
-#   args:
-#     creates: /tmp/grits.tar.gz
-#   register: gritsimage
 - command: "gzip -dfk /tmp/grits.tar.gz"
   when: gritsimage.changed
 - name: Load grit image into docker
@@ -46,14 +40,14 @@
 - name: Copy compose directory
   synchronize: src="compose/" dest="/grits-compose"
 - name: Start grits services
-  recreate: always
   docker_service:
     project_src: /grits-compose
+    #recreate: always
   environment:
     elasticsearch_data_path: /mnt/elasticsearch/data
     ip_address: "{{ ansible_default_ipv4.address }}"
-# Needed to set API key
-# TODO Move config to jenkins
+# Needed to set API keys
+# TODO Move config to jenkins and pass in more variables through dockekr env
 - command: docker cp /home/ubuntu/source-vars.sh.backup grits:/source-vars.sh
 - command: docker exec grits bash -c 'source /source-vars.sh && /scripts/update-settings.sh'
 - command: docker exec grits bash -c 'source /source-vars.sh && /scripts/disease-label-autocomplete.sh'
