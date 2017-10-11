@@ -89,6 +89,7 @@ RUN apt-get install -y \
         libxslt1-dev \
         libjpeg-dev \
         python-software-properties \
+        bsdtar \
     && \
     apt-get clean all
 
@@ -182,9 +183,11 @@ COPY grits-api/flowerd.conf /etc/supervisor/conf.d/flowerd.conf
 COPY grits-api/flower.sh /flower.sh
 
 USER root
+COPY scripts /scripts
+RUN chmod -R +x /scripts
 
 #Install meteor
-RUN curl https://install.meteor.com | /bin/sh
+RUN /scripts/install-meteor.sh
 
 ### Diagnostic-Dashboard ##########################################################################################
 ENV DOMAIN=eha.io
@@ -229,7 +232,6 @@ COPY logging/supervisor-logging.conf /etc/supervisor/conf.d/supervisor-logging.c
 ADD supervisord.conf /etc/supervisor/supervisord.conf
 RUN mkdir -p /var/log/supervisor/
 
-COPY scripts /scripts
 VOLUME /etc/letsencrypt
 VOLUME /home/grits/diagnostic-dashboard
 COPY run.sh /run.sh

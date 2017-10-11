@@ -1,6 +1,6 @@
 - block:
     - name: Start netcat process to serve secrets to docker builds
-      shell: "echo {{ vault_password | default(0) }} | nc -l 14242"
+      shell: "echo {{ ansible_vault_password | default(0) }} | nc -l 14242"
       async: 100000
       poll: 0
     - name: Copy image directory
@@ -14,10 +14,13 @@
         force: yes
       when: image_name == 'eidr-connect'
     - name: Build image
-      docker_image:
-        path: "/{{image_name}}_docker"
-        name: "{{image_name}}"
-        force: "{{ force_image }}"
+      command: "docker build -t {{image_name}} /{{image_name}}_docker"
+    # This freezes on the spa image, but works on the second run
+    # - name: Build image
+    #   docker_image:
+    #     path: "/{{image_name}}_docker"
+    #     name: "{{image_name}}"
+    #     force: "{{ force_image }}"
     - name: Tar and zip image
       shell: "docker save {{image_name}} | gzip > /tmp/{{image_name}}.tar.gz"
     - name: Save image on s3
