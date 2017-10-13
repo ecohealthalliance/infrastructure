@@ -47,7 +47,7 @@ services:
     logging:
       options:
         max-size: 50m
-  
+
   mongodb:
     container_name: mongodb
     image: mongo:3.4.9

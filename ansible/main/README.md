@@ -6,7 +6,7 @@ This contains ansible scripts for:
 
 
 To initialize a multipule domain server,
-create a my_secure.yml file with ec2_access_key and ec2_secret_key variables,
+create a my_secure.yml file with aws_access_key and aws_secret_key variables,
 set the targets ip address in inventory.ini to its ip address,
 then run these commands:
 

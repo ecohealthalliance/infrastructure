@@ -8,7 +8,9 @@
     overwrite: never
   roles:
     - name: deploy-grits
-      tags: deploy-grits
+      tags:
+        - deploy-grits
+        - deploy-grits-without-worker
     - name: deploy-promed-scraper
       tags: deploy-promed-scraper
     - name: deploy-eidr-connect
@@ -21,3 +23,17 @@
       eidr_connect_db_name: "eidr-connect-bsve"
       eidr_connect_domain_name: "eidr-connect-bsve.eha.io"
       eidr_connect_port: 3180
+
+- hosts: grits-workers
+  remote_user: ubuntu
+  become: true
+  become_user: root
+  vars:
+    overwrite: always
+  roles:
+    - name: deploy-grits-worker
+      tags:
+        - deploy-grits
+        - deploy-grits-worker
+  vars_files:
+    - my_secure.yml

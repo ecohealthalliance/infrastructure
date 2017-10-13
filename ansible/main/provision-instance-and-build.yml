@@ -27,8 +27,8 @@
         - always
     - name: Provision an AWS instance
       ec2:
-        aws_access_key: "{{ ec2_access_key }}"
-        aws_secret_key: "{{ ec2_secret_key }}"
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
         group: "{{ aws_security_group }}"
         region: "us-east-1"
         key_name: "infrastructure"

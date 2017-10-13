@@ -1,0 +1,45 @@
+- name: Install common packages from apt
+  apt: pkg={{item}} state=installed update_cache=yes
+  with_items:
+    - git
+    - python-pip
+    - python-dev
+    - curl
+- name: Install global python modules
+  pip: name={{item}}
+  with_items:
+    - awscli
+    - virtualenv
+    - boto
+    - boto3
+    - botocore
+- name: Download grits image
+  aws_s3:
+    bucket: bsve-integration
+    object: grits.tar.gz
+    dest: /tmp/grits.tar.gz
+    mode: get
+    overwrite: "{{overwrite}}"
+    aws_access_key: "{{aws_access_key}}"
+    aws_secret_key: "{{aws_secret_key}}"
+  register: gritsimage
+- command: "gzip -dfk /tmp/grits.tar.gz"
+  when: gritsimage.changed
+- name: Load grit image into docker
+  shell: "docker load < /tmp/grits.tar"
+  when: gritsimage.changed
+- name: Copy compose directory
+  synchronize: src="compose/" dest="/grits-compose"
+  tags: work
+- name: Start grit worker
+  docker_service:
+    project_src: /grits-compose
+  tags: work
+
+# Needed to set API keys
+# TODO Move config to jenkins and pass in more variables through dockekr env
+# - command: docker cp /home/ubuntu/source-vars.sh.backup grits:/source-vars.sh
+# - command: docker exec grits bash -c 'source /source-vars.sh && /scripts/update-settings.sh'
+# - command: docker exec grits bash -c 'source /source-vars.sh && /scripts/disease-label-autocomplete.sh'
+# - command: docker kill grits
+# - command: docker start grits
