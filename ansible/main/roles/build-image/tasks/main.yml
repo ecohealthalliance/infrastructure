@@ -1,7 +1,8 @@
 - block:
+    - pip: name=pycrypto
     - name: Start netcat process to serve secrets to docker builds
-      shell: "echo {{ ansible_vault_password | default(0) }} | nc -l 14242"
-      async: 100000
+      shell: 'echo "{{ ansible_vault_password | default(0) }}" | nc -l 14242'
+      async: 1000000
       poll: 0
     - name: Copy image directory
       synchronize: src="../../docker/images/{{image_name}}/" dest="/{{image_name}}_docker"

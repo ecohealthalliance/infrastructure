@@ -13,7 +13,6 @@ ENV PORT="3001"
 ENV ROOT_URL="http://CHANGEME"
 ENV MAIL_URL="smtp://localhost"
 ENV GRID_URL="https://eidr.ecohealthalliance.org"
-ENV NLTK_DATA="$GRITS_HOME/nltk_data"
 ENV ANNOTATOR_DB_PATH="/shared/.annotator.sqlitedb"
 ENV BASIC_AUTH="CHANGEME"
 ENV GEONAME_LOOKUP_URL="http://geoname-lookup.eha.io/"
@@ -37,7 +36,6 @@ RUN touch /source-vars.sh &&\
     echo "#export ROOT_URL=$ROOT_URL" >> /source-vars.sh &&\
     echo "export MAIL_URL=$MAIL_URL" >> /source-vars.sh &&\
     echo "export GRID_URL=$GRID_URL" >> /source-vars.sh &&\
-    echo "export NLTK_DATA=$NLTK_DATA" >> /source-vars.sh &&\
     echo "export BASIC_AUTH=$BASIC_AUTH" >> /source-vars.sh &&\
     echo "export AWS_ACCESS_KEY_ID=CHANGEME" >> /source-vars.sh &&\
     echo "export AWS_SECRET_ACCESS_KEY=CHANGEME" >> /source-vars.sh &&\

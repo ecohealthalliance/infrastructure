@@ -48,7 +48,8 @@
     ip_address: "{{ ansible_default_ipv4.address }}"
 # Needed to set API keys
 # TODO Move config to jenkins and pass in more variables through dockekr env
-- command: docker cp /home/ubuntu/source-vars.sh.backup grits:/source-vars.sh
+- copy: content="{{grits_env_vars}}" dest="/home/ubuntu/source-vars.sh" force=yes
+- command: docker cp /home/ubuntu/source-vars.sh grits:/source-vars.sh
 - command: docker exec grits bash -c 'source /source-vars.sh && /scripts/update-settings.sh'
 - command: docker exec grits bash -c 'source /source-vars.sh && /scripts/disease-label-autocomplete.sh'
 - command: docker kill grits

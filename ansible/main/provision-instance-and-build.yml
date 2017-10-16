@@ -61,7 +61,7 @@
       tags:
         - always
     - name: Wait for the instances to boot by checking the ssh ports
-      wait_for: host="{{item.public_ip}}" port=22 delay=5 timeout=320 state=started
+      wait_for: host="{{item.public_ip}}" port=22 delay=8 timeout=320 state=started
       with_items: "{{ec2.tagged_instances}}"
       tags:
         - always
@@ -80,6 +80,8 @@
   remote_user: ubuntu
   become: true
   become_user: root
+  vars:
+    ansible_vault_password: "{{ lookup('file', 'vault_pass') }}"
   pre_tasks:
     - name: Cancel prior shutdown commands
       shell: "shutdown -c || true"

@@ -13,6 +13,9 @@
   - shell: "docker load < /tmp/promed-scraper.tar"
   when: image.changed
 
+- name: Create config.json
+  copy: content="{{promed_config | to_json}}" dest="/shared/promed-scraper/promed-scraper.json" force=yes
+
 - name: Copy compose directory
   synchronize: src="compose/" dest="/promed-scraper-compose"
 - name: Start services

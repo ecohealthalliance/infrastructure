@@ -8,7 +8,7 @@ services:
       - OTHER_ANSIBLE_PARAMS="--tags=promed,download-classifier,s3backup --skip-tags=preloadable"
       - TERM=xterm
     volumes:
-      - /shared:/shared
+      - /shared/promed-scraper:/shared
     restart: always
     logging:
       options:
