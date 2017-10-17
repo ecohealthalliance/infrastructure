@@ -10,7 +10,7 @@ services:
       - PORT=3000
       - SPA_MONGO_URL=mongodb://${ip_address}:27018/promed
     env_file:
-      - /shared/sensitive-environment-vars.env
+      - /shared/${domain_name}/sensitive-environment-vars.env
     ports:
       - "${port}:3000"
     restart: always

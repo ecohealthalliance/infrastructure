@@ -46,9 +46,11 @@
   environment:
     elasticsearch_data_path: /mnt/elasticsearch/data
     ip_address: "{{ ansible_default_ipv4.address }}"
-# Needed to set API keys
-# TODO Move config to jenkins and pass in more variables through dockekr env
-- copy: content="{{grits_env_vars}}" dest="/home/ubuntu/source-vars.sh" force=yes
+    google_translate_key: "{{ google_translate_key }}"
+- copy:
+    content: "{{ grits_env_vars }}"
+    dest: "/home/ubuntu/source-vars.sh"
+    force: yes
 - command: docker cp /home/ubuntu/source-vars.sh grits:/source-vars.sh
 - command: docker exec grits bash -c 'source /source-vars.sh && /scripts/update-settings.sh'
 - command: docker exec grits bash -c 'source /source-vars.sh && /scripts/disease-label-autocomplete.sh'
