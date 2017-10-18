@@ -1,5 +1,6 @@
 #!/bin/bash
 cd /opt/infrastructure/ansible/main
+ansible-galaxy install -r requirements.yml
 ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook provision-instance-and-build.yml \
   --private-key ~/.keys/infrastructure.pem \
   --extra-vars "image_name=eidr-connect"
