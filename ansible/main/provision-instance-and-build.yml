@@ -3,7 +3,8 @@
   become_method: sudo
   vars:
     instance_size: "c4.large"
-    aws_security_group: grits
+    aws_security_group: temp-instances
+    key_name: temp-instances
     instance_tag: "{{image_name}}-build-instance"
   tasks:
     - name: Check whether pip is installed
@@ -31,7 +32,7 @@
         aws_secret_key: "{{ aws_secret_key }}"
         group: "{{ aws_security_group }}"
         region: "us-east-1"
-        key_name: "infrastructure"
+        key_name: "{{ key_name }}"
         instance_type: "{{ instance_size }}"
         # Ubuntu 16.04 AWS stock image
         image: "ami-cd0f5cb6"
