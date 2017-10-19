@@ -1,0 +1,71 @@
+- hosts: targets
+  become: yes
+  become_user: root
+  vars:
+    # Add domain names here.
+    # When adding a new domain name, create the DNS record before running this
+    # script or it will fail.
+    servers:
+      - servername: "jenkins.eha.io"
+        port: 2080
+    webroot: "/var/www"
+    acme_tiny_challenges_directory: "/var/www/.well-known/acme-challenge"
+    cert_name: "multidomain_cert_2"
+    ssl_directory: "/etc/letsencrypt/live/{{cert_name}}"
+  pre_tasks:
+    - block:
+      - name: Initialize apache config variables
+        set_fact:
+          apache_vhosts_ssl_in:
+            servername: "{{ item.servername }}"
+            documentroot: "{{ webroot }}"
+            certificate_key_file: "{{ ssl_directory }}/privkey.pem"
+            certificate_file: "{{ ssl_directory }}/cert.pem"
+            certificate_chain_file: "{{ ssl_directory }}/chain.pem"
+            extra_parameters: |
+              RewriteEngine on
+              RewriteRule ^/internal.* [F]
+              RewriteCond %{HTTP:UPGRADE} ^WebSocket$ [NC]
+              RewriteCond %{HTTP:CONNECTION} ^Upgrade$ [NC]
+              RewriteRule ^/(?!\.well-known)(.*) ws://localhost:{{ item.port }}%{REQUEST_URI} [P]
+              RewriteCond %{HTTPS} off
+              RewriteRule (.*) https://%{SERVER_NAME}%{REQUEST_URI} [R,L]
+              ProxyPreserveHost On
+              ProxyPassMatch ^/(?!\.well-known)(.*) http://localhost:{{ item.port }}/$1
+              ProxyPassReverse ^/(?!\.well-known)(.*) http://localhost:{{ item.port }}/$1
+        with_items: "{{ servers }}"
+        register: create_configs
+      - set_fact: apache_vhosts_ssl_in="{{ create_configs.results | map(attribute='ansible_facts.apache_vhosts_ssl_in') | list }}"
+      - set_fact: letsencrypt_cert_domains_in="{{ servers | map(attribute='servername') | list }}"
+      tags:
+        - always
+  roles:
+    - name: init
+      tags: init
+    - name: kamaln7.swapfile
+      swapfile_size: 8GB
+      swapfile_location: "/swapfile"
+      tags: swap
+    - name: thefinn93.letsencrypt
+      letsencrypt_cert_domains: "{{ letsencrypt_cert_domains_in }}"
+      letsencrypt_webroot_path: "{{ webroot }}"
+      letsencrypt_email: "tech@ecohealthalliance.org"
+      letsencrypt_renewal_command_args: "--cert-name {{cert_name}}"
+      letsencrypt_standalone_command_args: "--cert-name {{cert_name}}"
+      tags: letsencrypt
+    - name: geerlingguy.apache
+      apache_mods_enabled:
+        - rewrite.load
+        - ssl.load
+        - proxy.load
+        - proxy_http.load
+        - alias.load
+        - proxy_wstunnel.load
+      apache_mods_disabled: []
+      apache_vhosts_ssl: "{{ apache_vhosts_ssl_in }}"
+      apache_vhosts: "{{ apache_vhosts_ssl_in }}"
+      tags: apache
+    - role: geerlingguy.java
+    - role: geerlingguy.jenkins
+      jenkins_hostname: jenkins.example.com
+      jenkins_http_port: 2080

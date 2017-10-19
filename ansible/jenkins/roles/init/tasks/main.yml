@@ -1,0 +1,29 @@
+---
+- name: Install common packages from apt
+  apt: pkg={{item}} state=installed update_cache=yes
+  with_items:
+    - git
+    - python3-pip
+    - python-pip
+    - python-dev
+    - curl
+- name: Install global python modules
+  pip: name={{item}}
+  with_items:
+    - awscli
+    - virtualenv
+    - boto
+    - boto3
+    - botocore
+    - ansible
+# - name: Create aws crendentials directory
+#   file: path=~/.aws state=directory
+# - name: Create aws credentials
+#   template: src=config.j2 dest=~/.aws/config
+# - block:
+#     - name: Add Mongo packages repo
+#       apt_key: id=0C49F3730359A14518585931BC711F9BA15703C6  keyserver=keyserver.ubuntu.com
+#     - name: add repo itself
+#       apt_repository: repo='deb http://repo.mongodb.org/apt/ubuntu {{ansible_distribution_release}}/mongodb-org/3.4 multiverse' state=present
+#     - name: install packages
+#       apt: pkg=mongodb-org-tools state=present
