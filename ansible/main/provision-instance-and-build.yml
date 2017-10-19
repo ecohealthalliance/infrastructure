@@ -28,6 +28,7 @@
         - always
     - name: Provision an AWS instance
       ec2:
+        instance_initiated_shutdown_behavior: terminate
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
         group: "{{ aws_security_group }}"
