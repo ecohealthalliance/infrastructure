@@ -3,9 +3,7 @@
   become: true
   become_user: root
   vars:
-    # Whether to overwrite any existing data and images with the ones from S3.
-    # The auto mode doesn't seem to work.
-    overwrite: never
+    overwrite: different
   roles:
     - name: deploy-grits
       tags:
@@ -30,7 +28,7 @@
   become: true
   become_user: root
   vars:
-    overwrite: always
+    overwrite: different
   roles:
     - name: deploy-grits-worker
       tags:
