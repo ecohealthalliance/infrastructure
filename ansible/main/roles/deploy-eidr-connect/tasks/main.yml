@@ -6,11 +6,12 @@
     mode: get
     overwrite: "{{overwrite}}"
   register: image
-- command: "gzip -dfk /tmp/eidr-connect.tar.gz"
-  when: image.changed
-- name: Load image into docker
-  shell: "docker load < /tmp/eidr-connect.tar"
-  when: image.changed
+- when: image.changed
+  block:
+  - command: "gzip -dfk /tmp/eidr-connect.tar.gz"
+  - name: Load image into docker
+    shell: "docker load < /tmp/eidr-connect.tar"
+
 - name: Copy compose directory
   synchronize: src="compose/" dest="/{{ eidr_connect_domain_name }}-compose"
 
@@ -19,7 +20,10 @@
 
 - when: eidr_connect_db_name == "eidr-connect"
   name: Create config.json
-  copy: content="{{ eidrc_config | to_json }}" dest="/shared/{{ eidr_connect_domain_name }}/settings.json" force=yes
+  copy:
+    content: "{{ eidrc_config | to_json }}"
+    dest: "/shared/{{ eidr_connect_domain_name }}/settings-production.json"
+    force: yes
   vars:
     eidrc_config:
       private:
@@ -38,6 +42,7 @@
     domain_name: "{{ eidr_connect_domain_name }}"
     db_name: "{{ eidr_connect_db_name }}"
     port: "{{ eidr_connect_port }}"
+
 - when: eidr_connect_db_name == "eidr-connect"
   block:
   - name: Download eidr-connect database dump
@@ -46,12 +51,11 @@
       object: mongodump-2017-10-10.tar.gz
       dest: /tmp/eidr-connect-dump.tar.gz
       mode: get
-      overwrite: "{{overwrite}}"
+      overwrite: never
     register: data
-  - name: Create database dump directory
-    file: path=/tmp/eidr-connect-dump state=directory
-  - command: tar -xvzf /tmp/eidr-connect-dump.tar.gz -C /tmp/eidr-connect-dump
-    when: data.changed
-  - command: mongorestore --host localhost:27017 --drop /tmp/eidr-connect-dump/var/log/dump/eidr-connect/ --db eidr-connect
-    when: data.changed
-
+  - when: data.changed
+    block:
+    - name: Create database dump directory
+      file: path=/tmp/eidr-connect-dump state=directory
+    - command: tar -xvzf /tmp/eidr-connect-dump.tar.gz -C /tmp/eidr-connect-dump
+    - command: mongorestore --host localhost:27017 --drop /tmp/eidr-connect-dump/var/log/dump/eidr-connect/ --db eidr-connect
