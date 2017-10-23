@@ -24,6 +24,7 @@ ENV DIAGNOSE_WORKERS=1
 ENV PROCESS_WORKERS=10
 ENV AUTOSTART_PROCESS_WORKERS=true
 ENV AUTOSTART_PRIORITY_WORKERS=true
+ENV AUTOSTART_DIAGNOSE_WORKERS=true
 
 #Environment variables do not get exported to all subshells.
 #Have to take this brute force approach

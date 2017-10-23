@@ -1,0 +1,41 @@
+- name: Download flirt image
+  aws_s3:
+    bucket: bsve-integration
+    object: flirt.tar.gz
+    dest: /tmp/flirt.tar.gz
+    mode: get
+    overwrite: "{{overwrite}}"
+  register: flirtimage
+
+- when: flirtimage.changed
+  block:
+  - command: "gzip -dfk /tmp/flirt.tar.gz"
+  - name: Load image into docker
+    shell: "docker load < /tmp/flirt.tar"
+
+- file: path="/shared/flirt" state=directory
+
+- name: Create meteor settings.json
+  copy:
+    content: "{{ flirt_settings | to_json }}"
+    dest: "/shared/flirt/settings-production.json"
+    force: yes
+  vars:
+    flirt_settings:
+      public:
+        analyticsSettings:
+          "Google Analytics":
+            trackingId": "UA-54918272-5"
+
+- name: Copy compose directory
+  synchronize: src="compose/" dest="/flirt-compose"
+
+- name: Start flirt services
+  docker_service:
+    project_src: /flirt-compose
+  environment:
+    mongo_host: 52.70.37.162
+    ip_address: "{{ ansible_default_ipv4.address }}"
+    aws_smtp_user: "{{ aws_smtp_user }}"
+    aws_smtp_password: "{{ aws_smtp_password }}"
+    flirt_port: "{{ flirt_port }}"

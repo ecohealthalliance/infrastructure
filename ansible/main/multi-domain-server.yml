@@ -17,6 +17,8 @@
         port: 3080
       - servername: "eidr-connect-bsve.eha.io"
         port: 3180
+      - servername: "flirt.eha.io"
+        port: 4080
     webroot: "/var/www"
     acme_tiny_challenges_directory: "/var/www/.well-known/acme-challenge"
     cert_name: "multidomain_cert_2"
@@ -65,6 +67,11 @@
       letsencrypt_standalone_command_args: "--cert-name {{cert_name}}"
       tags: letsencrypt
     - name: geerlingguy.apache
+      # The default vhost must be removed so the .well-known route from one of
+      # our vhosts will be served for newly added domains that do not have one.
+      # This is useful because it allows us to handle letsencrypt challenges
+      # before running the apache role to create a vhost for a new domain.
+      apache_remove_default_vhost: true
       apache_mods_enabled:
         - rewrite.load
         - ssl.load

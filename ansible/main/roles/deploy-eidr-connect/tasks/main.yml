@@ -18,6 +18,8 @@
 - name: Create sensitive-environment-vars.env
   copy: content="{{ eidr_connect_sensitive_envvars }}" dest="/shared/{{ eidr_connect_domain_name }}/sensitive-environment-vars.env" force=yes
 
+- file: path="/shared/{{ eidr_connect_domain_name }}" state=directory
+
 - when: eidr_connect_db_name == "eidr-connect"
   name: Create config.json
   copy:

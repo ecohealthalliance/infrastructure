@@ -1,0 +1,23 @@
+version: '2'
+services:
+  flirt:
+    container_name: flirt
+    image: flirt
+    environment:
+      - "MONGO_URL=mongodb://${mongo_host}:27017/flirt"
+      - "MONGO_URI=mongodb://${mongo_host}:27017"
+      - "MONGO_HOST=${mongo_host}"
+      - MONGO_DB=flirt
+      - MONGO_PORT=27017
+      - SIMULATION_PORT=45000
+      - "ROOT_URL=http://${ip_address}"
+      - PORT=3000
+      #- TERM=xterm
+      - "SMTP_USER=${aws_smtp_user}"
+      - "SMTP_PASSWORD=${aws_smtp_password}"
+    ports:
+      - "${flirt_port}:3000"
+    restart: always
+    volumes:
+      - /shared/flirt:/shared:ro
+    command: supervisord --nodaemon --config /etc/supervisor/supervisord.conf

@@ -5,6 +5,9 @@
   vars:
     overwrite: different
   roles:
+    - name: deploy-flirt
+      tags: deploy-flirt
+      flirt_port: 4080
     - name: deploy-grits
       tags:
         - deploy-grits
