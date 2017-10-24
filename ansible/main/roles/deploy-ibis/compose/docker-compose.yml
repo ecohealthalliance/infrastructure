@@ -1,0 +1,14 @@
+version: '2'
+services:
+  ibis:
+    container_name: ibis
+    image: ibis
+    environment:
+      - "MONGO_URL=mongodb://${ip_address}:27017/ibis"
+      - "SMTP_USER=${aws_smtp_user}"
+      - "SMTP_PASSWORD=${aws_smtp_password}"
+    ports:
+      - "5080:80"
+    restart: always
+    volumes:
+      - /shared/ibis:/shared:ro

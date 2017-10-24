@@ -1,0 +1,40 @@
+- name: Download ibis image
+  aws_s3:
+    bucket: bsve-integration
+    object: ibis.tar.gz
+    dest: /tmp/ibis.tar.gz
+    mode: get
+    overwrite: "{{overwrite}}"
+  register: ibisimage
+
+- when: ibisimage.changed
+  block:
+  - command: "gzip -dfk /tmp/ibis.tar.gz"
+  - name: Load image into docker
+    shell: "docker load < /tmp/ibis.tar"
+
+- file: path="/shared/ibis" state=directory
+
+- name: Create meteor settings.json
+  copy:
+    content: "{{ ibis_settings | to_json }}"
+    dest: "/shared/ibis/settings.json"
+    force: yes
+  vars:
+    ibis_settings:
+      public:
+        analyticsSettings:
+          "Google Analytics":
+            trackingId": "UA-54918272-10"
+
+- name: Copy compose directory
+  synchronize: src="compose/" dest="/ibis-compose"
+
+- name: Start ibis services
+  docker_service:
+    project_src: /ibis-compose
+  environment:
+    ip_address: "{{ ansible_default_ipv4.address }}"
+    aws_smtp_user: "{{ aws_smtp_user }}"
+    aws_smtp_password: "{{ aws_smtp_password }}"
+
