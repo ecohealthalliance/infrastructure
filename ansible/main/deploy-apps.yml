@@ -24,6 +24,8 @@
       eidr_connect_db_name: "eidr-connect-bsve"
       eidr_connect_domain_name: "eidr-connect-bsve.eha.io"
       eidr_connect_port: 3180
+    - name: deploy-ibis
+      tags: deploy-ibis
   vars_files:
     - my_secure.yml
 - hosts: grits-workers
