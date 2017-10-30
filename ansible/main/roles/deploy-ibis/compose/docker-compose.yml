@@ -4,11 +4,24 @@ services:
     container_name: ibis
     image: ibis
     environment:
-      - "MONGO_URL=mongodb://${ip_address}:27017/ibis"
+      - "MONGO_URL=mongodb://flight-mongodb:27017/ibis"
+      - "FLIGHT_MONGO_URL=mongodb://flight-mongodb:27017/flirt"
       - "SMTP_USER=${aws_smtp_user}"
       - "SMTP_PASSWORD=${aws_smtp_password}"
     ports:
       - "5080:80"
-    restart: always
+    restart: unless-stopped
     volumes:
       - /shared/ibis:/shared:ro
+
+  flight-mongodb:
+    container_name: flight-mongodb
+    # 1 GB
+    mem_limit: 1000000000
+    image: mongo:3.4.9
+    restart: unless-stopped
+    ports:
+      - 27019:27017
+    logging:
+      options:
+        max-size: 50m

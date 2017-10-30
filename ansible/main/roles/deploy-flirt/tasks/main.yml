@@ -34,7 +34,8 @@
   docker_service:
     project_src: /flirt-compose
   environment:
-    mongo_host: 52.70.37.162
+    mongo_host: "{{ ansible_default_ipv4.address }}"
+    mongo_port: 27019
     ip_address: "{{ ansible_default_ipv4.address }}"
     aws_smtp_user: "{{ aws_smtp_user }}"
     aws_smtp_password: "{{ aws_smtp_password }}"
