@@ -1,0 +1,76 @@
+- hosts: localhost
+  become: yes
+  become_method: sudo
+  roles:
+    - name: provision-instances
+      instance_size: "c4.large"
+      aws_security_group: temp-instances
+      key_name: temp-instances
+      instance_tag: "flight-data-import-instance"
+      host_group: ec2hosts
+      tags: always
+  vars_files:
+    - my_secure.yml
+
+- hosts: ec2hosts
+  vars:
+    # This private vpc ip must be used for security group source incoming
+    # traffic rules to take effect.
+    mongo_host: "172.30.2.108:27019"
+  # TODO: How to handle shutdown??
+  # pre_tasks:
+  #   - name: Cancel prior shutdown commands
+  #     shell: "shutdown -c || true"
+  #   - name: Shut down the instance in one hour (to cancel use shutdown -c)
+  #     shell: "shutdown -h +55 &"
+  roles:
+    - name: init
+      become: yes
+      become_method: sudo
+    - name: kamaln7.swapfile
+      swapfile_size: 16GB
+      swapfile_location: "/swapfile"
+      become: yes
+      become_method: sudo
+      tags: swap
+  tasks:
+    - file: path="/flirt-consume" state=directory mode="a+rwx"
+      become: yes
+      become_user: root
+    - name: Get consume script from github
+      git:
+        repo: "https://github.com/ecohealthalliance/flirt-consume.git"
+        dest: "/flirt-consume"
+        recursive: no
+        force: yes
+    - template:
+        src: flirt-consume-settings.py.j2
+        dest: "/flirt-consume/settings_dev.py"
+    - name: Restore airports collection
+      command: "mongorestore --host {{mongo_host}} --db flirt --collection airports data/airports/airports.bson"
+      args:
+        chdir: /flirt-consume
+    - pip:
+        virtualenv: /flirt-consume/venv
+        virtualenv_python: python3
+        requirements: /flirt-consume/requirements.txt
+    - name: Create legs collection
+      shell: "venv/bin/python process.py > >(tee -a process.legs.log) 2> >(tee -a process.legs.error.log >&2)"
+      args:
+        chdir: /flirt-consume
+      become: yes
+      become_user: root
+      async: 1000000000000000000000000000000
+      poll: 0
+    - pause:
+        minutes: 10
+    - name: Create flights collection
+      shell: "venv/bin/python process.py -f > >(tee -a process.log) 2> >(tee -a process.error.log >&2)"
+      args:
+        chdir: /flirt-consume
+      become: yes
+      become_user: root
+      async: 1000000000000000000000000000000
+      poll: 0
+  vars_files:
+    - my_secure.yml
