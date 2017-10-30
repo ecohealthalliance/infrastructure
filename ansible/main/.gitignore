@@ -1,5 +1,4 @@
 .imported_roles
 logs
 *.retry
-my_secure.yml
 vault_pass
