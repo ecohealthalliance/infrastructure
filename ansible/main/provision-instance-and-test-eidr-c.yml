@@ -1,21 +1,12 @@
 - hosts: localhost
   become: yes
   become_method: sudo
-  tasks:
-    - name: Copy private promed_mail_scraper repo from github into docker image directory
-      git:
-        repo: "git@github.com:ecohealthalliance/promed_mail_scraper.git"
-        dest: "../../docker/images/promed-scraper/promed_mail_scraper"
-        key_file: "~/.ssh/id_rsa"
-        recursive: no
-        force: yes
-      when: image_name == 'promed-scraper'
   roles:
     - name: provision-instances
       instance_size: "c4.large"
       aws_security_group: temp-instances
       key_name: temp-instances
-      instance_tag: "{{image_name}}-build-instance"
+      instance_tag: "ci-test-instance"
       host_group: ec2hosts
       tags: always
   vars_files:
@@ -41,8 +32,15 @@
       tags: docker
     - name: init
       tags: init
-    - name: build-image
-      force_image: no
-      tags: build-image
+  tasks:
+    - name: Create sensitive-environment-vars.env
+      copy: content="{{ eidr_connect_sensitive_envvars }}" dest="/shared/eidr-connect/sensitive-environment-vars.env" force=yes
+    - file: path="/shared/eidr-connect/settings-dev.json"
+    - name: Copy image directory
+      synchronize: src="{{ docker_image_path }}" dest="/docker_image"
+    - name: Build image
+      command: "docker build -t eidr-connect-test -f /docker_image/test.Dockerfile /docker_image/"
+    - name: Start app
+      command: "docker-compose -f /docker_image/eidr-connect-test.yml up -d"
   vars_files:
     - my_secure.yml
