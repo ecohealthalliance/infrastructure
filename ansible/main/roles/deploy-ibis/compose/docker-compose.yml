@@ -16,8 +16,8 @@ services:
 
   flight-mongodb:
     container_name: flight-mongodb
-    # 1 GB
-    mem_limit: 1000000000
+    # 4 GB
+    mem_limit: 4000000000
     image: mongo:3.4.9
     restart: unless-stopped
     ports:
