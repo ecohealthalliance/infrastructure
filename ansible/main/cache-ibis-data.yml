@@ -1,0 +1,73 @@
+- hosts: localhost
+  become: yes
+  become_method: sudo
+  roles:
+    - name: provision-instances
+      instance_size: "c4.large"
+      aws_security_group: temp-instances
+      key_name: temp-instances
+      instance_tag: "flight-processing-instance"
+      host_group: ec2hosts
+      tags: always
+  vars_files:
+    - my_secure.yml
+
+- hosts: ec2hosts
+  vars:
+    # This private vpc ip must be used for security group source incoming
+    # traffic rules to take effect.
+    mongo_host: "172.30.2.108:27019"
+  roles:
+    - name: init
+      become: yes
+      become_method: sudo
+    - name: kamaln7.swapfile
+      swapfile_size: 16GB
+      swapfile_location: "/swapfile"
+      become: yes
+      become_method: sudo
+      tags: swap
+  pre_tasks:
+    - name: Cancel prior shutdown commands
+      shell: "shutdown -c || true"
+    - name: "Shut down the instance in {{minutes}} minutes (to cancel use shutdown -c)"
+      shell: "shutdown -h +{{minutes}} &"
+      vars:
+        minutes: 295
+  tasks:
+    - file: path="/flirt-simulation-service" state=directory mode="a+rwx"
+      become: yes
+      become_user: root
+    - name: Get get simulator code
+      git:
+        repo: "https://github.com/ecohealthalliance/flirt-simulation-service.git"
+        dest: "/flirt-simulation-service"
+        recursive: no
+        force: yes
+    - pip:
+        virtualenv: /flirt-simulation-service/venv
+        virtualenv_python: python
+        requirements: /flirt-simulation-service/requirements.txt
+    - pip:
+        virtualenv: /flirt-simulation-service/venv
+        virtualenv_python: python
+        requirements: /flirt-simulation-service/simulator/requirements.pip
+    - block:
+      - name: Start workers
+        shell: "/flirt-simulation-service/venv/bin/celery worker -A tasks --loglevel=INFO --concurrency=3 -Q caching  > >(tee -a worker.log) 2> >(tee -a worker.error.log >&2)"
+        async: 1000000000000000000000000000000
+        poll: 0
+        args:
+          chdir: /flirt-simulation-service/simulator
+      - name: Queue simulations and wait for them to complete
+        shell: "/flirt-simulation-service/venv/bin/python cache_airport_flows.py"
+        args:
+          chdir: /flirt-simulation-service
+      environment:
+        MONGO_URI: "mongodb://{{mongo_host}}"
+      become: yes
+      become_user: root
+    - name: "Terminate instance"
+      shell: "shutdown -h 0"
+  vars_files:
+    - my_secure.yml
