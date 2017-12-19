@@ -69,5 +69,7 @@
       become_user: root
     - name: "Terminate instance"
       shell: "shutdown -h 0"
+      become: yes
+      become_user: root
   vars_files:
     - my_secure.yml
