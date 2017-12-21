@@ -18,11 +18,13 @@
     # traffic rules to take effect.
     mongo_host: "172.30.2.108:27019"
   # TODO: How to handle shutdown??
-  # pre_tasks:
-  #   - name: Cancel prior shutdown commands
-  #     shell: "shutdown -c || true"
-  #   - name: Shut down the instance in one hour (to cancel use shutdown -c)
-  #     shell: "shutdown -h +55 &"
+  pre_tasks:
+    - name: Cancel prior shutdown commands
+      shell: "shutdown -c || true"
+    - name: "Shut down the instance in {{minutes}} minutes (to cancel use shutdown -c)"
+      shell: "shutdown -h +{{minutes}} &"
+      vars:
+        minutes: 295
   roles:
     - name: init
       become: yes
