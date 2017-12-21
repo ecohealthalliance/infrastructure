@@ -17,7 +17,6 @@
     # This private vpc ip must be used for security group source incoming
     # traffic rules to take effect.
     mongo_host: "172.30.2.108:27019"
-  # TODO: How to handle shutdown??
   pre_tasks:
     - name: Cancel prior shutdown commands
       shell: "shutdown -c || true"
