@@ -79,4 +79,4 @@ ENV MONGO_DB="flirt"
 ENV MONGO_URI="mongodb://$MONGO_HOST:$MONGO_PORT/$MONGO_DB"
 EXPOSE 80
 COPY run.sh /run.sh
-CMD bash run.sh
+CMD service supervisor start
