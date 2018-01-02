@@ -17,6 +17,8 @@
     # This private vpc ip must be used for security group source incoming
     # traffic rules to take effect.
     mongo_host: "172.30.2.108:27019"
+    concurrency: 3
+    cache_airport_flows_script: "cache_airport_flows.py"
   roles:
     - name: init
       become: yes
@@ -54,13 +56,13 @@
         requirements: /flirt-simulation-service/simulator/requirements.pip
     - block:
       - name: Start workers
-        shell: "/flirt-simulation-service/venv/bin/celery worker -A tasks --loglevel=INFO --concurrency=3 -Q caching  > >(tee -a worker.log) 2> >(tee -a worker.error.log >&2)"
+        shell: "/flirt-simulation-service/venv/bin/celery worker -A tasks --loglevel=INFO --concurrency={{concurrency}} -Q caching  > >(tee -a worker.log) 2> >(tee -a worker.error.log >&2)"
         async: 1000000000000000000000000000000
         poll: 0
         args:
           chdir: /flirt-simulation-service/simulator
       - name: Queue simulations and wait for them to complete
-        shell: "/flirt-simulation-service/venv/bin/python cache_airport_flows.py"
+        shell: "/flirt-simulation-service/venv/bin/python {{cache_airport_flows_script}}"
         args:
           chdir: /flirt-simulation-service
       environment:
