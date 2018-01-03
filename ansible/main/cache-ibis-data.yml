@@ -18,7 +18,14 @@
     # traffic rules to take effect.
     mongo_host: "172.30.2.108:27019"
     concurrency: 3
-    cache_airport_flows_script: "cache_airport_flows.py"
+    start_date: "{{ansible_date_time.date}}"
+    periods: 1
+    # Pandas date_range frequency
+    # http://pandas.pydata.org/pandas-docs/version/0.19.1/generated/pandas.date_range.html
+    freq: '14D'
+    sim_groups:
+      - 'ibis14day'
+    shutdown_minutes: 295
   roles:
     - name: init
       become: yes
@@ -32,10 +39,8 @@
   pre_tasks:
     - name: Cancel prior shutdown commands
       shell: "shutdown -c || true"
-    - name: "Shut down the instance in {{minutes}} minutes (to cancel use shutdown -c)"
-      shell: "shutdown -h +{{minutes}} &"
-      vars:
-        minutes: 295
+    - name: "Shut down the instance in {{shutdown_minutes}} minutes (to cancel use shutdown -c)"
+      shell: "shutdown -h +{{shutdown_minutes}} &"
   tasks:
     - file: path="/flirt-simulation-service" state=directory mode="a+rwx"
       become: yes
@@ -62,9 +67,10 @@
         args:
           chdir: /flirt-simulation-service/simulator
       - name: Queue simulations and wait for them to complete
-        shell: "/flirt-simulation-service/venv/bin/python {{cache_airport_flows_script}}"
+        shell: "/flirt-simulation-service/venv/bin/python cache_airport_flows_periodic.py --start_date {{start_date}} --sim_group {{item}} --periods {{periods}} --freq {{freq}}"
         args:
           chdir: /flirt-simulation-service
+        with_items: "{{sim_groups}}"
       environment:
         MONGO_URI: "mongodb://{{mongo_host}}"
       become: yes
