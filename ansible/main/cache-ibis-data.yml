@@ -76,7 +76,7 @@
       become: yes
       become_user: root
     - name: "Terminate instance"
-      shell: "shutdown -h 0"
+      shell: "shutdown -h +1 &"
       become: yes
       become_user: root
   vars_files:
