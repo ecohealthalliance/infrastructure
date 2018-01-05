@@ -1,0 +1,67 @@
+- hosts: localhost
+  become: yes
+  become_method: sudo
+  roles:
+    - name: provision-instances
+      instance_size: "t2.small"
+      aws_security_group: temp-instances
+      key_name: temp-instances
+      instance_tag: "flight-analysis-instance"
+      host_group: ec2hosts
+      tags: always
+  vars_files:
+    - my_secure.yml
+
+- hosts: ec2hosts
+  vars:
+    # This private vpc ip must be used for security group source incoming
+    # traffic rules to take effect.
+    mongo_host: "172.30.2.108:27019"
+    shutdown_minutes: 295
+  roles:
+    - name: init
+      become: yes
+      become_method: sudo
+    - name: kamaln7.swapfile
+      swapfile_size: 16GB
+      swapfile_location: "/swapfile"
+      become: yes
+      become_method: sudo
+      tags: swap
+  pre_tasks:
+    - name: Cancel prior shutdown commands
+      shell: "shutdown -c || true"
+    - name: "Shut down the instance in {{shutdown_minutes}} minutes (to cancel use shutdown -c)"
+      shell: "shutdown -h +{{shutdown_minutes}} &"
+  tasks:
+    - file: path="/flight-data-notebook" state=directory mode="a+rwx"
+      become: yes
+      become_user: root
+    - name: Get get simulator code
+      git:
+        repo: "https://github.com/ecohealthalliance/flight-data-notebook.git"
+        dest: "/flight-data-notebook"
+        recursive: no
+        force: yes
+    - pip:
+        virtualenv: /flight-data-notebook/venv
+        virtualenv_python: python
+        requirements: /flight-data-notebook/requirements.pip
+    - name: Install matplotlib
+      shell: /flight-data-notebook/venv/bin/python -mpip install -U matplotlib
+    - name: Run validation script
+      shell: "/flight-data-notebook/venv/bin/jupyter nbconvert --execute --ExecutePreprocessor.timeout=None --allow-errors flight-data-validation.ipynb"
+      args:
+        chdir: /flight-data-notebook
+      environment:
+        MONGO_HOST: "{{mongo_host}}"
+    - name: Save results to S3
+      command: "aws s3 cp --acl public-read /flight-data-notebook/flight-data-validation.html s3://apps.eha.io/"
+      become: yes
+      become_user: root
+    - name: "Terminate instance"
+      shell: "shutdown -h +10 &"
+      become: yes
+      become_user: root
+  vars_files:
+    - my_secure.yml
