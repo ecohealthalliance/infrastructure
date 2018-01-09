@@ -47,6 +47,8 @@
         virtualenv: /flight-data-notebook/venv
         virtualenv_python: python
         requirements: /flight-data-notebook/requirements.pip
+    - name: Install unzip
+      apt: pkg=unzip state=installed
     - name: Install matplotlib
       shell: /flight-data-notebook/venv/bin/python -mpip install -U matplotlib
     - name: Run validation script
