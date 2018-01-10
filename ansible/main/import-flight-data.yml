@@ -3,7 +3,7 @@
   become_method: sudo
   roles:
     - name: provision-instances
-      instance_size: "c4.large"
+      instance_size: "t2.medium"
       aws_security_group: temp-instances
       key_name: temp-instances
       instance_tag: "flight-data-import-instance"
@@ -20,10 +20,14 @@
   pre_tasks:
     - name: Cancel prior shutdown commands
       shell: "shutdown -c || true"
+      become: yes
+      become_user: root
     - name: "Shut down the instance in {{minutes}} minutes (to cancel use shutdown -c)"
       shell: "shutdown -h +{{minutes}} &"
       vars:
-        minutes: 295
+        minutes: 595
+      become: yes
+      become_user: root
   roles:
     - name: init
       become: yes
