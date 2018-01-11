@@ -39,8 +39,12 @@
   pre_tasks:
     - name: Cancel prior shutdown commands
       shell: "shutdown -c || true"
+      become: yes
+      become_user: root
     - name: "Shut down the instance in {{shutdown_minutes}} minutes (to cancel use shutdown -c)"
       shell: "shutdown -h +{{shutdown_minutes}} &"
+      become: yes
+      become_user: root
   tasks:
     - file: path="/flirt-simulation-service" state=directory mode="a+rwx"
       become: yes

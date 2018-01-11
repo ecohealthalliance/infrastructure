@@ -31,8 +31,12 @@
   pre_tasks:
     - name: Cancel prior shutdown commands
       shell: "shutdown -c || true"
+      become: yes
+      become_user: root
     - name: "Shut down the instance in {{shutdown_minutes}} minutes (to cancel use shutdown -c)"
       shell: "shutdown -h +{{shutdown_minutes}} &"
+      become: yes
+      become_user: root
   tasks:
     - file: path="/flight-data-notebook" state=directory mode="a+rwx"
       become: yes
@@ -49,6 +53,8 @@
         requirements: /flight-data-notebook/requirements.pip
     - name: Install unzip
       apt: pkg=unzip state=installed
+      become: yes
+      become_method: sudo
     - name: Install matplotlib
       shell: /flight-data-notebook/venv/bin/python -mpip install -U matplotlib
     - name: Run validation script
