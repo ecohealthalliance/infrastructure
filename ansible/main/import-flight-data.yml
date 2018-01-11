@@ -3,7 +3,7 @@
   become_method: sudo
   roles:
     - name: provision-instances
-      instance_size: "t2.medium"
+      instance_size: "m3.medium"
       aws_security_group: temp-instances
       key_name: temp-instances
       instance_tag: "flight-data-import-instance"
@@ -62,18 +62,10 @@
         shell: "venv/bin/python process.py --flights > >(tee -a process.log) 2> >(tee -a process.error.log >&2)"
         args:
           chdir: /flirt-consume
-        async: 1000000000000000000000000000000
-        poll: 0
-        register: "flight_import"
-      - name: Wait for CSV downloads to complete
-        pause:
-          minutes: 10
       - name: Create legs collection
         shell: "venv/bin/python process.py > >(tee -a process.legs.log) 2> >(tee -a process.legs.error.log >&2)"
         args:
           chdir: /flirt-consume
-        async: 1000000000000000000000000000000
-        poll: 0
         when: not flights_only
       environment:
         FLIGHT_GLOBAL_FTP_URL: 'ftp.us.flightglobal.com'
@@ -83,12 +75,5 @@
         MONGO_DB: 'flirt'
       become: yes
       become_user: root
-    - name: Check if import is complete
-      async_status:
-        jid: "{{ flight_import.ansible_job_id }}"
-      register: job_result
-      until: job_result.finished
-      retries: 100
-      delay: 600
   vars_files:
     - my_secure.yml
