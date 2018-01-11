@@ -17,6 +17,7 @@
     # This private vpc ip must be used for security group source incoming
     # traffic rules to take effect.
     mongo_host: "172.30.2.108:27019"
+    flights_only: false
   pre_tasks:
     - name: Cancel prior shutdown commands
       shell: "shutdown -c || true"
@@ -73,13 +74,7 @@
           chdir: /flirt-consume
         async: 1000000000000000000000000000000
         poll: 0
-      - name: Check if import is complete
-        async_status:
-          jid: "{{ flight_import.ansible_job_id }}"
-        register: job_result
-        until: job_result.finished
-        retries: 100
-        delay: 600
+        when: not flights_only
       environment:
         FLIGHT_GLOBAL_FTP_URL: 'ftp.us.flightglobal.com'
         FLIGHT_GLOBAL_FTP_UNAME: '{{ flightglobal_user }}'
@@ -88,5 +83,12 @@
         MONGO_DB: 'flirt'
       become: yes
       become_user: root
+    - name: Check if import is complete
+      async_status:
+        jid: "{{ flight_import.ansible_job_id }}"
+      register: job_result
+      until: job_result.finished
+      retries: 100
+      delay: 600
   vars_files:
     - my_secure.yml
