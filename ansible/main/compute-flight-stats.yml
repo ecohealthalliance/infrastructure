@@ -55,6 +55,11 @@
       apt: pkg=unzip state=installed
       become: yes
       become_method: sudo
+    - name: Get BTS Data
+      command: aws s3 cp s3://eha-flirt/BTS_T100_MARKET_ALL_CARRIER.zip /flight-data-notebook
+      become: yes
+      become_user: root
+    - command: unzip /flight-data-notebook/BTS_T100_MARKET_ALL_CARRIER.zip
     - name: Install matplotlib
       shell: /flight-data-notebook/venv/bin/python -mpip install -U matplotlib
     - name: Run validation script
