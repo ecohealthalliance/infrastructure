@@ -60,6 +60,8 @@
       become: yes
       become_user: root
     - command: unzip /flight-data-notebook/BTS_T100_MARKET_ALL_CARRIER.zip
+      args:
+        chdir: /flight-data-notebook
     - name: Install matplotlib
       shell: /flight-data-notebook/venv/bin/python -mpip install -U matplotlib
     - name: Run validation script
