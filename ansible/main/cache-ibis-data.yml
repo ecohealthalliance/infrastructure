@@ -79,6 +79,26 @@
         MONGO_URI: "mongodb://{{mongo_host}}"
       become: yes
       become_user: root
+    - block:
+      - name: Get IBIS code
+        git:
+          repo: "https://github.com/ecohealthalliance/ibis.git"
+          dest: "/ibis"
+          recursive: no
+          force: yes
+      - pip:
+          virtualenv: /ibis/venv
+          virtualenv_python: python
+          name:
+            - jupyter
+            - pymongo
+      - shell: "/ibis/venv/jupyter nbconvert --execute --ExecutePreprocessor.kernel_name=python --ExecutePreprocessor.timeout=None --allow-errors .scripts/rank_events.ipynb --output ../public/rank_event.html"
+        args:
+          chdir: /ibis
+        environment:
+          MONGO_HOST: "{{mongo_host}}"
+      become: yes
+      become_user: root
     - name: "Terminate instance"
       shell: "shutdown -h +1 &"
       become: yes
