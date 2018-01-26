@@ -92,11 +92,15 @@
           name:
             - jupyter
             - pymongo
-      - shell: "/ibis/venv/jupyter nbconvert --execute --ExecutePreprocessor.kernel_name=python --ExecutePreprocessor.timeout=None --allow-errors .scripts/rank_events.ipynb --output ../public/rank_event.html"
+            - requests
+            - pandas
+      - shell: "/ibis/venv/bin/jupyter nbconvert --execute --ExecutePreprocessor.kernel_name=python --ExecutePreprocessor.timeout=None --allow-errors .scripts/rank_events.ipynb --output ../public/rank_events_result.html"
         args:
           chdir: /ibis
         environment:
           MONGO_HOST: "{{mongo_host}}"
+      - name: Save results to S3
+        command: "aws s3 cp --acl public-read /ibis/public/rank_events_result.html s3://apps.eha.io/"
       become: yes
       become_user: root
     - name: "Terminate instance"
