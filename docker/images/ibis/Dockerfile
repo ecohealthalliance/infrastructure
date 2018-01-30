@@ -2,8 +2,10 @@ FROM ubuntu:16.04
 
 # Install apt package dependencies
 RUN apt-get clean all && apt-get update && \
-    apt-get -y install wget curl python make g++ git && \
+    apt-get -y install wget curl python make g++ git cron pip && \
     apt-get clean all
+
+RUN pip install jupyter pymongo requests pandas
 
 # Install Meteor
 RUN curl https://install.meteor.com/ | sh
@@ -31,5 +33,8 @@ WORKDIR /
 ENV ROOT_URL http://ibis.eha.io
 ENV PORT 80
 
+
+RUN echo "0 */3 * * * (cd /app && source /.env && jupyter nbconvert --execute --ExecutePreprocessor.kernel_name=python --ExecutePreprocessor.timeout=None --allow-errors .scripts/rank_events.ipynb --output ../public/rank_events.html) >> cron.log" | crontab -
+
 # Start application
-CMD meteor node /home/meteor/build/bundle/main.js
+CMD ['sh', '-c', 'env > /.env && cron && meteor node /home/meteor/build/bundle/main.js']
