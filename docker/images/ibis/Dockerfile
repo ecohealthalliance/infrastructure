@@ -2,7 +2,7 @@ FROM ubuntu:16.04
 
 # Install apt package dependencies
 RUN apt-get clean all && apt-get update && \
-    apt-get -y install wget curl python make g++ git cron pip && \
+    apt-get -y install wget curl python make g++ git cron python-pip && \
     apt-get clean all
 
 RUN pip install jupyter pymongo requests pandas
