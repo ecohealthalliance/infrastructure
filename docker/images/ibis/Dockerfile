@@ -5,7 +5,12 @@ RUN apt-get clean all && apt-get update && \
     apt-get -y install wget curl python make g++ git cron python-pip && \
     apt-get clean all
 
-RUN pip install jupyter pymongo requests pandas
+RUN pip install jupyter pymongo requests pandas epitator
+
+# Install EpiTator dependencies
+RUN python -m spacy download en_core_web_sm
+RUN python -m epitator.importers.import_disease_ontology
+RUN python -m epitator.importers.import_wikidata
 
 # Install Meteor
 RUN curl https://install.meteor.com/ | sh
@@ -32,7 +37,6 @@ WORKDIR /
 
 ENV ROOT_URL http://ibis.eha.io
 ENV PORT 80
-
 
 RUN echo "0 */3 * * * (cd /app && . /.env && MONGO_HOST=\$MONGO_HOST jupyter nbconvert --execute --ExecutePreprocessor.kernel_name=python --ExecutePreprocessor.timeout=None --allow-errors .scripts/rank_events.ipynb --output ../public/rank_events.html) >> cron.log >> cron.error.log" | crontab -
 
