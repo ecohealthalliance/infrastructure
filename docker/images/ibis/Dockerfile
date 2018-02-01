@@ -37,4 +37,4 @@ ENV PORT 80
 RUN echo "0 */3 * * * (cd /app && . /.env && MONGO_HOST=\$MONGO_HOST jupyter nbconvert --execute --ExecutePreprocessor.kernel_name=python --ExecutePreprocessor.timeout=None --allow-errors .scripts/rank_events.ipynb --output ../public/rank_events.html) >> cron.log >> cron.error.log" | crontab -
 
 # Start application
-CMD ["sh", "-c", "'env > /.env && cron && meteor node /home/meteor/build/bundle/main.js'"]
+CMD ["sh", "-c", "env > /.env && cron && meteor node /home/meteor/build/bundle/main.js"]
