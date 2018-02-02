@@ -1,6 +1,4 @@
 - hosts: localhost
-  become: yes
-  become_method: sudo
   tasks:
     - name: Copy private promed_mail_scraper repo from github into docker image directory
       git:
@@ -18,6 +16,8 @@
       instance_tag: "{{image_name}}-build-instance"
       host_group: ec2hosts
       tags: always
+      become: yes
+      become_method: sudo
   vars_files:
     - my_secure.yml
 
