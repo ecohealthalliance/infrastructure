@@ -7,6 +7,7 @@
         repo: "git@github.com:ecohealthalliance/promed_mail_scraper.git"
         dest: "../../docker/images/promed-scraper/promed_mail_scraper"
         key_file: "/var/lib/jenkins/.ssh/id_rsa"
+        ssh_opts: "-o StrictHostKeyChecking=no"
         recursive: no
         force: yes
       when: image_name == 'promed-scraper'
