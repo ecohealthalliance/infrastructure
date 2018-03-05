@@ -56,16 +56,18 @@
       become: yes
       become_method: sudo
     - block:
-      - name: Get BTS Data
-        command: aws s3 cp s3://eha-flirt/{{item}.zip /flight-data-notebook
-        become: yes
-        become_user: root
-      - command: unzip /flight-data-notebook/{{item}}.zip
-        args:
-          chdir: /flight-data-notebook
-      with_items:
-        - "BTS_T100_MARKET_ALL_CARRIER.zip"
-        - "BTS_T100_SEGMENT_ALL_CARRIER.zip"
+      - name: Get BTS Market Data
+        command: aws s3 cp s3://eha-flirt/BTS_T100_MARKET_ALL_CARRIER.zip /flight-data-notebook
+      - name: Get BTS Segment Data
+        command: aws s3 cp s3://eha-flirt/BTS_T100_SEGMENT_ALL_CARRIER.zip /flight-data-notebook
+      become: yes
+      become_user: root
+    - command: unzip /flight-data-notebook/BTS_T100_MARKET_ALL_CARRIER.zip
+      args:
+        chdir: /flight-data-notebook
+    - command: unzip /flight-data-notebook/BTS_T100_SEGMENT_ALL_CARRIER.zip
+      args:
+        chdir: /flight-data-notebook
     - name: Install matplotlib
       shell: /flight-data-notebook/venv/bin/python -mpip install -U matplotlib
     - name: Run validation script
