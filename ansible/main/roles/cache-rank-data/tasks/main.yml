@@ -36,9 +36,14 @@
     args:
       creates: /ibis/.scripts/gpw
       chdir: /ibis/.scripts
-  - name: Install EpiTator dependencies
+  - name: Run event ranking script
     shell: /ibis/venv/bin/python rank_events.py
     args:
       chdir: /ibis/.scripts
+    ignore_errors: yes
+    register: rank_events_result
+  - debug: var=rank_events_result.stdout_lines
+  - debug: var=rank_events_result.stderr_lines
+    when: rank_events_result.stderr_lines
   environment:
     MONGO_HOST: "mongodb://{{mongo_host}}"

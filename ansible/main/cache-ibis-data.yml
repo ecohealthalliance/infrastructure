@@ -45,10 +45,7 @@
       become: yes
       become_method: sudo
       tags: swap
-    # - name: cache-sim-data
-    #   become: yes
-    #   become_user: root
-    - name: cache-rank-data
+    - name: cache-sim-data
       become: yes
       become_user: root
   tasks:
