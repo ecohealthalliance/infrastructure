@@ -26,6 +26,15 @@
     sim_groups:
       - 'ibis14day'
     shutdown_minutes: 295
+  pre_tasks:
+    - name: Cancel prior shutdown commands
+      shell: "shutdown -c || true"
+      become: yes
+      become_user: root
+    - name: "Shut down the instance in {{shutdown_minutes}} minutes (to cancel use shutdown -c)"
+      shell: "shutdown -h +{{shutdown_minutes}} &"
+      become: yes
+      become_user: root
   roles:
     - name: init
       become: yes
@@ -36,49 +45,13 @@
       become: yes
       become_method: sudo
       tags: swap
-  pre_tasks:
-    - name: Cancel prior shutdown commands
-      shell: "shutdown -c || true"
-      become: yes
-      become_user: root
-    - name: "Shut down the instance in {{shutdown_minutes}} minutes (to cancel use shutdown -c)"
-      shell: "shutdown -h +{{shutdown_minutes}} &"
+    # - name: cache-sim-data
+    #   become: yes
+    #   become_user: root
+    - name: cache-rank-data
       become: yes
       become_user: root
   tasks:
-    - file: path="/flirt-simulation-service" state=directory mode="a+rwx"
-      become: yes
-      become_user: root
-    - name: Get get simulator code
-      git:
-        repo: "https://github.com/ecohealthalliance/flirt-simulation-service.git"
-        dest: "/flirt-simulation-service"
-        recursive: no
-        force: yes
-    - pip:
-        virtualenv: /flirt-simulation-service/venv
-        virtualenv_python: python
-        requirements: /flirt-simulation-service/requirements.txt
-    - pip:
-        virtualenv: /flirt-simulation-service/venv
-        virtualenv_python: python
-        requirements: /flirt-simulation-service/simulator/requirements.pip
-    - block:
-      - name: Start workers
-        shell: "/flirt-simulation-service/venv/bin/celery worker -A tasks --loglevel=INFO --concurrency={{concurrency}} -Q caching  > >(tee -a worker.log) 2> >(tee -a worker.error.log >&2)"
-        async: 1000000000000000000000000000000
-        poll: 0
-        args:
-          chdir: /flirt-simulation-service/simulator
-      - name: Queue simulations and wait for them to complete
-        shell: "/flirt-simulation-service/venv/bin/python cache_airport_flows_periodic.py --start_date {{start_date}} --sim_group {{item}} --periods {{periods}} --freq {{freq}}"
-        args:
-          chdir: /flirt-simulation-service
-        with_items: "{{sim_groups}}"
-      environment:
-        MONGO_URI: "mongodb://{{mongo_host}}"
-      become: yes
-      become_user: root
     - name: "Terminate instance"
       shell: "shutdown -h +1 &"
       become: yes

@@ -1,0 +1,33 @@
+---
+- file: path="/ibis" state=directory mode="a+rwx"
+- name: Get get IBIS code
+  git:
+    repo: "https://github.com/ecohealthalliance/ibis.git"
+    dest: "/ibis"
+    recursive: no
+    force: yes
+- name: Add GIS repo
+  apt_repository: repo='ppa:ubuntugis/ubuntugis-unstable' state=present
+- name: Add GDAL packages
+  apt: pkg={{item}} state=installed update_cache=yes
+  with_items:
+    - gdal-bin
+    - python-gdal
+    - libgdal1-dev
+- pip:
+    virtualenv: /ibis/venv
+    virtualenv_python: python
+    requirements: /ibis/.scripts/requirements.pip
+- name: Install EpiTator dependencies
+  shell: /ibis/venv/bin/python -m spacy download en_core_web_sm
+- name: Install EpiTator dependencies
+  shell: /ibis/venv/bin/python -m epitator.importers.import_disease_ontology
+- name: Install EpiTator dependencies
+  shell: /ibis/venv/bin/python -m epitator.importers.import_wikidata
+- block:
+  - name: Install EpiTator dependencies
+    shell: /ibis/venv/bin/python rank_events.py
+    args:
+      chdir: /ibis/.scripts
+  environment:
+    MONGO_HOST: "mongodb://{{mongo_host}}"
