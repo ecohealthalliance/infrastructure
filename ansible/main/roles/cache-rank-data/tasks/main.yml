@@ -8,13 +8,17 @@
     force: yes
 - name: Add GIS repo
   apt_repository: repo="ppa:ubuntugis/ubuntugis-unstable" state=present
-- name: Add GDAL packages
-  apt: pkg={{item}} state=installed update_cache=yes
-  with_items:
-    - gdal-bin
-    - python-gdal
-    - libgdal1-dev
-    - unzip
+- shell: apt-get update
+- shell: apt-get install gdal-bin python-gdal libgdal1-dev unzip
+# - name: Add GDAL packages
+#   apt: pkg={{item}} state=installed update_cache=yes
+#   with_items:
+#     - gdal-bin
+#     - python-gdal
+#     - libgdal1-dev
+#     - unzip
+#   become: yes
+#   become_method: sudo
 - pip:
     virtualenv: /ibis/venv
     virtualenv_python: python

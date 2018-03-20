@@ -1,8 +1,8 @@
 - hosts: targets
   remote_user: ubuntu
+  become: true
+  become_user: root
   roles:
     - name: cache-rank-data
-      become: yes
-      become_user: root
   vars_files:
     - my_secure.yml
