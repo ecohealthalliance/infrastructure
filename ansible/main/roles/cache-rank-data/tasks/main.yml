@@ -7,13 +7,14 @@
     recursive: no
     force: yes
 - name: Add GIS repo
-  apt_repository: repo='ppa:ubuntugis/ubuntugis-unstable' state=present
+  apt_repository: repo="ppa:ubuntugis/ubuntugis-unstable" state=present
 - name: Add GDAL packages
   apt: pkg={{item}} state=installed update_cache=yes
   with_items:
     - gdal-bin
     - python-gdal
     - libgdal1-dev
+    - unzip
 - pip:
     virtualenv: /ibis/venv
     virtualenv_python: python
@@ -29,6 +30,11 @@
 - name: Install EpiTator dependencies
   shell: /ibis/venv/bin/python -m epitator.importers.import_wikidata
 - block:
+  - name: Download GPW data
+    command: aws s3 cp s3://eha-flirt/gpw-v4-population-count-rev10_2015_15_min_tif.zip /ibis/.scripts
+  - command: unzip gpw-v4-population-count-rev10_2015_15_min_tif.zip -d gpw
+    args:
+      chdir: /ibis/.scripts
   - name: Install EpiTator dependencies
     shell: /ibis/venv/bin/python rank_events.py
     args:
