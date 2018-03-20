@@ -34,6 +34,7 @@
     command: aws s3 cp s3://eha-flirt/gpw-v4-population-count-rev10_2015_15_min_tif.zip /ibis/.scripts
   - command: unzip gpw-v4-population-count-rev10_2015_15_min_tif.zip -d gpw
     args:
+      creates: /ibis/.scripts/gpw
       chdir: /ibis/.scripts
   - name: Install EpiTator dependencies
     shell: /ibis/venv/bin/python rank_events.py
