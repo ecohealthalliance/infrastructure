@@ -17,6 +17,10 @@
 - pip:
     virtualenv: /ibis/venv
     virtualenv_python: python
+    name: numpy
+- pip:
+    virtualenv: /ibis/venv
+    virtualenv_python: python
     requirements: /ibis/.scripts/requirements.pip
 - name: Install EpiTator dependencies
   shell: /ibis/venv/bin/python -m spacy download en_core_web_sm
