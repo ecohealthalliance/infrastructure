@@ -4,5 +4,6 @@
   become_user: root
   roles:
     - name: cache-rank-data
+      mongo_host: "localhost:27019"
   vars_files:
     - my_secure.yml

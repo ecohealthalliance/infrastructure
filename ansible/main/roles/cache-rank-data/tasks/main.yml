@@ -9,7 +9,8 @@
 - name: Add GIS repo
   apt_repository: repo="ppa:ubuntugis/ubuntugis-unstable" state=present
 - shell: apt-get update
-- shell: apt-get install -y gdal-bin python-gdal libgdal1-dev unzip
+- name: Add GDAL packages
+  shell: apt-get install -y gdal-bin python-gdal libgdal1-dev unzip
 - pip:
     virtualenv: /ibis/venv
     virtualenv_python: python
@@ -38,7 +39,5 @@
     ignore_errors: yes
     register: rank_events_result
   - debug: var=rank_events_result.stdout_lines
-  - debug: var=rank_events_result.stderr_lines
-    when: rank_events_result.stderr_lines
   environment:
     MONGO_HOST: "mongodb://{{mongo_host}}"
