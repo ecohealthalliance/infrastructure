@@ -2,9 +2,8 @@ redis-tunnel:
   container_name: redis-tunnel
   image: thomass/ssh-client
   volumes:
-    # TODO: Deploy key from ansible
-    - /home/freddie/.ssh:/ssh
-  command: "ssh -Ng -L 6379:localhost:6379 -i /ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@grits.eha.io"
+    - /home/jenkins/.ssh:/ssh
+  command: "ssh -Ng -p 6322 -L 6379:redis:6379 -i /ssh/id_rsa -o StrictHostKeyChecking=no root@grits.eha.io"
   ports:
     - "6379"
   restart: always

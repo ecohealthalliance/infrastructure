@@ -8,7 +8,7 @@
   register: gritsimage
 - command: "gzip -dfk /tmp/grits.tar.gz"
   when: gritsimage.changed
-- name: Load grit image into docker
+- name: Load grits image into docker
   shell: "docker load < /tmp/grits.tar"
   when: gritsimage.changed
 - name: Download elasticsearch data
@@ -39,6 +39,10 @@
   when: geonamesapiimage.changed
 - name: Copy compose directory
   synchronize: src="compose/" dest="/grits-compose"
+- name: Build sshd image
+  docker_image:
+    path: /grits-compose
+    name: sshd
 - name: Start grits services
   docker_service:
     project_src: /grits-compose

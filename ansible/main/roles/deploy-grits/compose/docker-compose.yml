@@ -18,6 +18,8 @@ services:
     logging:
       options:
         max-size: 50m
+    networks:
+      - main
 
   geonames-api:
     container_name: geonames-api
@@ -28,7 +30,9 @@ services:
     logging:
       options:
         max-size: 50m
-  
+    networks:
+      - main
+
   elasticsearch:
     container_name: elasticsearch
     image: "elasticsearch:2.4.1"
@@ -38,7 +42,9 @@ services:
     logging:
       options:
         max-size: 50m
-  
+    networks:
+      - main
+
   redis:
     image: redis
     container_name: redis
@@ -49,6 +55,17 @@ services:
     logging:
       options:
         max-size: 50m
+    networks:
+      - main
+      - insecure
+
+  redis-tunnel-in:
+    image: sshd
+    restart: always
+    ports:
+      - "6322:22"
+    networks:
+      - insecure
 
   mongodb:
     container_name: mongodb
@@ -61,3 +78,9 @@ services:
     logging:
       options:
         max-size: 50m
+    networks:
+      - main
+
+networks:
+  main:
+  insecure:
