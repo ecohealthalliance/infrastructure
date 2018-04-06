@@ -1,0 +1,43 @@
+- hosts: targets
+  remote_user: ubuntu
+  tasks:
+    # - name: Dump mongo data
+    #   command: "mongodump --host localhost:27019 --db flirt --gzip"
+    - name: Transfer data to kirby
+      command: "scp -r dump jenkins@{{groups.kirby[0]}}:"
+    - name: Clean up
+      command: "rm -rf dump"
+
+- hosts: kirby
+  remote_user: jenkins
+  become: true
+  become_user: root
+  tasks:
+    - docker_service:
+        project_name: flight-mongodb-service
+        definition:
+          version: '2'
+          services:
+            flight-mongodb:
+              container_name: flight-mongodb
+              # 4 GB
+              mem_limit: 4000000000
+              image: mongo:3.4.9
+              restart: unless-stopped
+              volumes:
+                - "/home/jenkins/dump:/dump"
+              ports:
+                - 27019:27017
+              logging:
+                options:
+                  max-size: 50m
+    - name: add container to inventory
+      add_host:
+        name: flight-mongodb
+        ansible_connection: docker
+        ansible_user: root
+    - name: Wait for mongo
+      wait_for: host=localhost port=27019 delay=8 timeout=320 state=started
+    - command: "docker exec flight-mongodb mongorestore"
+      become: true
+      become_method: sudo
