@@ -1,8 +1,8 @@
 - hosts: targets
   remote_user: ubuntu
   tasks:
-    # - name: Dump mongo data
-    #   command: "mongodump --host localhost:27019 --db flirt --gzip"
+    - name: Dump mongo data
+      command: "mongodump --host localhost:27019 --db flirt --gzip"
     - name: Transfer data to kirby
       command: "scp -r dump jenkins@{{groups.kirby[0]}}:"
     - name: Clean up
@@ -38,6 +38,9 @@
         ansible_user: root
     - name: Wait for mongo
       wait_for: host=localhost port=27019 delay=8 timeout=320 state=started
-    - command: "docker exec flight-mongodb mongorestore"
+    - name: Restore flight database from dump
+      command: "docker exec flight-mongodb mongorestore --gzip --drop"
       become: true
       become_method: sudo
+    - name: Remove dump data
+      command: "rm -rf /home/jenkins/dump"
