@@ -36,8 +36,8 @@
     shell: /ibis/venv/bin/python rank_events.py
     args:
       chdir: /ibis/.scripts
-    ignore_errors: yes
     register: rank_events_result
+  always:
   - debug: var=rank_events_result.stdout_lines
   environment:
     MONGO_HOST: "mongodb://{{mongo_host}}"
