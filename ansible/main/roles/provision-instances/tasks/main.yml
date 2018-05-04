@@ -46,3 +46,6 @@
 - name: Wait for the instances to boot by checking the ssh ports
   wait_for: host="{{item.public_ip}}" port=22 delay=8 timeout=320 state=started
   with_items: "{{ec2.tagged_instances}}"
+- name: Wait a couple seconds in case instance is not ready to accept connections
+  pause:
+    seconds: 2
