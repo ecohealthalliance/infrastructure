@@ -1,0 +1,121 @@
+# This will provision an Azure instance and use it to run pubcrawler.
+# A CosmoDB specified by cosmodb_mongo_url in the secrets file is used to
+# store the data.
+#
+# Usage:
+# pip install ansible[azure] azure azure-cli
+# az login
+# ansible-playbook run-pubcrawler.yml
+
+- hosts: localhost
+  tasks:
+    - name: Create virtual machine
+      azure_rm_virtualmachine:
+        resource_group: IBIS
+        name: testvm001
+        vm_size: Standard_D1
+        admin_username: ubuntu
+        ssh_password_enabled: false
+        ssh_public_keys:
+          - path: "/home/ubuntu/.ssh/authorized_keys"
+            key_data: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+        image:
+          offer: UbuntuServer
+          publisher: Canonical
+          sku: '18.04-LTS'
+          version: latest
+      register: azure
+      tags: always
+    
+    - set_fact:
+        azure_hostname: "{{ azure.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress }}"
+      tags: always
+
+    - name: Add all instance public IPs to host group
+      add_host:
+        hostname: "{{ azure_hostname }}"
+        ansible_ssh_user: "ubuntu"
+        ansible_python_interpreter: "/usr/bin/python3"
+        groups:
+          - azurehosts
+      tags: always
+    
+    - name: Wait for the instances to boot by checking the ssh ports
+      wait_for: host="{{ azure_hostname }}" port=22 delay=8 timeout=320 state=started
+      tags: always
+
+- hosts: azurehosts
+  vars:
+    mongo_host: "{{ cosmodb_mongo_url }}"
+    shutdown_minutes: 295
+  roles:
+    - name: init
+      become: yes
+      become_method: sudo
+      ansible_distribution_release: xenial
+    - name: kamaln7.swapfile
+      swapfile_size: 16GB
+      swapfile_location: "/swapfile"
+      become: yes
+      become_method: sudo
+      tags: swap
+  pre_tasks:
+    - name: Cancel prior shutdown commands
+      shell: "shutdown -c || true"
+      become: yes
+      become_user: root
+    - name: "Shut down the instance in {{shutdown_minutes}} minutes (to cancel use shutdown -c)"
+      shell: "shutdown -h +{{shutdown_minutes}} &"
+      become: yes
+      become_user: root
+  tasks:
+    - file: path="/pubcrawler" state=directory mode="a+rwx"
+      become: yes
+      become_user: root
+
+    - name: Get pubcrawler code
+      git:
+        repo: "https://github.com/ecohealthalliance/pubcrawler.git"
+        dest: "/pubcrawler"
+        recursive: no
+        force: yes
+        version: ai4e-updates
+
+    - pip:
+        virtualenv: /pubcrawler/venv
+        virtualenv_python: python3
+        requirements: /pubcrawler/requirements.txt
+
+    - name: Get EpiTator data
+      get_url:
+        url: https://s3.amazonaws.com/bsve-integration/annotator.sqlitedb
+        dest: ~/.epitator.sqlitedb
+
+    - name: Get PubMed data
+      command: aws s3 cp s3://pubcrawler/data.zip /pubcrawler
+      become: yes
+      become_method: sudo
+
+    - name: Install unzip
+      apt: pkg=unzip state=installed
+      become: yes
+      become_method: sudo
+
+    - name: Unzip PubMed data
+      command: unzip /pubcrawler/data.zip
+      args:
+        chdir: /pubcrawler
+        creates: /pubcrawler/dump
+      register: dump_dir
+
+    - name: Restore PubMed db
+      command: 'mongorestore --gzip --drop --uri="{{mongo_host}}"'
+      when: dump_dir.changed
+
+    - name: Run pubcrawler script
+      shell: '/pubcrawler/venv/bin/python crawler.py -u "{{mongo_host}}" -x extract_disease_ontology_keywords -s meta -w 8 -c articlesubset'
+      args:
+        chdir: /pubcrawler
+
+  vars_files:
+    - my_secure.yml
