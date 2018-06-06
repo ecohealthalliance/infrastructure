@@ -51,6 +51,7 @@
     elasticsearch_data_path: /mnt/elasticsearch/data
     ip_address: "{{ ansible_default_ipv4.address }}"
     google_translate_key: "{{ google_translate_key }}"
+    ms_translate_key: "{{ ms_translate_key }}"
 - copy:
     content: "{{ grits_env_vars }}"
     dest: "/home/ubuntu/source-vars.sh"

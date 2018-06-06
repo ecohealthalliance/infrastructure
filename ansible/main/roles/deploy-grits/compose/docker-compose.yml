@@ -12,6 +12,7 @@ services:
       - "BROKER_URL=redis://redis:6379/0"
       - "ROOT_URL=http://${ip_address}"
       - 'GOOGLE_TRANSLATE_KEY=${google_translate_key}'
+      - 'MS_TRANSLATE_KEY=${ms_translate_key}'
       - 'AUTOSTART_DIAGNOSE_WORKERS=false'
     volumes:
       - /shared/grits:/shared

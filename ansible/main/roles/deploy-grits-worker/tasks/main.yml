@@ -35,3 +35,4 @@
     project_src: /grits-compose
   environment:
     google_translate_key: "{{ google_translate_key }}"
+    ms_translate_key: "{{ ms_translate_key }}"

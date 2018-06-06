@@ -22,3 +22,4 @@ grits:
     - 'AUTOSTART_PRIORITY_WORKERS=false'
     - 'DIAGNOSE_WORKERS=2'
     - 'GOOGLE_TRANSLATE_KEY=${google_translate_key}'
+    - 'MS_TRANSLATE_KEY=${ms_translate_key}'
