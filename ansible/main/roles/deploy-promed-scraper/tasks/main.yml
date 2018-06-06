@@ -21,6 +21,8 @@
 - name: Start services
   docker_service:
     project_src: /promed-scraper-compose
+  environment:
+    MS_TRANSLATE_KEY: "{{ms_translate_key}}"
 
 - name: Count promed items. The database is only restored if there are no items or restore_database is defined.
   command: docker exec promed-scraper bash -c 'mongo mongodb://pm-mongo:27017/promed --eval "db.posts.count()" --quiet'
