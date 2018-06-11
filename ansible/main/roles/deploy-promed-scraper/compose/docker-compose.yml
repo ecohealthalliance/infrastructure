@@ -7,7 +7,7 @@ services:
       - MONGO_URL=mongodb://pm-mongo:27017
       - OTHER_ANSIBLE_PARAMS="--tags=promed,download-classifier,s3backup --skip-tags=preloadable"
       - TERM=xterm
-      - MS_TRANSLATE_KEY="${MS_TRANSLATE_KEY}"
+      - MS_TRANSLATE_KEY=${MS_TRANSLATE_KEY}
     volumes:
       - /shared/promed-scraper:/shared
     restart: always
