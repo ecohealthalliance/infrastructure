@@ -20,6 +20,7 @@
       - requests
       - pandas
       - pymongo
+      - backports.functools_lru_cache
   - block:
     - name: Run event ranking script
       shell: /eidr-connect/venv/bin/python download_india_moh_data.py /tmp
