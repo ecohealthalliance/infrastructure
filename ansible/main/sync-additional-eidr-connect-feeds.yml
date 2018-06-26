@@ -1,0 +1,33 @@
+- hosts: targets
+  remote_user: ubuntu
+  become: true
+  become_user: root
+  tasks:
+  - file: path="/eidr-connect" state=directory mode="a+rwx"
+  - name: Get get EIDR-C code
+    git:
+      repo: "https://github.com/ecohealthalliance/eidr-connect.git"
+      dest: "/eidr-connect"
+      recursive: no
+      force: yes
+  - name: Add pdftohtml package
+    shell: apt-get install -y pdftohtml
+  - pip:
+      virtualenv: /eidr-connect/venv
+      virtualenv_python: python
+      name: "{{item}}"
+    with_items:
+      - requests
+      - pandas
+      - pymongo
+  - block:
+    - name: Run event ranking script
+      shell: /eidr-connect/venv/bin/python download_india_moh_data.py /tmp
+      args:
+        chdir: /eidr-connect/.scripts
+      register: result
+    always:
+    - debug: var=result.stdout_lines
+    environment:
+      MONGO_HOST: "mongodb://localhost:27017"
+
