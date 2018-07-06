@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+env
 cd /wab-net-website
 /venv/bin/python manage.py makemigrations wabnet
 /venv/bin/python manage.py migrate
