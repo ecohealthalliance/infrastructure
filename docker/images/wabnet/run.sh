@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 cd /wab-net-website
-python manage.py makemigrations wabnet
-python manage.py migrate
-python import_from_epicollect.py
-python manage.py runserver
+/venv/bin/python manage.py makemigrations wabnet
+/venv/bin/python manage.py migrate
+/venv/bin/python import_from_epicollect.py
+/venv/bin/python manage.py runserver

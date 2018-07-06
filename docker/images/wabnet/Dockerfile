@@ -11,9 +11,8 @@ COPY wab-net-website /wab-net-website
 RUN pip install virtualenv virtualenvwrapper awscli setuptools
 
 RUN virtualenv /venv &&\
-    source /venv/bin/activate &&\
     cd /wab-net-website &&\
-    pip install -r requirements.pip
+    /venv/bin/pip install -r requirements.pip
 
 COPY run.sh /run.sh
 CMD bash run.sh
