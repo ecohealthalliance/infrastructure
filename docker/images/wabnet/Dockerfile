@@ -3,7 +3,7 @@ FROM ubuntu:18.04
 # Install apt package dependencies
 RUN apt-get clean all && apt-get update && \
     apt-get -y install wget curl make g++ git && \
-    apt-get -y install build-essential python-dev python-pip python-software-properties software-properties-common && \
+    apt-get -y install build-essential python-dev python-pip software-properties-common && \
     apt-get clean all
 
 COPY wab-net-website /wab-net-website
