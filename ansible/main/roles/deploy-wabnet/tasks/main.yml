@@ -1,0 +1,33 @@
+- name: Download wabnet image
+  aws_s3:
+    bucket: bsve-integration
+    object: wabnet.tar.gz
+    dest: /tmp/wabnet.tar.gz
+    mode: get
+    overwrite: "{{overwrite}}"
+  register: image
+
+- when: image.changed
+  block:
+  - command: "gzip -dfk /tmp/wabnet.tar.gz"
+  - name: Load image into docker
+    shell: "docker load < /tmp/wabnet.tar"
+
+- file: path="/apache_conf" state=directory
+
+- name: Copy compose directory
+  synchronize: src="compose/" dest="/wabnet-compose"
+
+- name: Start wabnet
+  docker_service:
+    project_src: /wabnet-compose
+  environment:
+    ip_address: "{{ ansible_default_ipv4.address }}"
+    aws_smtp_user: "{{ aws_smtp_user }}"
+    aws_smtp_password: "{{ aws_smtp_password }}"
+    SECRET_KEY: "{{ DJANGO_SECRET_KEY }}"
+    EC5_PROJECT_NAME: "{{ EC5_PROJECT_NAME }}"
+    EC5_SECRET_KEY: "{{ EC5_SECRET_KEY }}"
+    EC5_CLIENT_ID: "{{ EC5_CLIENT_ID }}"
+    DJANGO_SUPER_USER: "{{ DJANGO_SUPER_USER }}"
+    DJANGO_SUPER_PASSWORD: "{{ DJANGO_SUPER_PASSWORD }}"

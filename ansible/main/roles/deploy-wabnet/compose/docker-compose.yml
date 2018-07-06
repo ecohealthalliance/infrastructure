@@ -1,0 +1,21 @@
+version: '2'
+services:
+  wabnet:
+    container_name: wabnet
+    image: wabnet
+    environment:
+      - "SECRET_KEY=${SECRET_KEY}"
+      - "EC5_PROJECT_NAME=${EC5_PROJECT_NAME}"
+      - "EC5_SECRET_KEY=${EC5_SECRET_KEY}"
+      - "EC5_CLIENT_ID=${EC5_CLIENT_ID}"
+      - "DEBUG=True"
+    restart: unless-stopped
+
+  apache:
+    container_name: wabnet-apache
+    image: "httpd:2.4.33"
+    volumes:
+      /apache_conf:/usr/local/apache2/conf
+    ports:
+      - "6080:80"
+    restart: unless-stopped

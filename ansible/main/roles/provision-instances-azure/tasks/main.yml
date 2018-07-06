@@ -1,0 +1,39 @@
+- name: Check whether pip is installed
+  shell: command -v pip
+  register: is_pip_installed
+  ignore_errors: yes
+- name: Install Python PIP
+  apt: pkg=python-pip state=latest
+  when: is_pip_installed.rc == 1
+# - name: Install boto via PIP
+#   pip: name=boto state=latest
+# - name: TODO # azure and azure-cli
+#   pip: name="ansible[azure]" state=latest
+- name: Create virtual machine
+  azure_rm_virtualmachine:
+    resource_group: IBIS
+    name: testvm001
+    vm_size: Standard_D1
+    admin_username: ubuntu
+    ssh_password_enabled: false
+    ssh_public_keys:
+      - path: "/home/ubuntu/.ssh/authorized_keys"
+        key_data: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCxwbKZiRcf6czBgqxpzF5cdGMvRHI8rj8TLCAelfVZiaDFuyNkj8fAg1khwwTV9e9q53D3na9q7vUWNNCooEGMc/p292WjLzOu1p2vW5Qn/iNrBjuGxD/uPvfUWceq/gk+rluVWD0YxAvxQ9Vngw1L2cxWy2+gWD8g+J1jjN2AyY6+wBhdAJow2NMxaNhJLswujrjzmJAjxozMTtYaGm5zp57TsnGaiSdK4zG+/DDf8vPiHNuZ62InjYs1kyaf/MosfNzLrrNkzaZWg2kNzsDD65audy65avhp1ZXuIh5tvR/9dbfyfifOEcS8wPCR3vCHBYvxBGQO8OD/078+5SpR nabreit@gmail.com"
+    image:
+      offer: UbuntuServer
+      publisher: Canonical
+      sku: '18.04-LTS'
+      version: latest
+  register: azure
+- debug: var=azure
+
+- name: Add all instance public IPs to host group
+  add_host:
+    hostname: "{{ azure.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress }}"
+    ansible_ssh_user: "ubuntu"
+    ansible_python_interpreter: "/usr/bin/python3"
+    groups:
+      - "{{ host_group }}"
+
+- name: Wait for the instances to boot by checking the ssh ports
+  wait_for: host="{{azure.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress }}" port=22 delay=8 timeout=320 state=started
