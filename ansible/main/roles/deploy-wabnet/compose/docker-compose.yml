@@ -25,7 +25,7 @@ services:
     volumes:
         - static:/static
         - media:/media
-        - "/wabnet-compose/httpd.conf:/usr/local/apache2/conf/httpd.conf"
+        - "/wabnet-compose/httpd.conf:/usr/local/apache2/conf/httpd.conf:ro"
 
 volumes:
   static:
