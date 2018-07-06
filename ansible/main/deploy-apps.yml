@@ -26,6 +26,8 @@
       eidr_connect_port: 3180
     - name: deploy-ibis
       tags: deploy-ibis
+    - name: deploy-wabnet
+      tags: deploy-wabnet
   vars_files:
     - my_secure.yml
 - hosts: grits-workers

@@ -21,6 +21,8 @@
         port: 4080
       - servername: "ibis.eha.io"
         port: 5080
+      - servername: "wabnet.eha.io"
+        port: 6080
     webroot: "/var/www"
     acme_tiny_challenges_directory: "/var/www/.well-known/acme-challenge"
     cert_name: "multidomain_cert_2"
