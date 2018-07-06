@@ -9,13 +9,26 @@ services:
       - "EC5_SECRET_KEY=${EC5_SECRET_KEY}"
       - "EC5_CLIENT_ID=${EC5_CLIENT_ID}"
       - "DEBUG=True"
+      - "STATIC_ROOT=/static"
+      - "MEDIA_ROOT=/media"
     restart: unless-stopped
+    volumes:
+      - static:/static
+      - media:/media
 
   apache:
     container_name: wabnet-apache
     image: "httpd:2.4.33"
-    # volumes:
-    #   - "/apache_conf:/usr/local/apache2/conf"
     ports:
       - "6080:80"
     restart: unless-stopped
+    volumes:
+        - static:/static
+        - media:/media
+        - "/wabnet-compose/httpd.conf:/usr/local/apache2/conf/httpd.conf"
+
+volumes:
+  static:
+    driver: local
+  media:
+    driver: local

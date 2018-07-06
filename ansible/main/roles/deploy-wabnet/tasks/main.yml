@@ -13,8 +13,6 @@
   - name: Load image into docker
     shell: "docker load < /tmp/wabnet.tar"
 
-- file: path="/apache_conf" state=directory
-
 - name: Copy compose directory
   synchronize: src="compose/" dest="/wabnet-compose"
 
