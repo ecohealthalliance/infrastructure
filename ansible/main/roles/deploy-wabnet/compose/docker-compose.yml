@@ -14,8 +14,8 @@ services:
   apache:
     container_name: wabnet-apache
     image: "httpd:2.4.33"
-    volumes:
-      - "/apache_conf:/usr/local/apache2/conf"
+    # volumes:
+    #   - "/apache_conf:/usr/local/apache2/conf"
     ports:
       - "6080:80"
     restart: unless-stopped

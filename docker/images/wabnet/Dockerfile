@@ -10,7 +10,7 @@ COPY wab-net-website /wab-net-website
 
 RUN pip install virtualenv virtualenvwrapper awscli setuptools
 
-RUN virtualenv /venv &&\
+RUN virtualenv /venv --python=python3 &&\
     cd /wab-net-website &&\
     /venv/bin/pip install -r requirements.pip
 
