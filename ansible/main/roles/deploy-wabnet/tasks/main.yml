@@ -29,3 +29,9 @@
     EC5_CLIENT_ID: "{{ EC5_CLIENT_ID }}"
     DJANGO_SUPER_USER: "{{ DJANGO_SUPER_USER }}"
     DJANGO_SUPER_PASSWORD: "{{ DJANGO_SUPER_PASSWORD }}"
+
+- name: Create wabnet sync cronjob
+  cron:
+    name: "Sync wabnet data"
+    minute: "7"
+    job: "curl localhost:6080/sync"
