@@ -10,11 +10,12 @@ services:
       - "EC5_CLIENT_ID=${EC5_CLIENT_ID}"
       - "STATIC_ROOT=/static"
       - "MEDIA_ROOT=/media"
-      - "DATABASE_PATH=/db.sqlite3"
+      - "DATABASE_PATH=/shared/db.sqlite3"
     restart: unless-stopped
     volumes:
       - static:/static
-      - media:/media
+      - /shared/wabnet-media:/media
+      - /shared/wabnet:/shared
 
   apache:
     container_name: wabnet-apache
@@ -23,12 +24,10 @@ services:
       - "6080:80"
     restart: unless-stopped
     volumes:
-        - static:/static
-        - media:/media
-        - "/wabnet-compose/httpd.conf:/usr/local/apache2/conf/httpd.conf:ro"
+      - static:/static
+      - /shared/wabnet-media:/media
+      - "/wabnet-compose/httpd.conf:/usr/local/apache2/conf/httpd.conf:ro"
 
 volumes:
   static:
-    driver: local
-  media:
     driver: local
