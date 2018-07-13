@@ -33,7 +33,7 @@
       creates: /ibis/.scripts/gpw
       chdir: /ibis/.scripts
   - name: Run event ranking script
-    shell: /ibis/venv/bin/python rank_events.py
+    shell: "/ibis/venv/bin/python rank_events.py{{additional_rank_event_params  | default('')}}"
     args:
       chdir: /ibis/.scripts
     register: rank_events_result
