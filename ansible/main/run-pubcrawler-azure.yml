@@ -4,15 +4,13 @@
 #
 # Usage:
 # pip install ansible[azure] azure azure-cli
-# az login
-# ansible-playbook run-pubcrawler.yml
+# ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook run-pubcrawler.yml
 
 - hosts: localhost
   tasks:
     - name: Create virtual machine
       azure_rm_virtualmachine:
-        resource_group: IBIS
-        name: testvm001
+        name: pubcrawlervm
         vm_size: Standard_D1
         admin_username: ubuntu
         ssh_password_enabled: false
@@ -24,6 +22,12 @@
           publisher: Canonical
           sku: '18.04-LTS'
           version: latest
+        resource_group: pubcrawler
+        virtual_network_name: pubcrawlernet
+        subscription_id: "{{ azure_subscription_id }}"
+        tenant: "{{ azure_tenant }}"
+        client_id: "{{ azure_client_id }}"
+        secret: "{{ azure_secret }}"
       register: azure
       tags: always
     
@@ -43,6 +47,9 @@
     - name: Wait for the instances to boot by checking the ssh ports
       wait_for: host="{{ azure_hostname }}" port=22 delay=8 timeout=320 state=started
       tags: always
+
+  vars_files:
+    - my_secure.yml
 
 - hosts: azurehosts
   vars:
@@ -79,12 +86,14 @@
         dest: "/pubcrawler"
         recursive: no
         force: yes
-        version: ai4e-updates
 
     - pip:
         virtualenv: /pubcrawler/venv
         virtualenv_python: python3
         requirements: /pubcrawler/requirements.txt
+
+    - name: Install SpaCy model
+      command: /pubcrawler/venv/bin/python -m spacy download en_core_web_md
 
     - name: Get EpiTator data
       get_url:
@@ -102,10 +111,11 @@
       become_method: sudo
 
     - name: Unzip PubMed data
-      command: unzip /pubcrawler/data.zip
+      command: unzip -o /pubcrawler/data.zip
       args:
         chdir: /pubcrawler
         creates: /pubcrawler/dump
+      ignore_errors: yes
       register: dump_dir
 
     - name: Restore PubMed db
@@ -116,6 +126,21 @@
       shell: '/pubcrawler/venv/bin/python crawler.py -u "{{mongo_host}}" -x extract_disease_ontology_keywords -s meta -w 8 -c articlesubset'
       args:
         chdir: /pubcrawler
+
+  vars_files:
+    - my_secure.yml
+
+- hosts: localhost
+  tasks:
+    - name: Remove virtual machine
+      azure_rm_virtualmachine:
+        resource_group: pubcrawler
+        name: pubcrawlervm
+        state: absent
+        subscription_id: "{{ azure_subscription_id }}"
+        tenant: "{{ azure_tenant }}"
+        client_id: "{{ azure_client_id }}"
+        secret: "{{ azure_secret }}"
 
   vars_files:
     - my_secure.yml
