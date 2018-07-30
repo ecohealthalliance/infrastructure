@@ -26,7 +26,7 @@
     - name: "Shut down the instance in {{minutes}} minutes (to cancel use shutdown -c)"
       shell: "shutdown -h +{{minutes}} &"
       vars:
-        minutes: 595
+        minutes: 9990
       become: yes
       become_user: root
   roles:
@@ -73,6 +73,10 @@
         FLIGHT_GLOBAL_FTP_PASSWORD: '{{ flightglobal_password }}'
         MONGO_URI: 'mongodb://{{ mongo_host }}'
         MONGO_DB: 'flirt'
+      become: yes
+      become_user: root
+    - name: "Terminate instance"
+      shell: "shutdown -h +10 &"
       become: yes
       become_user: root
   vars_files:
