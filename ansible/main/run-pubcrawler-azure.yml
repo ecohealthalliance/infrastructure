@@ -120,6 +120,8 @@
 
     - name: Restore PubMed db
       command: 'mongorestore --gzip --drop --uri="{{mongo_host}}"'
+      args:
+        chdir: /pubcrawler
       when: dump_dir.changed
 
     - name: Run pubcrawler script
