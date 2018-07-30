@@ -11,6 +11,8 @@ services:
       - "STATIC_ROOT=/static"
       - "MEDIA_ROOT=/media"
       - "DATABASE_PATH=/shared/db.sqlite3"
+      - "SMTP_USER=${SMTP_USER}"
+      - "SMTP_PASSWORD=${SMTP_PASSWORD}"
     restart: unless-stopped
     volumes:
       - static:/static

@@ -27,8 +27,8 @@
     project_src: /wabnet-compose
   environment:
     ip_address: "{{ ansible_default_ipv4.address }}"
-    aws_smtp_user: "{{ aws_smtp_user }}"
-    aws_smtp_password: "{{ aws_smtp_password }}"
+    SMTP_USER: "{{ aws_smtp_user }}"
+    SMTP_PASSWORD: "{{ aws_smtp_password }}"
     SECRET_KEY: "{{ DJANGO_SECRET_KEY }}"
     EC5_PROJECT_NAME: "{{ EC5_PROJECT_NAME }}"
     EC5_SECRET_KEY: "{{ EC5_SECRET_KEY }}"
