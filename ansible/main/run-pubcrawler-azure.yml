@@ -54,7 +54,6 @@
 - hosts: azurehosts
   vars:
     mongo_host: "{{ cosmodb_mongo_url }}"
-    shutdown_minutes: 295
   roles:
     - name: init
       become: yes
@@ -66,15 +65,6 @@
       become: yes
       become_method: sudo
       tags: swap
-  pre_tasks:
-    - name: Cancel prior shutdown commands
-      shell: "shutdown -c || true"
-      become: yes
-      become_user: root
-    - name: "Shut down the instance in {{shutdown_minutes}} minutes (to cancel use shutdown -c)"
-      shell: "shutdown -h +{{shutdown_minutes}} &"
-      become: yes
-      become_user: root
   tasks:
     - file: path="/pubcrawler" state=directory mode="a+rwx"
       become: yes
