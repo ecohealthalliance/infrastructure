@@ -115,7 +115,7 @@
       when: dump_dir.changed
 
     - name: Run pubcrawler script
-      shell: '/pubcrawler/venv/bin/python crawler.py -u "{{mongo_host}}" -x extract_disease_ontology_keywords -s meta -w 8 -c articlesubset'
+      shell: '/pubcrawler/venv/bin/python crawler.py -u "{{mongo_host}}" -x extract_disease_ontology_keywords -s keywords -w 8 -c articlesubset'
       args:
         chdir: /pubcrawler
 
