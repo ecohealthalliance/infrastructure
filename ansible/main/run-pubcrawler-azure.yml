@@ -95,27 +95,34 @@
       become: yes
       become_method: sudo
 
-    - name: Install unzip
-      apt: pkg=unzip state=installed
-      become: yes
-      become_method: sudo
+    - when: "{{ restore_database | default(false) }}"
+      block:
+      - name: Install unzip
+        apt: pkg=unzip state=installed
+        become: yes
+        become_method: sudo
+  
+      - name: Unzip PubMed data
+        command: unzip -o /pubcrawler/data.zip
+        args:
+          chdir: /pubcrawler
+          creates: /pubcrawler/dump
+        ignore_errors: yes
+        register: dump_dir
+  
+      - name: Restore PubMed db
+        command: 'mongorestore --gzip --drop --uri="{{mongo_host}}"'
+        args:
+          chdir: /pubcrawler
+        when: dump_dir.changed
 
-    - name: Unzip PubMed data
-      command: unzip -o /pubcrawler/data.zip
+    - name: Run keyword extraction script
+      shell: '/pubcrawler/venv/bin/python crawler.py -u "{{mongo_host}}" -x extract_disease_ontology_keywords -s "keywords.disease-ontology" -w 4 -c articlesubset'
       args:
         chdir: /pubcrawler
-        creates: /pubcrawler/dump
-      ignore_errors: yes
-      register: dump_dir
 
-    - name: Restore PubMed db
-      command: 'mongorestore --gzip --drop --uri="{{mongo_host}}"'
-      args:
-        chdir: /pubcrawler
-      when: dump_dir.changed
-
-    - name: Run pubcrawler script
-      shell: '/pubcrawler/venv/bin/python crawler.py -u "{{mongo_host}}" -x extract_disease_ontology_keywords -s keywords -w 4 -c articlesubset'
+    - name: Run geoname extraction script
+      shell: '/pubcrawler/venv/bin/python crawler.py -u "{{mongo_host}}" -x extract_geonames -s keywords.geonames -w 4 -c articlesubset'
       args:
         chdir: /pubcrawler
 
