@@ -25,6 +25,7 @@ USER root
 
 WORKDIR /home/meteor/build/bundle/programs/server
 RUN meteor npm install
+RUN meteor npm install @babel/runtime@7.0.0-beta.55
 
 WORKDIR /
 
