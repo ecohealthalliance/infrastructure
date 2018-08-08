@@ -111,7 +111,7 @@
           state: directory
 
       - name: Extract pmc data
-        shell: tar -xvzf /mnt/ftp.ncbi.nlm.nih.gov/pub/pmc/articles.*
+        shell: "ls /mnt/ftp.ncbi.nlm.nih.gov/pub/pmc/articles*.tar.gz | xargs -i tar -xvzf {}"
         args:
           chdir: /mnt/ftp.ncbi.nlm.nih.gov/extracted
 
