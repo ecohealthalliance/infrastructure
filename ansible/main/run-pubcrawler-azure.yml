@@ -11,7 +11,7 @@
     - name: Create virtual machine
       azure_rm_virtualmachine:
         name: pubcrawlervm
-        vm_size: Standard_D1
+        vm_size: Standard_D4
         admin_username: ubuntu
         ssh_password_enabled: false
         ssh_public_keys:
@@ -95,7 +95,14 @@
       become: yes
       become_method: sudo
 
-    - when: "{{ restore_database | default(false) }}"
+    - when: "{{ restore_database_from_ftp | default(false) }}"
+      block:
+      - name: Download pmc data
+        command: wget -r ftp://ftp.ncbi.nlm.nih.gov/pub/pmc
+      - name: Import pmc data
+        command: "/pubcrawler/venv/bin/python mongo_import_pmc_oas_local.py --pmc_path ftp.ncbi.nlm.nih.gov/pub/pmc"
+
+    - when: "{{ restore_database_from_dump | default(false) }}"
       block:
       - name: Install unzip
         apt: pkg=unzip state=installed
@@ -117,12 +124,12 @@
         when: dump_dir.changed
 
     - name: Run keyword extraction script
-      shell: '/pubcrawler/venv/bin/python crawler.py -u "{{mongo_host}}" -x extract_disease_ontology_keywords -s "keywords.disease-ontology" -w 4 -c articlesubset'
+      shell: '/pubcrawler/venv/bin/python crawler.py -u "{{mongo_host}}" -x extract_disease_ontology_keywords -s "keywords.disease-ontology" -w 8 -c articlesubset'
       args:
         chdir: /pubcrawler
 
     - name: Run geoname extraction script
-      shell: '/pubcrawler/venv/bin/python crawler.py -u "{{mongo_host}}" -x extract_geonames -s keywords.geonames -w 4 -c articlesubset'
+      shell: '/pubcrawler/venv/bin/python crawler.py -u "{{mongo_host}}" -x extract_geonames -s keywords.geonames -w 8 -c articlesubset'
       args:
         chdir: /pubcrawler
 
