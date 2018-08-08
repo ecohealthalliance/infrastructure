@@ -90,25 +90,42 @@
         url: https://s3.amazonaws.com/bsve-integration/annotator.sqlitedb
         dest: ~/.epitator.sqlitedb
 
-    - name: Get PubMed data
-      command: aws s3 cp s3://pubcrawler/data.zip /pubcrawler
-      become: yes
-      become_method: sudo
-
     - when: restore_database_from_ftp | default(false)
       block:
+      - name: Ensure /mnt is readable and writable
+        file:
+          path: /mnt
+          state: directory
+          mode: "a+rwx"
+        become: yes
+        become_method: sudo
+
       - name: Download pmc data
-        command: wget -r ftp://ftp.ncbi.nlm.nih.gov/pub/pmc
+        command: wget -r -l1 ftp://ftp.ncbi.nlm.nih.gov/pub/pmc -A "*.tar.gz"
         args:
           chdir: /mnt
+          creates: /mnt/ftp.ncbi.nlm.nih.gov
+
+      - file:
+          path: /mnt/ftp.ncbi.nlm.nih.gov/extracted
+          state: directory
+
+      - name: Extract pmc data
+        shell: tar -xvzf /mnt/ftp.ncbi.nlm.nih.gov/pub/pmc/articles.*
+        args:
+          chdir: /mnt/ftp.ncbi.nlm.nih.gov/extracted
 
       - name: Import pmc data
-        command: "/pubcrawler/venv/bin/python mongo_import_pmc_oas_local.py --pmc_path /mnt/ftp.ncbi.nlm.nih.gov/pub/pmc"
+        command: "/pubcrawler/venv/bin/python mongo_import_pmc_oas_local.py --pmc_path /mnt/ftp.ncbi.nlm.nih.gov/extracted"
         args:
           chdir: /pubcrawler
 
     - when: restore_database_from_dump | default(false)
       block:
+      - name: Get PubMed data
+        command: aws s3 cp s3://pubcrawler/data.zip /pubcrawler
+        become: yes
+        become_method: sudo
       - name: Install unzip
         apt: pkg=unzip state=installed
         become: yes
