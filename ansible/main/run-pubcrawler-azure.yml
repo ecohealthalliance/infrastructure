@@ -95,14 +95,17 @@
       become: yes
       become_method: sudo
 
-    - when: "{{ restore_database_from_ftp | default(false) }}"
+    - when: restore_database_from_ftp | default(false)
       block:
       - name: Download pmc data
         command: wget -r ftp://ftp.ncbi.nlm.nih.gov/pub/pmc
+
       - name: Import pmc data
         command: "/pubcrawler/venv/bin/python mongo_import_pmc_oas_local.py --pmc_path ftp.ncbi.nlm.nih.gov/pub/pmc"
+        args:
+          chdir: /pubcrawler
 
-    - when: "{{ restore_database_from_dump | default(false) }}"
+    - when: restore_database_from_dump | default(false)
       block:
       - name: Install unzip
         apt: pkg=unzip state=installed
