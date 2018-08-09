@@ -151,7 +151,7 @@
         chdir: /pubcrawler
 
     - name: Run geoname extraction script
-      shell: '/pubcrawler/venv/bin/python crawler.py -u "{{mongo_host}}" -x extract_geonames -s keywords.geonames -w 8 -c articlesubset'
+      shell: '/pubcrawler/venv/bin/python crawler.py -u "{{mongo_host}}" -x extract_geonames -s geonames -w 8 -c articlesubset'
       args:
         chdir: /pubcrawler
 
