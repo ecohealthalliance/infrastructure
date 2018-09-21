@@ -22,7 +22,7 @@
       - pymongo
       - backports.functools_lru_cache
   - block:
-    - name: Run event ranking script
+    - name: Run India MOH data download script
       shell: /eidr-connect/venv/bin/python download_india_moh_data.py /tmp
       args:
         chdir: /eidr-connect/.scripts
@@ -31,4 +31,3 @@
     - debug: var=result.stdout_lines
     environment:
       MONGO_HOST: "mongodb://localhost:27017"
-
