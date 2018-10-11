@@ -21,6 +21,8 @@
         port: 4080
       - servername: "ibis.eha.io"
         port: 5080
+        username: "{{ibis_user}}"
+        password: "{{ibis_password}}"
       - servername: "wabnet.eha.io"
         port: 6080
     webroot: "/var/www"
@@ -48,6 +50,25 @@
               ProxyPreserveHost On
               ProxyPassMatch ^/(?!\.well-known)(.*) http://localhost:{{ item.port }}/$1
               ProxyPassReverse ^/(?!\.well-known)(.*) http://localhost:{{ item.port }}/$1
+              {% if item.password is defined %}
+              <Location />
+                  Deny from all
+                  AuthUserFile /sites/{{ item.servername }}/.htpasswd
+                  AuthName "Restricted Area"
+                  AuthType Basic
+                  Satisfy Any
+                  require valid-user
+              </Location>
+              {% endif %}
+        - name: Create site folders
+          file:
+            recurse: true
+            path: /sites/{{ item.servername }}
+            state: directory
+            mode: 0755
+        - name: Create password files
+          command: "htpasswd -cb /sites/{{ item.servername }}/.htpasswd {{ item.user }} {{ item.password }}"
+          when: item.password is defined
         with_items: "{{ servers }}"
         register: create_configs
       - set_fact: apache_vhosts_ssl_in="{{ create_configs.results | map(attribute='ansible_facts.apache_vhosts_ssl_in') | list }}"
