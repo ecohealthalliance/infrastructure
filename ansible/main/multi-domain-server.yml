@@ -23,6 +23,7 @@
         port: 5080
         username: "{{ibis_user}}"
         password: "{{ibis_password}}"
+        passworded_location_regex: "^/(?!api/clearCaches).*"
       - servername: "wabnet.eha.io"
         port: 6080
     webroot: "/var/www"
@@ -40,6 +41,7 @@
             certificate_file: "{{ ssl_directory }}/cert.pem"
             certificate_chain_file: "{{ ssl_directory }}/chain.pem"
             extra_parameters: |
+              TimeOut 1000
               RewriteEngine on
               RewriteRule ^/internal.* [F]
               RewriteCond %{HTTP:UPGRADE} ^WebSocket$ [NC]
@@ -51,14 +53,14 @@
               ProxyPassMatch ^/(?!\.well-known)(.*) http://localhost:{{ item.port }}/$1
               ProxyPassReverse ^/(?!\.well-known)(.*) http://localhost:{{ item.port }}/$1
               {% if item.password is defined %}
-              <Location />
+              <LocationMatch "{{ item.passworded_location_regex }}">
                   Deny from all
                   AuthUserFile /sites/{{ item.servername }}/.htpasswd
                   AuthName "Restricted Area"
                   AuthType Basic
                   Satisfy Any
                   require valid-user
-              </Location>
+              </LocationMatch>
               {% endif %}
         - name: Create site folders
           file:
