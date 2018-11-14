@@ -41,7 +41,10 @@
             certificate_file: "{{ ssl_directory }}/cert.pem"
             certificate_chain_file: "{{ ssl_directory }}/chain.pem"
             extra_parameters: |
-              TimeOut 1000
+              {% if item.servername == "eidr-connect.eha.io" %}
+              TimeOut 3000
+              KeepAlive Off
+              {% endif %}
               RewriteEngine on
               RewriteRule ^/internal.* [F]
               RewriteCond %{HTTP:UPGRADE} ^WebSocket$ [NC]
