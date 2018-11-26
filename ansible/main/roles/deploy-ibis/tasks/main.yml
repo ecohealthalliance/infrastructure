@@ -15,6 +15,9 @@
 
 - file: path="/shared/ibis" state=directory
 
+- name: Create sensitive-environment-vars.env
+  copy: content="{{ ibis_sensitive_envvars }}" dest="/shared/ibis/sensitive-environment-vars.env" force=yes
+
 - name: Create meteor settings.json
   copy:
     content: "{{ ibis_settings | to_json }}"
@@ -26,6 +29,11 @@
         analyticsSettings:
           "Google Analytics":
             trackingId": "UA-54918272-10"
+      private:
+        initial_user:
+          profile:
+            name: "Admin"
+          email: "{{ ibis_admin_email }}"
 
 - name: Copy compose directory
   synchronize: src="compose/" dest="/ibis-compose"
