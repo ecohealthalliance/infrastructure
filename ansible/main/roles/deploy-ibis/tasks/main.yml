@@ -21,7 +21,7 @@
 - name: Create meteor settings.json
   copy:
     content: "{{ ibis_settings | to_json }}"
-    dest: "/shared/ibis/settings.json"
+    dest: "/shared/ibis/settings-production.json"
     force: yes
   vars:
     ibis_settings:

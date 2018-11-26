@@ -8,6 +8,7 @@ services:
       - "FLIGHT_MONGO_URL=mongodb://flight-mongodb:27017/flirt"
       - "SMTP_USER=${aws_smtp_user}"
       - "SMTP_PASSWORD=${aws_smtp_password}"
+      = "MAIL_URL=smtps://${aws_smtp_user}:${aws_smtp_password}@email-smtp.us-east-1.amazonaws.com:465"
       - "MONGO_HOST=mongodb://flight-mongodb:27017/"
     ports:
       - "5080:80"

@@ -21,9 +21,6 @@
         port: 4080
       - servername: "ibis.eha.io"
         port: 5080
-        username: "{{ibis_user}}"
-        password: "{{ibis_password}}"
-        passworded_location_regex: "^/(?!api/clearCaches).*"
       - servername: "wabnet.eha.io"
         port: 6080
     webroot: "/var/www"
