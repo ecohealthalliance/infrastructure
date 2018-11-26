@@ -31,5 +31,7 @@ WORKDIR /
 ENV ROOT_URL http://ibis.eha.io
 ENV PORT 80
 
+ADD run.sh .
+
 # Start application
-CMD ["sh", "-c", "meteor node /home/meteor/build/bundle/main.js"]
+CMD /bin/bash /run.sh
