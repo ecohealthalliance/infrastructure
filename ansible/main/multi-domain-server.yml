@@ -110,5 +110,13 @@
       apache_vhosts_ssl: "{{ apache_vhosts_ssl_in }}"
       apache_vhosts: "{{ apache_vhosts_ssl_in }}"
       tags: apache
+  tasks:
+  - name: Create cleanup cron job
+    cron:
+      name: "Cleanup unused data"
+      hour: 1
+      minute: 7
+      weekday: 0
+      job: "docker image prune -f"
   vars_files:
     - my_secure.yml
