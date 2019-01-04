@@ -1,0 +1,53 @@
+- hosts: targets
+  remote_user: ubuntu
+  become: true
+  become_user: root
+  vars:
+    mongo_host: "localhost:27017"
+  vars_files:
+    - my_secure.yml
+  tasks:
+    - file: path="/ibis" state=directory mode="a+rwx"
+    - file: path="/tmp/lemis" state=directory mode="a+rwx"
+    - name: Get get IBIS code
+      git:
+        repo: "https://github.com/ecohealthalliance/ibis.git"
+        dest: "/ibis"
+        recursive: no
+        force: yes
+    - pip:
+        virtualenv: /ibis/venv
+        virtualenv_python: python
+        name: psycopg2-binary
+    - name: Download eha.wild.db
+      command: aws s3 cp s3://eha.wild.db/cleaned_data/lemis_2000_2013_cleaned.csv /tmp/lemis
+    - name: Convert csv encoding
+      command: "iconv -f 'UTF-8' -t 'UTF-8//IGNORE' lemis_2000_2013_cleaned.csv --output=lemis_2000_2013_cleaned.utf8.csv"
+      ignore_errors: true
+      args:
+        chdir: /tmp/lemis
+    - copy:
+        src: lemis_import.sql
+        dest: /tmp/lemis
+    - name: Start postgres container
+      docker_container:
+        name: postgres
+        image: postgres
+        state: started
+        ports:
+          - "5432:5432"
+        volumes:
+          - "/tmp/lemis:/shared"
+        user: postgres
+    - name: Load lemis data into postgres database
+      shell: 'docker exec -it postgres psql -U postgres -f /shared/lemis_import.sql'
+    - name: Import lemis data into mongo
+      shell: "/ibis/venv/bin/python /ibis/.scripts/mongo_lemis_import.py"
+      args:
+        chdir: /ibis/.scripts
+      environment:
+        MONGO_HOST: "mongodb://{{mongo_host}}"
+    - name: Remove postgres container
+      docker_container:
+        name: postgres
+        state: absent
