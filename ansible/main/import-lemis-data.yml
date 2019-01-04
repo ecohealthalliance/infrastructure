@@ -3,7 +3,7 @@
   become: true
   become_user: root
   vars:
-    mongo_host: "localhost:27017"
+    mongo_host: "localhost:27019"
   vars_files:
     - my_secure.yml
   tasks:
