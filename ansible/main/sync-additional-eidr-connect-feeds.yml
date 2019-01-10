@@ -42,3 +42,4 @@
     - debug: var=result.stdout_lines
     environment:
       MONGO_HOST: "mongodb://localhost:27017"
+      PYTHONIOENCODING: "utf-8"
