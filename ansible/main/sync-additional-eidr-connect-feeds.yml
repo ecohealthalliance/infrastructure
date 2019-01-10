@@ -31,3 +31,14 @@
     - debug: var=result.stdout_lines
     environment:
       MONGO_HOST: "mongodb://localhost:27017"
+
+  - block:
+    - name: Run India MOH data download script
+      shell: /eidr-connect/venv/bin/python download_epi_archive_data.py
+      args:
+        chdir: /eidr-connect/.scripts
+      register: result
+    always:
+    - debug: var=result.stdout_lines
+    environment:
+      MONGO_HOST: "mongodb://localhost:27017"
