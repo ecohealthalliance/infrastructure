@@ -20,7 +20,6 @@
       git:
         repo: "git@github.com:ecohealthalliance/ideeal-app.git"
         dest: "/tmp/ideeal-app"
-        version: mv-docker
         key_file: "/var/lib/jenkins/.ssh/id_rsa"
         ssh_opts: "-o StrictHostKeyChecking=no"
         recursive: no
