@@ -1,0 +1,61 @@
+- hosts: localhost
+  become: yes
+  become_method: sudo
+  roles:
+    - name: provision-instances
+      instance_size: "t3.2xlarge"
+      aws_security_group: ideeal
+      key_name: "ap-southeast-1-key"
+      instance_tag: "ideeal"
+      host_group: ec2hosts
+      region: "ap-southeast-1"
+      volume_size: 80
+      instance_tags:
+        project: "ideeal"
+        "user:Owner": "ideeal"
+      vpc_subnet_id: "subnet-dc49c2b4"
+      image: "ami-0eb1f21bbd66347fe"
+  tasks:
+    - name: Download ideeal app locally
+      git:
+        repo: "git@github.com:ecohealthalliance/ideeal-app.git"
+        dest: "/tmp/ideeal-app"
+        version: mv-docker
+        key_file: "/var/lib/jenkins/.ssh/id_rsa"
+        ssh_opts: "-o StrictHostKeyChecking=no"
+        recursive: no
+        force: yes
+  vars_files:
+    - my_secure.yml
+
+- hosts: ec2hosts
+  remote_user: ubuntu
+  become: true
+  become_user: root
+  roles:
+    - name: kamaln7.swapfile
+      swapfile_size: 8GB
+      swapfile_location: "/swapfile"
+      tags: swap
+    - name: angstwad.docker_ubuntu
+      tags: docker
+    - name: init
+      tags: init
+  tasks:
+    - name: Copy app directory
+      synchronize: src="/tmp/ideeal-app/" dest="/ideeal-app"
+    - name: Build image
+      command: "docker build -f docker/Dockerfile -t ideeal-app ."
+      args:
+        chdir: /ideeal-app
+    - docker_service:
+        project_name: ideeal
+        definition:
+          version: '2'
+          services:
+            ideeal:
+              image: ideeal-app
+              ports:
+                - "80:3838"
+  vars_files:
+    - my_secure.yml

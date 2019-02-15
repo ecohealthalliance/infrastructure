@@ -15,25 +15,23 @@
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
     group: "{{ aws_security_group }}"
-    region: "us-east-1"
+    region: "{{ region | default('us-east-1') }}"
     key_name: "{{ key_name }}"
     instance_type: "{{ instance_size }}"
     # Ubuntu 16.04 AWS stock image
-    image: "ami-cd0f5cb6"
+    image: "{{ image | default('ami-cd0f5cb6') }}"
     wait: true
     # The count prevents more than 1 instances from running at once.
     exact_count: 1
     count_tag:
       Name: "{{ instance_tag }}"
-    instance_tags:
-      Name: "{{ instance_tag }}"
-      "user:Owner": "build-script"
+    instance_tags: "{{ default_instance_tags | combine(instance_tags) }}"
     volumes:
      - device_name: /dev/sda1
        device_type: gp2
-       volume_size: 220
+       volume_size: "{{ volume_size | default(220) }}"
        delete_on_termination: true
-    vpc_subnet_id: subnet-50b75809
+    vpc_subnet_id: "{{ vpc_subnet_id | default('subnet-50b75809') }}"
   register: ec2
 - name: Add all instance public IPs to host group
   add_host:

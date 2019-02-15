@@ -25,13 +25,13 @@
   shell: /ibis/venv/bin/python -m epitator.importers.import_disease_ontology
 - name: Install EpiTator dependencies
   shell: /ibis/venv/bin/python -m epitator.importers.import_wikidata
+- name: Download GPW data
+  command: aws s3 cp s3://eha-flirt/gpw-v4-population-count-rev10_2015_15_min_tif.zip /ibis/.scripts
+- command: unzip gpw-v4-population-count-rev10_2015_15_min_tif.zip -d gpw
+  args:
+    creates: /ibis/.scripts/gpw
+    chdir: /ibis/.scripts
 - block:
-  - name: Download GPW data
-    command: aws s3 cp s3://eha-flirt/gpw-v4-population-count-rev10_2015_15_min_tif.zip /ibis/.scripts
-  - command: unzip gpw-v4-population-count-rev10_2015_15_min_tif.zip -d gpw
-    args:
-      creates: /ibis/.scripts/gpw
-      chdir: /ibis/.scripts
   - name: Run event ranking script
     shell: "/ibis/venv/bin/python rank_events.py{{additional_rank_event_params  | default('')}}"
     args:

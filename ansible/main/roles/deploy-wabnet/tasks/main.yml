@@ -37,5 +37,5 @@
 - name: Create wabnet sync cronjob
   cron:
     name: "Sync wabnet data"
-    minute: "7"
+    minute: 7
     job: "curl localhost:6080/sync"
