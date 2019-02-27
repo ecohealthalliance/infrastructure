@@ -3,7 +3,7 @@
   become_method: sudo
   roles:
     - name: provision-instances
-      instance_size: "t3.2xlarge"
+      instance_size: "t3.small"
       aws_security_group: ideeal
       key_name: "ap-southeast-1-key"
       instance_tag: "ideeal"
