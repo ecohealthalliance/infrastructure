@@ -60,14 +60,14 @@
     - block:
       - name: Create flights collection
         shell: "venv/bin/python process.py --flights > >(tee -a process.log) 2> >(tee -a process.error.log >&2)"
-        executable: /bin/bash
         args:
           chdir: /flirt-consume
+          executable: /bin/bash
       - name: Create legs collection
         shell: "venv/bin/python process.py > >(tee -a process.legs.log) 2> >(tee -a process.legs.error.log >&2)"
         args:
           chdir: /flirt-consume
-        executable: /bin/bash
+          executable: /bin/bash
         when: not flights_only
       environment:
         FLIGHT_GLOBAL_FTP_URL: 'ftp.us.flightglobal.com'
