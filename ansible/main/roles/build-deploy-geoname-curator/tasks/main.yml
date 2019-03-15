@@ -1,0 +1,55 @@
+- name: Copy image directory
+  synchronize: src="files/" dest="/{{ image_name }}_docker"
+
+- name: Copy image from github
+  git:
+    repo: "https://github.com/ecohealthalliance/GeoName-Curator.git"
+    dest: "/{{image_name}}_docker/GeoName-Curator"
+    recursive: no
+    force: yes
+
+- name: Build image
+  command: "docker build -t {{image_name}} /{{image_name}}_docker"
+
+- name: Copy compose directory
+  synchronize: src="compose/" dest="/{{ image_name }}-compose"
+
+- file: path="/shared/{{ domain_name }}" state=directory
+
+- name: Create sensitive-environment-vars.env
+  copy: content="{{ eidr_connect_sensitive_envvars }}" dest="/shared/{{ domain_name }}/sensitive-environment-vars.env" force=yes
+
+- name: Create config.json
+  copy:
+    content: "{{ app_config | to_json }}"
+    dest: "/shared/{{ domain_name }}/settings-production.json"
+    force: yes
+  vars:
+    app_config:
+      private:
+        disableBSVEAuthentication: true
+      public:
+
+- name: Start services
+  docker_service:
+    # The compose directory must be unique for each service
+    project_src: "/{{ image_name }}-compose"
+  environment:
+    ip_address: "{{ ansible_default_ipv4.address }}"
+    domain_name: "{{ domain_name }}"
+    db_name: "{{ image_name }}"
+    port: 7080
+
+# TODO: Upate this when new backups are created.
+- block:
+  - name: Download database dump
+    aws_s3:
+      bucket: eidr-connect-backups
+      object: annie-connect-dump-3.tar.gz
+      dest: /tmp/annie-connect-dump.gz
+      mode: get
+      overwrite: never
+    register: data
+  - when: data.changed
+    command: 'mongorestore --host localhost:27017 --archive=/tmp/annie-connect-dump.gz --gzip --nsFrom "annie-connect.*" --nsTo "{{ image_name }}.*"'
+    

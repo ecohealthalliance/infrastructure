@@ -1,0 +1,17 @@
+version: '2'
+services:
+  app:
+    image: geoname-curator
+    container_name: ${domain_name}
+    environment:
+      # Mongo is deployed by another compose file.
+      - MONGO_URL=mongodb://${ip_address}:27017/${db_name}
+      - ROOT_URL=https://${domain_name}
+      - PORT=3000
+    env_file:
+      - /shared/${domain_name}/sensitive-environment-vars.env
+    ports:
+      - "${port}:3000"
+    restart: always
+    volumes:
+      - /shared/${domain_name}:/shared

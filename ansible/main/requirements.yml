@@ -2,4 +2,4 @@
 - src: kamaln7.swapfile
 - src: thefinn93.letsencrypt
 - src: geerlingguy.apache
-  version: "1.7.2"
+  version: "3.0.3"

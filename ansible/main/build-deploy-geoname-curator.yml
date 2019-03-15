@@ -1,0 +1,10 @@
+- hosts: targets
+  remote_user: ubuntu
+  become: true
+  become_user: root
+  roles:
+    - name: build-deploy-geoname-curator
+      image_name: geoname-curator
+      domain_name: "{{ image_name }}.eha.io"
+  vars_files:
+    - my_secure.yml

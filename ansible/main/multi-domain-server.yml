@@ -23,12 +23,16 @@
         port: 5080
       - servername: "wabnet.eha.io"
         port: 6080
+      - servername: "geoname-curator.eha.io"
+        port: 7080
     webroot: "/var/www"
     acme_tiny_challenges_directory: "/var/www/.well-known/acme-challenge"
     cert_name: "multidomain_cert_2"
     ssl_directory: "/etc/letsencrypt/live/{{cert_name}}"
   pre_tasks:
-    - block:
+    - tags:
+      - always
+      block:
       - name: Initialize apache config variables
         set_fact:
           apache_vhosts_ssl_in:
@@ -62,21 +66,21 @@
                   require valid-user
               </LocationMatch>
               {% endif %}
-        - name: Create site folders
-          file:
-            recurse: true
-            path: /sites/{{ item.servername }}
-            state: directory
-            mode: 0755
-        - name: Create password files
-          command: "htpasswd -cb /sites/{{ item.servername }}/.htpasswd {{ item.user }} {{ item.password }}"
-          when: item.password is defined
         with_items: "{{ servers }}"
         register: create_configs
+      - name: Create site folders
+        file:
+          recurse: true
+          path: /sites/{{ item.servername }}
+          state: directory
+          mode: 0755
+        with_items: "{{ servers }}"
+      - name: Create password files
+        command: "htpasswd -cb /sites/{{ item.servername }}/.htpasswd {{ item.user }} {{ item.password }}"
+        when: item.password is defined
+        with_items: "{{ servers }}"
       - set_fact: apache_vhosts_ssl_in="{{ create_configs.results | map(attribute='ansible_facts.apache_vhosts_ssl_in') | list }}"
       - set_fact: letsencrypt_cert_domains_in="{{ servers | map(attribute='servername') | list }}"
-      tags:
-        - always
   roles:
     - name: init
       tags: init
