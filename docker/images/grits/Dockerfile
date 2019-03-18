@@ -54,7 +54,7 @@ RUN touch /source-vars.sh &&\
 # Replace shell with bash so we can source files
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
-RUN apt-get install software-properties-common && add-apt-repository ppa:deadsnakes/ppa
+RUN add-apt-repository ppa:deadsnakes/ppa
 
 # Set debconf to run non-interactively
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
@@ -70,6 +70,7 @@ VOLUME /shared
 
 #Install deb packages
 RUN apt-get install -y \
+        software-properties-common \
         vim \
         curl \
         build-essential \
