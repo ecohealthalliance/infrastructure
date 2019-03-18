@@ -58,11 +58,11 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 #Enable universe repo
-RUN apt-get update && apt-get -y install lsb-release wget &&\
+RUN apt-get update &&\
+    apt-get -y install lsb-release wget software-properties-common &&\
+    add-apt-repository ppa:deadsnakes/ppa &&\
     echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe" >> /etc/apt/sources.list &&\
     apt-get update
-
-RUN apt-get -y install software-properties-common && add-apt-repository ppa:deadsnakes/ppa
 
 ### Dependencies ###############################################################################################
 #Sensitive settings will go here
