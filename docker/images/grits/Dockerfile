@@ -54,8 +54,6 @@ RUN touch /source-vars.sh &&\
 # Replace shell with bash so we can source files
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
-RUN add-apt-repository ppa:deadsnakes/ppa
-
 # Set debconf to run non-interactively
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
@@ -64,13 +62,14 @@ RUN apt-get update && apt-get -y install lsb-release wget &&\
     echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe" >> /etc/apt/sources.list &&\
     apt-get update
 
+RUN apt-get install software-properties-common && add-apt-repository ppa:deadsnakes/ppa
+
 ### Dependencies ###############################################################################################
 #Sensitive settings will go here
 VOLUME /shared
 
 #Install deb packages
 RUN apt-get install -y \
-        software-properties-common \
         vim \
         curl \
         build-essential \
