@@ -54,6 +54,8 @@ RUN touch /source-vars.sh &&\
 # Replace shell with bash so we can source files
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
+RUN apt-get install software-properties-common && add-apt-repository ppa:deadsnakes/ppa
+
 # Set debconf to run non-interactively
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
@@ -74,6 +76,7 @@ RUN apt-get install -y \
         git \
         python-pip \
         python-dev \
+        python3.6 \
         cron \
         apache2 \
         g++ \
@@ -137,7 +140,7 @@ COPY apache/supervisor-apached.conf /etc/supervisor/conf.d/apached.conf
 
 ### Grits-API ###################################################################################################
 USER grits
-RUN git clone --depth 1 https://github.com/ecohealthalliance/grits-api.git $GRITS_HOME/grits-api
+RUN git clone --branch py3 --depth 1 https://github.com/ecohealthalliance/grits-api.git $GRITS_HOME/grits-api
 
 #Configure grits-api
 RUN cd $GRITS_HOME/grits-api &&\
@@ -158,10 +161,10 @@ RUN cd $GRITS_HOME/grits-api &&\
 
 #Install pip modules into virtenv
 RUN cd $GRITS_HOME &&\
-    virtualenv grits_env &&\
+    virtualenv --python=/usr/bin/python3 grits_env &&\
     source grits_env/bin/activate &&\
     pip install setuptools==34.4.1 &&\
-    pip install numpy nose &&\
+    #pip install numpy nose &&\
     cd grits-api &&\
     pip install -r requirements.txt
 
