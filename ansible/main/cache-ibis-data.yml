@@ -47,7 +47,7 @@
       tags: swap
     - name: cache-sim-data
       become: yes
-      become_user: root
+      become_method: sudo
   tasks:
     - name: "Terminate instance"
       shell: "shutdown -h +1 &"
