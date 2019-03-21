@@ -25,7 +25,7 @@
     freq: '14D'
     sim_groups:
       - 'ibis14day'
-    shutdown_minutes: 295
+    shutdown_minutes: 395
   pre_tasks:
     - name: Cancel prior shutdown commands
       shell: "shutdown -c || true"

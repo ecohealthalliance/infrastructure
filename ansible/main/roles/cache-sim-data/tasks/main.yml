@@ -21,6 +21,16 @@
     poll: 0
     args:
       chdir: /flirt-simulation-service/simulator
+      executable: /bin/bash
+    register: worker_job
+  - pause:
+      seconds: 5
+  - name: Check worker status
+    async_status:
+      jid: "{{ worker_job.ansible_job_id }}"
+    register: worker_status
+  - debug:
+      var: worker_status
   - name: Queue simulations and wait for them to complete
     shell: "/flirt-simulation-service/venv/bin/python cache_airport_flows_periodic.py --start_date {{start_date}} --sim_group {{item}} --periods {{periods}} --freq {{freq}}"
     args:
