@@ -40,16 +40,14 @@
     db_name: "{{ image_name }}"
     port: 7080
 
-# TODO: Upate this when new backups are created.
 - block:
   - name: Download database dump
     aws_s3:
-      bucket: eidr-connect-backups
-      object: annie-connect-dump-3.tar.gz
-      dest: /tmp/annie-connect-dump.gz
+      bucket: geoname-data
+      object: geoname-curator.mongodump.gzip
+      dest: /tmp/geoname-curator.mongodump.gzip
       mode: get
       overwrite: never
     register: data
   - when: data.changed
-    command: 'mongorestore --host localhost:27017 --archive=/tmp/annie-connect-dump.gz --gzip --nsFrom "annie-connect.*" --nsTo "{{ image_name }}.*"'
-    
+    command: 'mongorestore --host localhost:27017 --archive=/tmp/geoname-curator.mongodump.gzip --gzip --drop'
