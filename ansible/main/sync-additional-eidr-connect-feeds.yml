@@ -24,24 +24,15 @@
       - bs4
 
   - block:
+    - name: ECDC CDTR download script
+      shell: /eidr-connect/venv/bin/python download_ECDC_CDTRs.py /tmp
+      args:
+        chdir: /eidr-connect/.scripts
     - name: Run EpiArchive download script
       shell: /eidr-connect/venv/bin/python download_epi_archive_data.py
       args:
         chdir: /eidr-connect/.scripts
-      async: 100000000000
-      poll: 0
       register: epiarchive_worker
-    - name: ECDC CDTR download script
-      shell: /eidr-connect/venv/bin/python download_ECDC_CDTRs.py
-      args:
-        chdir: /eidr-connect/.scripts
-    - name: Wait for worker
-      async_status:
-        jid: "{{ epiarchive_worker.ansible_job_id }}"
-      register: result
-      until: result.finished
-      retries: 60
-      delay: 240
     always:
     - name: EpiArchive download result
       debug: var=result.stdout_lines
