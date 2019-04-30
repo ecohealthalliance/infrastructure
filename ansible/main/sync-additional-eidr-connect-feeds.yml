@@ -21,6 +21,7 @@
       - pandas
       - pymongo
       - backports.functools_lru_cache
+      - bs4
   - block:
     - name: Run India MOH data download script
       shell: /eidr-connect/venv/bin/python download_india_moh_data.py /tmp
@@ -38,6 +39,10 @@
       args:
         chdir: /eidr-connect/.scripts
       register: result
+    - name: ECDC CDTR download script
+      shell: /eidr-connect/venv/bin/python download_ECDC_CDTRs.py
+      args:
+        chdir: /eidr-connect/.scripts
     always:
     - debug: var=result.stdout_lines
     environment:
