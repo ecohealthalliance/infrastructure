@@ -1,0 +1,12 @@
+version: '2'
+services:
+  sshd:
+    image: sshd
+    restart: always
+    ports:
+      - "6322:22"
+    networks:
+      - tunnel
+
+networks:
+  tunnel:

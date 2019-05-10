@@ -58,15 +58,7 @@ services:
         max-size: 50m
     networks:
       - main
-      - insecure
-
-  redis-tunnel-in:
-    image: sshd
-    restart: always
-    ports:
-      - "6322:22"
-    networks:
-      - insecure
+      - ssh_tunnel
 
   mongodb:
     container_name: mongodb
@@ -84,4 +76,6 @@ services:
 
 networks:
   main:
-  insecure:
+  ssh_tunnel:
+    external:
+      name: sshd_tunnel

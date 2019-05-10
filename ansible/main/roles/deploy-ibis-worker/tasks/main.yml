@@ -1,0 +1,34 @@
+- name: Install common packages from apt
+  apt: pkg={{item}} state=installed update_cache=yes
+  with_items:
+    - git
+    - python-pip
+    - python-dev
+    - curl
+- name: Install global python modules
+  pip: name={{item}}
+  with_items:
+    - awscli
+    - virtualenv
+    - boto
+    - boto3
+    - botocore
+- name: Copy image from github
+  git:
+    repo: "https://github.com/ecohealthalliance/ibis.git"
+    dest: "/ibis"
+    recursive: no
+    force: yes
+- name: Download GPW data
+  command: aws s3 cp s3://eha-flirt/gpw-v4-population-count-rev10_2015_15_min_tif.zip /ibis/.scripts/score_api
+- command: unzip gpw-v4-population-count-rev10_2015_15_min_tif.zip -d gpw
+  args:
+    creates: /ibis/.scripts/score_api/gpw
+    chdir: /ibis/.scripts
+- name: Build IBIS worker image
+  command: "docker build -t ibis-worker /ibis/.scripts/score_api"
+- name: Copy compose directory
+  synchronize: src="compose/" dest="/ibis-compose"
+- name: Start IBIS worker
+  docker_service:
+    project_src: /ibis-compose

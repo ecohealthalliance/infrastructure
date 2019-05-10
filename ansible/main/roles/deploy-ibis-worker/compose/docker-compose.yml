@@ -1,0 +1,20 @@
+tunnel:
+  container_name: tunnel
+  image: thomass/ssh-client
+  volumes:
+    - /home/jenkins/.ssh:/ssh
+  command: 'ssh -Ng -p 6322 -L 6379:ibis-redis:6379 -L 27017:flight-mongodb:27017 -i /ssh/id_rsa -o StrictHostKeyChecking=no root@grits.eha.io'
+  ports:
+    - '6379'
+  restart: always
+
+ibis-worker:
+  image: ibis-worker
+  container_name: ibis-worker
+  links:
+    - tunnel
+  restart: always
+  environment:
+    BROKER_URL: 'redis://tunnel:6379/0'
+    MONGO_HOST: 'mongodb://tunnel:27017'
+    WORKER_MODE: 'true'

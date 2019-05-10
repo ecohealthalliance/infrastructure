@@ -25,12 +25,12 @@
   register: gritsimage
 - command: "gzip -dfk /tmp/grits.tar.gz"
   when: gritsimage.changed
-- name: Load grit image into docker
+- name: Load grits image into docker
   shell: "docker load < /tmp/grits.tar"
   when: gritsimage.changed
 - name: Copy compose directory
   synchronize: src="compose/" dest="/grits-compose"
-- name: Start grit worker
+- name: Start grits worker
   docker_service:
     project_src: /grits-compose
   environment:

@@ -5,6 +5,11 @@
   vars:
     overwrite: different
   roles:
+    - name: deploy-sshd
+      tags:
+        - deploy-sshd
+        - deploy-grits
+        - deploy-ibis
     - name: deploy-flirt
       tags: deploy-flirt
       flirt_port: 4080
@@ -30,7 +35,8 @@
       tags: deploy-wabnet
   vars_files:
     - my_secure.yml
-- hosts: grits-workers
+
+- hosts: kirby
   remote_user: ubuntu
   become: true
   become_user: root
@@ -41,5 +47,9 @@
       tags:
         - deploy-grits
         - deploy-grits-worker
+    - name: deploy-ibis-worker
+      tags:
+        - deploy-ibis
+        - deploy-ibis-worker
   vars_files:
     - my_secure.yml

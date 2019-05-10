@@ -10,6 +10,7 @@ services:
       - "SMTP_PASSWORD=${aws_smtp_password}"
       - "MAIL_URL=smtps://${aws_smtp_user}:${aws_smtp_password}@email-smtp.us-east-1.amazonaws.com:465"
       - "MONGO_HOST=mongodb://flight-mongodb:27017/"
+      - "SCORE_API=http://ibis-score-api:80"
     ports:
       - "5080:80"
     restart: unless-stopped
@@ -27,3 +28,34 @@ services:
     logging:
       options:
         max-size: 50m
+    networks:
+      - ssh_tunnel
+
+  ibis-redis:
+    image: redis
+    container_name: ibis-redis
+    restart: always
+    # Leave port open for external workers
+    ports:
+      - 6379:6379
+    logging:
+      options:
+        max-size: 50m
+    networks:
+      - main
+      - ssh_tunnel
+
+  ibis-score-api:
+    image: ibis-score-api
+    container_name: ibis-score-api
+    restart: always
+    environment:
+      WORKER_MODE: 'false'
+      MONGO_HOST: 'mongodb://flight-mongodb:27017'
+      BROKER_URL: 'redis://ibis-redis:6379/0'
+
+networks:
+  main:
+  ssh_tunnel:
+    external:
+      name: sshd_tunnel

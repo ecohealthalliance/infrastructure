@@ -1,0 +1,9 @@
+- name: Copy compose directory
+  synchronize: src="compose/" dest="/sshd"
+- name: Build sshd image
+  docker_image:
+    path: /sshd
+    name: sshd
+- name: Start sshd service
+  docker_service:
+    project_src: /sshd
