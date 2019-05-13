@@ -4,6 +4,7 @@
   docker_image:
     path: /sshd
     name: sshd
+    force: yes
 - name: Start sshd service
   docker_service:
     project_src: /sshd
