@@ -16,6 +16,8 @@ services:
     restart: unless-stopped
     volumes:
       - /shared/ibis:/shared:ro
+    networks:
+      - main
 
   flight-mongodb:
     container_name: flight-mongodb
@@ -29,6 +31,7 @@ services:
       options:
         max-size: 50m
     networks:
+      - main
       - ssh_tunnel
 
   ibis-redis:
@@ -53,6 +56,8 @@ services:
       WORKER_MODE: 'false'
       MONGO_HOST: 'mongodb://flight-mongodb:27017'
       BROKER_URL: 'redis://ibis-redis:6379/0'
+    networks:
+      - main
 
 networks:
   main:
