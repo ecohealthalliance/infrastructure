@@ -23,7 +23,7 @@
   aws_s3:
     bucket: eha-flirt
     object: gpw-v4-population-count-rev10_2015_15_min_tif.zip
-    dest: /ibis/.scripts/score_api
+    dest: /ibis/.scripts/score_api/gpw-v4-population-count-rev10_2015_15_min_tif.zip
     mode: get
     aws_access_key: "{{aws_access_key}}"
     aws_secret_key: "{{aws_secret_key}}"
