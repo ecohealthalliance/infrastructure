@@ -21,7 +21,7 @@
     force: yes
 
 - name: Download GPW data
-  command: aws s3 cp s3://eha-flirt/gpw-v4-population-count-rev10_2015_15_min_tif.zip /ibis/.scripts/score_api
+  command: aws s3 cp s3://eha-flirt/gpw-v4-population-count-rev10_2015_15_min_tif.zip /ibis/.scripts
   
 - command: unzip -o gpw-v4-population-count-rev10_2015_15_min_tif.zip -d gpw
   args:
