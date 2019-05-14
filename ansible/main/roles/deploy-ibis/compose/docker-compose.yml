@@ -52,6 +52,12 @@ services:
     image: ibis-score-api
     container_name: ibis-score-api
     restart: always
+    # open a port for debugging
+    ports:
+      - "5081:80"
+    logging:
+      options:
+        max-size: 50m
     environment:
       WORKER_MODE: 'false'
       MONGO_HOST: 'mongodb://flight-mongodb:27017'
