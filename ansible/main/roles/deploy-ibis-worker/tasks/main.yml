@@ -27,7 +27,7 @@
     mode: get
     aws_access_key: "{{aws_access_key}}"
     aws_secret_key: "{{aws_secret_key}}"
-- command: unzip -o gpw-v4-population-count-rev10_2015_15_min_tif.zip -d gpw
+- command: unzip -o gpw-v4-population-count-rev10_2015_15_min_tif.zip -d score_api/gpw
   args:
     creates: /ibis/.scripts/score_api/gpw
     chdir: /ibis/.scripts

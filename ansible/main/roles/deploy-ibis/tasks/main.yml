@@ -23,7 +23,7 @@
 - name: Download GPW data
   command: aws s3 cp s3://eha-flirt/gpw-v4-population-count-rev10_2015_15_min_tif.zip /ibis/.scripts
   
-- command: unzip -o gpw-v4-population-count-rev10_2015_15_min_tif.zip -d gpw
+- command: unzip -o gpw-v4-population-count-rev10_2015_15_min_tif.zip -d score_api/gpw
   args:
     creates: /ibis/.scripts/score_api/gpw
     chdir: /ibis/.scripts
