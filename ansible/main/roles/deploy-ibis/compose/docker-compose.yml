@@ -51,7 +51,7 @@ services:
   ibis-score-api:
     image: ibis-score-api
     container_name: ibis-score-api
-    restart: always
+    restart: unless-stopped
     # open a port for debugging
     ports:
       - "5081:80"

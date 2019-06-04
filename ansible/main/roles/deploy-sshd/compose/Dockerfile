@@ -15,4 +15,10 @@ ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 
 EXPOSE 22
+
+# Change host key directory so it can be mounted as a persistent volume
+RUN sed -i -E 's@^HostKey \/etc\/ssh\/(.+)$@HostKey \/etc\/ssh\/host_keys\/\1@g' /etc/ssh/sshd_config
+RUN mkdir /etc/ssh/host_keys/
+RUN cp /etc/ssh/ssh_host_* /etc/ssh/host_keys/
+
 CMD ["/usr/sbin/sshd", "-D"]

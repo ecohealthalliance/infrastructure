@@ -9,7 +9,7 @@ services:
       - tunnel
     # Create permanent volume so host keys don't change on redeploy
     volumes:
-      - "/sshd/etc:/etc/ssh"
+      - "/sshd/etc/:/etc/ssh/host_keys"
 
 networks:
   tunnel:
