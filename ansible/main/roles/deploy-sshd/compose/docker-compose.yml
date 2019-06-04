@@ -7,9 +7,9 @@ services:
       - "6322:22"
     networks:
       - tunnel
-  # Create permanent volume so host keys don't change on redeploy
-  volumes:
-    - "/sshd/etc:/etc/ssh"
+    # Create permanent volume so host keys don't change on redeploy
+    volumes:
+      - "/sshd/etc:/etc/ssh"
 
 networks:
   tunnel:
