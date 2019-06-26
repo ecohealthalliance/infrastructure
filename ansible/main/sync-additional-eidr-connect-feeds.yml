@@ -32,10 +32,10 @@
       shell: /eidr-connect/venv/bin/python download_epi_archive_data.py
       args:
         chdir: /eidr-connect/.scripts
-      register: epiarchive_worker
+      register: epiarchive_result
     always:
     - name: EpiArchive download result
-      debug: var=result.stdout_lines
+      debug: var=epiarchive_result.stdout_lines
     environment:
       MONGO_HOST: "mongodb://localhost:27017"
       PYTHONIOENCODING: "utf-8"
