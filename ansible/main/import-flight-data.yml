@@ -18,6 +18,7 @@
     # traffic rules to take effect.
     mongo_host: "172.30.2.108:27019"
     flights_only: false
+    legs_only: false
   pre_tasks:
     - name: Cancel prior shutdown commands
       shell: "shutdown -c || true"
@@ -63,6 +64,7 @@
         args:
           chdir: /flirt-consume
           executable: /bin/bash
+        when: not legs_only
       - name: Create legs collection
         shell: "venv/bin/python process.py > >(tee -a process.legs.log) 2> >(tee -a process.legs.error.log >&2)"
         args:
