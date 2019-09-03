@@ -45,15 +45,15 @@
     db_name: "{{ eidr_connect_db_name }}"
     port: "{{ eidr_connect_port }}"
 
-- when: eidr_connect_db_name == "eidr-connect"
+- when: "restore_eidr_connect_db | default(False)"
   block:
   - name: Download eidr-connect database dump
     aws_s3:
       bucket: eidr-connect-backups
-      object: mongodump-2017-10-10.tar.gz
+      object: mongodump-2019-09-03.tar.gz
       dest: /tmp/eidr-connect-dump.tar.gz
       mode: get
-      overwrite: never
+      overwrite: always
     register: data
   - when: data.changed
     block:
