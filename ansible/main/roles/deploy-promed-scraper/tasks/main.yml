@@ -16,6 +16,9 @@
 - name: Create config.json
   copy: content="{{promed_config | to_json}}" dest="/shared/promed-scraper/promed-scraper.json" force=yes
 
+- name: Create aws credentials
+  template: src=config.j2 dest=/shared/promed-scraper/.aws/config
+
 - name: Copy compose directory
   synchronize: src="compose/" dest="/promed-scraper-compose"
 - name: Start services
