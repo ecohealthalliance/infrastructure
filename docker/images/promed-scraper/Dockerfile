@@ -6,10 +6,6 @@ RUN apt-get clean all && \
     apt-get update && \
     apt-get -y install build-essential openssh-server python python-dev python-setuptools python-pip python-software-properties debconf-utils software-properties-common curl libffi-dev libssl-dev acl git make && \
     pip install virtualenv virtualenvwrapper awscli && \
-    add-apt-repository -y ppa:webupd8team/java && \
-    apt-get update && \
-    echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | debconf-set-selections && \
-    apt-get install -y oracle-java8-installer && \
     apt-get clean all
 
 RUN pip install --upgrade setuptools
