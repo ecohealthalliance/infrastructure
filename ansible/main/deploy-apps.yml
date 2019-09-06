@@ -1,3 +1,5 @@
+# This playbook assumes multi-domain-server.yml or a similar playbook has previously been run against
+# the target hosts to install boto and docker.
 - hosts: targets
   remote_user: ubuntu
   become: true
