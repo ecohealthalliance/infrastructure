@@ -13,6 +13,11 @@
   - shell: "docker load < /tmp/promed-scraper.tar"
   when: image.changed
 
+- name: Create /shared/promed-scraper/
+  file:
+    path: /shared/promed-scraper
+    state: directory
+
 - name: Create config.json
   copy: content="{{promed_config | to_json}}" dest="/shared/promed-scraper/promed-scraper.json" force=yes
 

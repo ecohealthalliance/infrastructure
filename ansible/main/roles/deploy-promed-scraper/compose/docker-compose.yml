@@ -19,7 +19,7 @@ services:
     container_name: pm-mongo
     # 1 GB
     mem_limit: 1000000000
-    image: mongo
+    image: mongo:3.4.9
     restart: always
     ports:
        - 27018:27017
