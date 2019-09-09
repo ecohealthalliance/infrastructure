@@ -32,7 +32,7 @@
     - name: Start postgres container
       docker_container:
         name: postgres
-        image: postgres
+        image: "postgres:11.5"
         state: started
         ports:
           - "5432:5432"

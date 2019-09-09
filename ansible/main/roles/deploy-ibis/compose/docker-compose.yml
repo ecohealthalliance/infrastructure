@@ -35,7 +35,7 @@ services:
       - ssh_tunnel
 
   ibis-redis:
-    image: redis
+    image: redis:3.0.6
     container_name: ibis-redis
     restart: always
     # Leave port open for external workers

@@ -47,7 +47,7 @@ services:
       - main
 
   redis:
-    image: redis
+    image: redis:3.0.6
     container_name: redis
     restart: always
     # Leave port open for external workers
