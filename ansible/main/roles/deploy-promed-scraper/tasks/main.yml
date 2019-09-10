@@ -15,7 +15,7 @@
 
 - name: Create /shared/promed-scraper/
   file:
-    path: /shared/promed-scraper
+    path: /shared/promed-scraper/.aws
     state: directory
 
 - name: Create config.json
