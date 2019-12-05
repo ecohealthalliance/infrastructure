@@ -9,7 +9,9 @@ RUN apt-get clean all && \
     apt-get clean all
 
 RUN pip install --upgrade setuptools
-RUN pip install ansible==2.9.0 pycrypto
+RUN apt-get -y install ansible
+RUN pip install pycrypto
+RUN pip install ansible
 
 # Install mongodb clients
 RUN wget -qO - https://www.mongodb.org/static/pgp/server-3.2.asc | sudo apt-key add -
