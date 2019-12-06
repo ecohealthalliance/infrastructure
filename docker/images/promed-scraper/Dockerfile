@@ -1,17 +1,18 @@
-FROM ubuntu:16.04
+FROM ubuntu:14.04.4
 
 #Install dependencies
 #Chaining these commands to keep the image smaller
 RUN apt-get clean all && \
     apt-get update && \
-    apt-get -y install sudo build-essential openssh-server python python-dev python-setuptools python-pip python-software-properties debconf-utils software-properties-common curl libffi-dev libssl-dev acl git make && \
+    apt-get -y install build-essential openssh-server python python-dev python-setuptools python-pip python-software-properties debconf-utils software-properties-common curl libffi-dev libssl-dev acl git make && \
     pip install virtualenv virtualenvwrapper awscli && \
     apt-get clean all
 
 RUN pip install --upgrade setuptools
-RUN apt-get -y install ansible
 RUN pip install pycrypto
-RUN pip install ansible
+RUN apt-add-repository -y ppa:ansible/ansible && \
+    apt-get update && \
+    apt-get -y install ansible
 
 # Install mongodb clients
 RUN wget -qO - https://www.mongodb.org/static/pgp/server-3.2.asc | sudo apt-key add -
