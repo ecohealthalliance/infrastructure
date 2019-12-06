@@ -1,4 +1,4 @@
-FROM ubuntu:14.04.4
+FROM ubuntu:16.04.4
 
 #Install dependencies
 #Chaining these commands to keep the image smaller
