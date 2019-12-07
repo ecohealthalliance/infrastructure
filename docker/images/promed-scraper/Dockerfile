@@ -1,7 +1,7 @@
 FROM ubuntu:14.04.4
 
-#Install dependencies
-#Chaining these commands to keep the image smaller
+# Install dependencies
+# Chaining these commands to keep the image smaller
 RUN apt-get clean all && \
     apt-get update && \
     apt-get -y install build-essential openssh-server python python-dev python-setuptools python-pip python-software-properties debconf-utils software-properties-common curl libffi-dev libssl-dev acl git make && \
@@ -25,7 +25,7 @@ RUN chmod +x /usr/local/bin/WITH_SECRET
 
 COPY promed_mail_scraper /promed_mail_scraper
 
-RUN WITH_SECRET /usr/local/bin/ansible-playbook --connection=local /promed_mail_scraper/ansible/site.yml --tags preloadable --vault-password-file /.secret --extra-vars "use_secure_aws_credentials=true"
+RUN WITH_SECRET /usr/bin/ansible-playbook --connection=local /promed_mail_scraper/ansible/site.yml --tags preloadable --vault-password-file /.secret --extra-vars "use_secure_aws_credentials=true"
 
 RUN mkdir /shared
 
