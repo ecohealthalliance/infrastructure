@@ -1,15 +1,15 @@
-FROM ubuntu:16.04.4
+FROM ubuntu:16.04
 
 # Install dependencies
 # Chaining these commands to keep the image smaller
 RUN apt-get clean all && \
     apt-get update && \
-    apt-get -y install build-essential openssh-server python python-dev python-setuptools python-pip python-software-properties debconf-utils software-properties-common curl libffi-dev libssl-dev acl git make && \
-    pip install virtualenv virtualenvwrapper awscli && \
+    apt-get -y install sudo build-essential openssh-server python3 python3-dev python3-setuptools python3-pip python3-software-properties debconf-utils software-properties-common curl libffi-dev libssl-dev acl git make && \
+    pip3 install virtualenv virtualenvwrapper awscli && \
     apt-get clean all
 
-RUN pip install --upgrade setuptools
-RUN pip install pycrypto
+RUN pip3 install --upgrade setuptools
+RUN pip3 install pycrypto
 RUN apt-add-repository -y ppa:ansible/ansible && \
     apt-get update && \
     apt-get -y install ansible
