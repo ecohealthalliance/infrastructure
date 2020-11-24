@@ -13,6 +13,7 @@ services:
       - "DATABASE_PATH=/shared/db.sqlite3"
       - "SMTP_USER=${SMTP_USER}"
       - "SMTP_PASSWORD=${SMTP_PASSWORD}"
+      - "AIRTABLE_API_KEY=${AIRTABLE_API_KEY}"
     restart: unless-stopped
     volumes:
       - static:/static
