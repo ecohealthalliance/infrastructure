@@ -38,8 +38,10 @@
       swapfile_size: 16GB
       swapfile_location: "/swapfile"
       tags: swap
-    - name: angstwad.docker_ubuntu
-      tags: docker
+# Removing angstwad.docker_ubuntu because of bug
+#   now building manually in init/tasks/main.yml
+#    - name: angstwad.docker_ubuntu
+#      tags: docker
     - name: init
       tags: init
     - name: build-image

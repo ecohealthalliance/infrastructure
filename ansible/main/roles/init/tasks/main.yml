@@ -6,8 +6,10 @@
     - python-pip
     - python-dev
     - curl
+    - python-setuptools
     # In case ansible is running through python3
     - python3-pip
+    - python3-setuptools
 - name: Install global python modules
   pip:
     name:
@@ -20,6 +22,22 @@
   file: path=~/.aws state=directory
 - name: Create aws credentials
   template: src=config.j2 dest=~/.aws/config
+- name: add docker gpg apt key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+- name: add docker repo
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu bionic stable
+    state: present
+- name: update apt and install docker-ce
+  apt: update_cache=yes name=docker-ce state=present
+- name: install Docker module for Python
+  pip:
+    name:
+      - docker
+      - docker-compose
+
 - block:
     - name: Add Mongo packages repo
       apt_key: id=0C49F3730359A14518585931BC711F9BA15703C6  keyserver=keyserver.ubuntu.com
